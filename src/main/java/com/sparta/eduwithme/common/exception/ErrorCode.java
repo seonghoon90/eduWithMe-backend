@@ -24,6 +24,10 @@ public enum ErrorCode {
     RECENT_PASSWORD_MATCH(HttpStatus.BAD_REQUEST, "최근 사용했던 비밀번호는 변경할 수 없습니다."),
     INCORRECT_PASSWORD(HttpStatus.UNAUTHORIZED, "입력하신 비밀번호가 일치하지 않습니다."),
 
+    // Room
+    SAME_NEW_ROOM_NAME(HttpStatus.BAD_REQUEST, "동일한 이름의 방을 생성할 수 없습니다."),
+    CAN_NOT_MADE_ROOM(HttpStatus.BAD_REQUEST, "방을 2개 이상 만들 수 없습니다."),
+
     // 사용자 권한 관련 오류 코드
     USER_NOT_MANAGER(HttpStatus.CONFLICT, "해당 기능에 접근할 수 있는 권한이 없습니다."),
 
@@ -56,13 +60,7 @@ public enum ErrorCode {
     USER_NOT_LOGGED_IN_TO_CREATE_COMMENT(HttpStatus.UNAUTHORIZED, "댓글을 작성하려면 로그인해야 합니다."),
     CANNOT_COMMENT_ON_DELETED_CARD(HttpStatus.BAD_REQUEST, "삭제된 카드에는 댓글을 달 수 없습니다."),
     USER_NOT_LOGGED_IN_TO_VIEW_COMMENTS(HttpStatus.UNAUTHORIZED, "댓글을 보려면 로그인해야 합니다."),
-    CANNOT_VIEW_COMMENTS_OF_DELETED_CARD(HttpStatus.BAD_REQUEST, "삭제된 카드의 댓글을 볼 수 없습니다."),
-
-    // 팔로우 도메인 오류 코드
-    SAME_USER(HttpStatus.BAD_REQUEST, "자신을 팔로우 할 수 없습니다."),
-    ALREADY_FOLLOW(HttpStatus.BAD_REQUEST, "이미 팔로우를 하셨습니다."),
-    RECENT_NOT_FOLLOW(HttpStatus.BAD_REQUEST, "이 유저를 팔로우하지 않았습니다."),
-    EMPTY_FOLLOW(HttpStatus.BAD_REQUEST, "현재 팔로우한 유저가 없습니다.");
+    CANNOT_VIEW_COMMENTS_OF_DELETED_CARD(HttpStatus.BAD_REQUEST, "삭제된 카드의 댓글을 볼 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
