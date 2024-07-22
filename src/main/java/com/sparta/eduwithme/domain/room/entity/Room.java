@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity @Table(name = "rooms")
-@NoArgsConstructor @Getter
+@Table(name = "rooms")
+@Entity
+@Getter
+@NoArgsConstructor
 public class Room extends TimeStamp {
 
     @Id
