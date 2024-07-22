@@ -1,5 +1,7 @@
 package com.sparta.eduwithme.domain.profile;
 
+import com.sparta.eduwithme.common.exception.CustomException;
+import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.domain.profile.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,7 @@ public class ProfileService {
 
     public UserProfileDto getUserProfile(Long userId) {
         User user = profileRespository.findById(userId).orElseThrow(() ->
-                new IllegalArgumentException("User not found with id: " + userId));
+                new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserProfileDto.builder()
                 .email(user.getEmail())
