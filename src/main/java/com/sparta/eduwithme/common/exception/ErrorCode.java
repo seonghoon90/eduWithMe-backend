@@ -22,9 +22,9 @@ public enum ErrorCode {
     // room
     SAME_NEW_ROOM_NAME(HttpStatus.BAD_REQUEST, "동일한 이름의 방을 생성할 수 없습니다."),
     CAN_NOT_MADE_ROOM(HttpStatus.BAD_REQUEST, "방을 2개 이상 만들 수 없습니다."),
-    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "방을 찾을 수 없습니다.");
-
+    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "방을 찾을 수 없습니다."),
     // question
+    KEYWORD_NOT_FOUND(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다.");
 
     // comment
 

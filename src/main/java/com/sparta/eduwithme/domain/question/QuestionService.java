@@ -56,8 +56,9 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<QuestionTitleDTO> searchQuestionByTitle(Long roomId, String keyword, int page, int pageSize) {
+
         if (keyword == null || keyword.trim().isEmpty()) {
-            throw new IllegalArgumentException("키워드를 입력해주세요.");
+            throw new CustomException(ErrorCode.KEYWORD_NOT_FOUND);
         }
 
         Room room = roomRepository.findById(roomId)

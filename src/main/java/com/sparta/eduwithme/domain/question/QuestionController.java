@@ -45,13 +45,8 @@ public class QuestionController {
     public ResponseEntity<DataCommonResponse<List<QuestionTitleDTO>>> searchQuestionByTitle(@PathVariable Long roomId,
                                                                                             @RequestParam String keyword,
                                                                                             @RequestParam(defaultValue = "0") int page) {
-
-        try {
-            List<QuestionTitleDTO> responseDTOList = questionService.searchQuestionByTitle(roomId, keyword, page, PAGE_SIZE);
-            String message = responseDTOList.isEmpty() ? "검색 결과가 없습니다." : "문제 제목 검색을 성공하였습니다.";
-            return ResponseEntity.ok(new DataCommonResponse<>(200, message, responseDTOList));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new DataCommonResponse<>(400, e.getMessage(), Collections.emptyList()));
-        }
+        List<QuestionTitleDTO> responseDTOList = questionService.searchQuestionByTitle(roomId, keyword, page, PAGE_SIZE);
+        DataCommonResponse<List<QuestionTitleDTO>> response = new DataCommonResponse<>(200,"문제 검색을 성공 하였습니다.", responseDTOList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
