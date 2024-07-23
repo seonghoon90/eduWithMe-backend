@@ -32,11 +32,6 @@ public class User extends TimeStamp {
     @Column
     private String photoUrl;
 
-    @ElementCollection
-    @CollectionTable(name = "previous_passwords", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "password")
-    private List<String> previousPasswords = new LinkedList<>();
-
     public User(String email, String password, String nickName, String ranking, String photoUrl) {
         this.email = email;
         this.password = password;
@@ -59,15 +54,7 @@ public class User extends TimeStamp {
         return this.password.equals(currentPassword);
     }
 
-    public boolean isPasswordRecentlyUsed(String newPassword) {
-        return this.previousPasswords.contains(newPassword) || this.password.equals(newPassword);
-    }
-
     public void updatePassword(String newPassword) {
-        if (this.previousPasswords.size() >= 3) {
-            this.previousPasswords.remove(0);
-        }
-        this.previousPasswords.add(this.password);
         this.password = newPassword;
     }
 }

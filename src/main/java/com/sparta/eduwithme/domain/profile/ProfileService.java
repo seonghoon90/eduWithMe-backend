@@ -49,10 +49,6 @@ public class ProfileService {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        if (user.isPasswordRecentlyUsed(request.getNewPassword())) {
-            throw new CustomException(ErrorCode.RECENT_PASSWORD_REUSE);
-        }
-
         user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
     }
