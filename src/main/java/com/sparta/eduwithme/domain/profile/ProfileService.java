@@ -2,6 +2,7 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
+import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.domain.profile.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,22 @@ public class ProfileService {
         }
 
         user.updateNickname(newNickname);
+        profileRepository.save(user);
+    }
+
+    public void updateUserPassword(Long userId, UpdatePasswordRequestDto request) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.checkPassword(request.getCurrentPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        if (user.isPasswordRecentlyUsed(request.getNewPassword())) {
+            throw new CustomException(ErrorCode.RECENT_PASSWORD_REUSE);
+        }
+
+//        user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
     }
 }
