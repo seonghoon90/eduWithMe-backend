@@ -2,7 +2,6 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
-import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
