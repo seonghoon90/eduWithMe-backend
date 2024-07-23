@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
+import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +14,21 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    // Student 테이블 생성 후 한 방에 소속 된 총 인원수 조회해서 같이 리턴 해야함.
-    public void createRoom(CreateRoomRequestDto requestDto, Long managerUserId) {
+    private static final int ROOM_CREATE_LIMIT = 2;
+
+    public void createRoom(CreateRoomRequestDto requestDto, User user) {
         boolean isDuplicateRoomName = roomRepository.findByRoomName(requestDto.getRoomName()).isPresent();
         if(isDuplicateRoomName) {
             throw new CustomException(ErrorCode.SAME_NEW_ROOM_NAME);
         }
-        Long countRooms = roomRepository.countByManagerUserId(managerUserId);
-        if(countRooms >= 2) {
+        Long countRooms = roomRepository.countByManagerUserId(user.getId());
+        if(countRooms >= ROOM_CREATE_LIMIT) {
             throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
         }
         Room room = Room.builder()
                 .roomName(requestDto.getRoomName())
                 .roomPassword(requestDto.getRoomPassword())
-                .managerUserId(managerUserId).build();
+                .managerUserId(user.getId()).build();
         roomRepository.save(room);
     }
 }
