@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfileService {
 
-    private final ProfileRespository profileRespository;
+    private final ProfileRepository profileRepository;
 
     public UserProfileDto getUserProfile(Long userId) {
-        User user = profileRespository.findById(userId).orElseThrow(() ->
+        User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserProfileDto.builder()
