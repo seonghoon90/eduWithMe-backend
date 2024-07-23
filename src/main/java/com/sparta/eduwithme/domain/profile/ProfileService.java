@@ -4,7 +4,8 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
-import com.sparta.eduwithme.domain.profile.entity.User;
+import com.sparta.eduwithme.domain.user.entity.User;
+import com.sparta.eduwithme.domain.user.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class ProfileService {
 
         return UserProfileDto.builder()
                 .email(user.getEmail())
-                .nickname(user.getNickname())
-                .profileImage(user.getProfileImage())
-                .userRank(user.getUserRank())
+                .nickName(user.getNickName())
+                .photoUrl(user.getPhotoUrl())
+                .ranking(user.getRanking())
                 .build();
     }
 

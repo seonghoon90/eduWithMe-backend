@@ -1,14 +1,12 @@
 package com.sparta.eduwithme.domain.user.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -34,6 +32,11 @@ public class User extends TimeStamp {
     @Column
     private String photoUrl;
 
+    @ElementCollection
+    @CollectionTable(name = "previous_passwords", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "password")
+    private List<String> previousPasswords = new LinkedList<>();
+
     public User(String email, String password, String nickName, String ranking, String photoUrl) {
         this.email = email;
         this.password = password;
@@ -46,5 +49,25 @@ public class User extends TimeStamp {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickName = newNickname;
+    }
+
+    public boolean checkPassword(String currentPassword) {
+        return this.password.equals(currentPassword);
+    }
+
+    public boolean isPasswordRecentlyUsed(String newPassword) {
+        return this.previousPasswords.contains(newPassword) || this.password.equals(newPassword);
+    }
+
+    public void updatePassword(String newPassword) {
+        if (this.previousPasswords.size() >= 3) {
+            this.previousPasswords.remove(0);
+        }
+        this.previousPasswords.add(this.password);
+        this.password = newPassword;
     }
 }
