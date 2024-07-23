@@ -1,14 +1,12 @@
 package com.sparta.eduwithme.domain.user.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -46,5 +44,17 @@ public class User extends TimeStamp {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickName = newNickname;
+    }
+
+    public boolean checkPassword(String currentPassword) {
+        return this.password.equals(currentPassword);
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 }
