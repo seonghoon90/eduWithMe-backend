@@ -8,7 +8,7 @@ import com.sparta.eduwithme.domain.question.dto.QuestionResponseDTO;
 import com.sparta.eduwithme.domain.question.dto.QuestionTitleDTO;
 import com.sparta.eduwithme.domain.question.entity.Answer;
 import com.sparta.eduwithme.domain.question.entity.Question;
-import com.sparta.eduwithme.domain.room.RoomRepository;
+import com.sparta.eduwithme.domain.room.repository.RoomRepository;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
