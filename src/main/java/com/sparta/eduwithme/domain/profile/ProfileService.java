@@ -6,6 +6,7 @@ import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.domain.profile.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserProfileDto getUserProfile(Long userId) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
@@ -51,7 +53,7 @@ public class ProfileService {
             throw new CustomException(ErrorCode.RECENT_PASSWORD_REUSE);
         }
 
-//        user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
+        user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
     }
 }
