@@ -10,8 +10,14 @@ import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.room.RoomRepository;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,4 +42,14 @@ public class QuestionService {
         return new QuestionResponseDTO(question);
 
     }
+
+    public List<QuestionResponseDTO> getAllQuestion(Long roomId, int page, int pageSize) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Question> questionPage = questionRepository.findAllByRoom(room, pageable);
+        return questionPage.stream().map(QuestionResponseDTO::new).toList();
+    }
+
+
 }
