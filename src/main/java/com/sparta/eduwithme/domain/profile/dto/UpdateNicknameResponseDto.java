@@ -1,8 +1,8 @@
 package com.sparta.eduwithme.domain.profile.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UpdateNicknameResponseDto {
     private String nickName; // 서버가 반환할 닉네임
 
