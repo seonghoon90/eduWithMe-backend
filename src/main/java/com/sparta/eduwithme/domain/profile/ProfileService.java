@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfileService {
 
-    private final ProfileRespository profileRespository;
+    private final ProfileRepository profileRepository;
 
     public UserProfileDto getUserProfile(Long userId) {
-        User user = profileRespository.findById(userId).orElseThrow(() ->
+        User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserProfileDto.builder()
@@ -23,5 +23,18 @@ public class ProfileService {
                 .profileImage(user.getProfileImage())
                 .userRank(user.getUserRank())
                 .build();
+    }
+
+    public void updateUserProfile(Long userId, String email, String newNickname) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 이메일이 일치하는지 확인
+        if (!user.getEmail().equals(email)) {
+            throw new CustomException(ErrorCode.EMAIL_MISMATCH);
+        }
+
+        user.updateNickname(newNickname);
+        profileRepository.save(user);
     }
 }
