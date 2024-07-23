@@ -1,7 +1,7 @@
 package com.sparta.eduwithme.domain.question.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
-import com.sparta.eduwithme.domain.question.dto.QuestionRequestDTO;
+import com.sparta.eduwithme.domain.question.dto.QuestionRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,19 +44,28 @@ public class Question extends TimeStamp {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
-    public Question(Room room, QuestionRequestDTO requestDTO) {
+
+    public Question(Room room, QuestionRequestDto requestDto) {
         this.room = room;
-        this.title = requestDTO.getTitle();
-        this.content = requestDTO.getContent();
-        this.category = requestDTO.getCategory();
-        this.difficulty = requestDTO.getDifficulty();
-        this.point = requestDTO.getPoint();
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = requestDto.getCategory();
+        this.difficulty = requestDto.getDifficulty();
+        this.point = requestDto.getPoint();
         this.answers = new ArrayList<>();
     }
 
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
         answer.setQuestion(this);
+    }
+
+    public void update(String title, String content, Category category, Difficulty difficulty, Long point) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.difficulty = difficulty;
+        this.point = point;
     }
 
 

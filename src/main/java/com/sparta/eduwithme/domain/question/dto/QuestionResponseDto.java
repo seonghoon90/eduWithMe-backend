@@ -6,18 +6,22 @@ import com.sparta.eduwithme.domain.question.entity.Question;
 import lombok.Getter;
 
 @Getter
-public class QuestionTitleDTO {
-    private Long questionid;
+public class QuestionResponseDto {
+
+    private Long questionId;
     private String title;
+    private String content;
     private Category category;
     private Difficulty difficulty;
     private Long point;
 
-    public QuestionTitleDTO(Question question) {
-        this.questionid = question.getId();
+    public QuestionResponseDto(Question question) {
+        this.questionId = question.getId();
         this.title = question.getTitle();
+        this.content = question.getContent();
         this.category = question.getCategory();
         this.difficulty = question.getDifficulty();
         this.point = question.getPoint();
     }
+
 }
