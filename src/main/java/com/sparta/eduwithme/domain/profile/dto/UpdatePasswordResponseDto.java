@@ -1,8 +1,8 @@
 package com.sparta.eduwithme.domain.profile.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UpdatePasswordResponseDto {
     private String message;
 

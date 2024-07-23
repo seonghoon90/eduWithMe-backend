@@ -1,9 +1,9 @@
 package com.sparta.eduwithme.domain.profile.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class UpdatePasswordRequestDto {
     private String currentPassword;
