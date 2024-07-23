@@ -22,7 +22,7 @@ public class ProfileController {
     @PutMapping("/{userId}")
     public ResponseEntity<String> updateProfile(@PathVariable Long userId,
                                                 @RequestBody UpdateNicknameRequestDto request) {
-        profileService.updateUserProfile(userId, request.getEmail(), request.getNickname());
+        profileService.updateUserProfile(userId, request.getEmail(), request.getNickName());
 
         return ResponseEntity.ok("프로필 수정이 완료되었습니다.");
     }
