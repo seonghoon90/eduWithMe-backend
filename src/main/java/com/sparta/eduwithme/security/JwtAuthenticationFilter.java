@@ -70,25 +70,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     {
         User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
         String accessToken = jwtUtil.createAccessToken(user);
-//        String refreshToken = jwtUtil.createRefreshToken(user);
+        String refreshToken = jwtUtil.createRefreshToken(user);
 
-//        updateRefreshToken(user, refreshToken);
+        updateRefreshToken(user, refreshToken);
 
         StatusCommonResponse responseDto = new StatusCommonResponse(HttpStatus.OK.value(), "로그인이 성공적으로 되었습니다.");
 
         response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
-//        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("text/plain;charset=UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
     }
 
-//    private void updateRefreshToken(User user, String refreshToken) {
-//        String originalRefreshToken = jwtUtil.refreshTokenSubstring(refreshToken);
-//        user.updateRefreshToken(originalRefreshToken);
-//        userRepository.save(user);
-//        log.info("{}", "[로그인 시점][DB] refreshToken 업데이트 성공");
-//    }
+    private void updateRefreshToken(User user, String refreshToken) {
+        String originalRefreshToken = jwtUtil.refreshTokenSubstring(refreshToken);
+        user.updateRefreshToken(originalRefreshToken);
+        userRepository.save(user);
+        log.info("{}", "[로그인 시점][DB] refreshToken 업데이트 성공");
+    }
 
     @Override
     protected void unsuccessfulAuthentication(

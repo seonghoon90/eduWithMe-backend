@@ -34,6 +34,9 @@ public class User extends TimeStamp {
     @Column
     private String photoUrl;
 
+    @Column
+    private String refreshToken;
+
     public User(String email, String password, String nickName, String ranking, String photoUrl) {
         this.email = email;
         this.password = password;
@@ -46,5 +49,9 @@ public class User extends TimeStamp {
         this.email = email;
         this.password = password;
         this.nickName = nickName;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

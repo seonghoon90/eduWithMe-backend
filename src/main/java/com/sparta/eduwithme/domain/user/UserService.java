@@ -33,5 +33,9 @@ public class UserService {
         // 회원가입한 user DB에 저장
         userRepository.save(new User(email, password, nickName));
     }
+
+    public User findById(Long userId){
+        return userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_UNIQUE));
+    }
 }
 
