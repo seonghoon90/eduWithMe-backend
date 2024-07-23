@@ -27,4 +27,8 @@ public class User extends TimeStamp {
 
     @Column(nullable = false)
     private String password;
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 }
