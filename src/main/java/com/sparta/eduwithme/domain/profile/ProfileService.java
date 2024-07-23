@@ -2,9 +2,11 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
+import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
-import com.sparta.eduwithme.domain.profile.entity.User;
+import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserProfileDto getUserProfile(Long userId) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
@@ -19,9 +22,9 @@ public class ProfileService {
 
         return UserProfileDto.builder()
                 .email(user.getEmail())
-                .nickname(user.getNickname())
-                .profileImage(user.getProfileImage())
-                .userRank(user.getUserRank())
+                .nickName(user.getNickName())
+                .photoUrl(user.getPhotoUrl())
+                .ranking(user.getRanking())
                 .build();
     }
 
@@ -35,6 +38,18 @@ public class ProfileService {
         }
 
         user.updateNickname(newNickname);
+        profileRepository.save(user);
+    }
+
+    public void updateUserPassword(Long userId, UpdatePasswordRequestDto request) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.checkPassword(request.getCurrentPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
     }
 }

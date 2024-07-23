@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class UserProfileDto {
     private String email;
-    private String nickname;
-    private String profileImage;
-    private String userRank;
+    private String nickName;
+    private String photoUrl;
+    private String ranking;
 }
