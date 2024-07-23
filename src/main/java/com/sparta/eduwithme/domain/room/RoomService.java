@@ -7,6 +7,7 @@ import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +31,12 @@ public class RoomService {
                 .roomPassword(requestDto.getRoomPassword())
                 .managerUserId(user.getId()).build();
         roomRepository.save(room);
+    }
+
+    @Transactional(readOnly = true)
+    public Room findById(Long roomId) {
+        return roomRepository.findById(roomId).orElseThrow(
+                () -> new CustomException(ErrorCode.ROOM_NOT_FOUND)
+        );
     }
 }
