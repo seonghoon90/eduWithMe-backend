@@ -17,6 +17,8 @@ public enum ErrorCode {
     // user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
     EMAIL_MISMATCH(HttpStatus.NOT_FOUND, "이메일이 일치하지 않습니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 비밀번호입니다."),
+    RECENT_PASSWORD_REUSE(HttpStatus.BAD_REQUEST, "최근 사용한 비밀번호와 동일한 비밀번호는 사용할 수 없습니다."),
 
     // room
     SAME_NEW_ROOM_NAME(HttpStatus.BAD_REQUEST, "동일한 이름의 방을 생성할 수 없습니다."),
