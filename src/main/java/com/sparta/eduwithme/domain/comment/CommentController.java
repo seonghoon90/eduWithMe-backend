@@ -12,13 +12,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/question/{questionId}")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{questionId}/comments")
+    @PostMapping("/comments")
     public ResponseEntity<DataCommonResponse<CommentResponseDto>> createComment(@PathVariable Long questionId,
                                                                                 @Valid @RequestBody CommentRequestDto commentRequestDto,
                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {

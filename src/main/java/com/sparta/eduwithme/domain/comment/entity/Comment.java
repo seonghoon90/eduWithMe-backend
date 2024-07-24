@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
