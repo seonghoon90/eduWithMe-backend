@@ -2,6 +2,7 @@ package com.sparta.eduwithme.domain.question.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
 import com.sparta.eduwithme.domain.question.dto.AnswerRequestDto;
+import com.sparta.eduwithme.domain.question.dto.AnswerUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,19 +31,25 @@ public class Answer extends TimeStamp {
     @Column(nullable = false)
     private int answered;
 
-    @ManyToOne
-    @JoinColumn(name = "question_id")
+    @OneToOne(mappedBy = "answer")
     private Question question;
 
-    public Answer(AnswerRequestDto answerRequestDto) {
-        this.first = answerRequestDto.getFirst();
-        this.second = answerRequestDto.getSecond();
-        this.third = answerRequestDto.getThird();
-        this.fourth = answerRequestDto.getFourth();
-        this.answered = answerRequestDto.getAnswered();
+    public Answer(String first, String second, String third, String fourth, int answered) {
+        this.first = first;
+        this.second = second;
+        this.third = third;
+        this.fourth = fourth;
+        this.answered = answered;
     }
 
-    public void setQuestion(Question question) {
+    public void updateAnswer(AnswerUpdateRequestDto answerUpdateRequestDto) {
+        this.first = answerUpdateRequestDto.getFirst();
+        this.second = answerUpdateRequestDto.getSecond();
+        this.third = answerUpdateRequestDto.getThird();
+        this.fourth = answerUpdateRequestDto.getFourth();
+        this.answered = answerUpdateRequestDto.getAnswered();
+    }
+    protected void initQuestion(Question question) {
         this.question = question;
     }
 }

@@ -29,16 +29,26 @@ public class QuestionService {
     public QuestionResponseDto createQuestion(Long roomId, QuestionRequestDto requestDto) {
         Room room = roomService.findById(roomId);
 
-        Question question = new Question(room, requestDto);
+        Answer answer = new Answer(
+                requestDto.getAnswer().getFirst(),
+                requestDto.getAnswer().getSecond(),
+                requestDto.getAnswer().getThird(),
+                requestDto.getAnswer().getFourth(),
+                requestDto.getAnswer().getAnswered()
+        );
 
-        for (AnswerRequestDto answerRequestDTO : requestDto.getAnswerList()) {
-            Answer answer = new Answer(answerRequestDTO);
+        Question question = new Question(
+                room,
+                requestDto.getTitle(),
+                requestDto.getContent(),
+                requestDto.getCategory(),
+                requestDto.getDifficulty(),
+                requestDto.getPoint(),
+                answer
+        );
 
-            question.addAnswer(answer);
-        }
         questionRepository.save(question);
         return new QuestionResponseDto(question);
-
     }
 
     @Transactional(readOnly = true)
@@ -79,15 +89,16 @@ public class QuestionService {
             throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
         }
 
-        question.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory(),
-                requestDto.getDifficulty(), requestDto.getPoint());
+        question.updateQuestion(requestDto);
 
-        question.getAnswers().clear();
-        for (AnswerRequestDto answerRequestDto : requestDto.getAnswerList()) {
-            Answer answer = new Answer(answerRequestDto);
-            question.addAnswer(answer);
+        Answer answer = question.getAnswer();
+        if (answer == null) {
+            throw new CustomException(ErrorCode.ANSWER_NOT_FOUND);
         }
-        return new QuestionResponseDto(question);
+        answer.updateAnswer(requestDto.getAnswer());
+
+        Question updatedQuestion = questionRepository.save(question);
+        return new QuestionResponseDto(updatedQuestion);
     }
 
     @Transactional
