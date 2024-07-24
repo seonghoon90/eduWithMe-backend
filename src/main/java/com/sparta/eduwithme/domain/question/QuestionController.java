@@ -1,6 +1,7 @@
 package com.sparta.eduwithme.domain.question;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
+import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.question.dto.QuestionRequestDto;
 import com.sparta.eduwithme.domain.question.dto.QuestionResponseDto;
 import com.sparta.eduwithme.domain.question.dto.QuestionTitleDto;
@@ -58,6 +59,15 @@ public class QuestionController {
                                                                                   @RequestBody QuestionUpdateRequestDto requestDto) {
         QuestionResponseDto responseDto = questionService.updateQuestion(roomId, questionId,requestDto);
         DataCommonResponse<QuestionResponseDto> response = new DataCommonResponse<>(200,"문제 수정이 완료되었습니다.", responseDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //Question 삭제
+    @DeleteMapping("/rooms/{roomId}/question/{questionId}")
+    public ResponseEntity<StatusCommonResponse> deleteQuestion(@PathVariable Long roomId,
+                                                               @PathVariable Long questionId) {
+        questionService.deleteQuestion(roomId, questionId);
+        StatusCommonResponse response = new StatusCommonResponse(204, "문제 삭제가 완료되었습니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
