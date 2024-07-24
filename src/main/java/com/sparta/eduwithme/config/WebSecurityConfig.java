@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -64,17 +66,12 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(
-                                "/swagger",
-                                "/swagger-ui.html/**",
-                                "/swagger-ui/**",
-                                "/api-docs",
-                                "/api-docs/**",
-                                "/v3/api-docs/**",
-                                "/error",
-                                "/favicon.ico", "/**/*.png",
-                                "/**/*.gif", "/**/*.svg",
-                                "/**/*.jpg", "/**/*.html",
-                                "/**/*.css", "/**/*.js"
+                                antMatcher("/swagger/**"),
+                                antMatcher("/swagger-ui.html/**"),
+                                antMatcher("/swagger-ui/**"),
+                                antMatcher("/api-docs"),
+                                antMatcher("/v3/api-docs/**"),
+                                antMatcher("/api-docs/**")
                         ).permitAll()
                         .requestMatchers(
                                 "/users/signup", // 회원가입[POST]
