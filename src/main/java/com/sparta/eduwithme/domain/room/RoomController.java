@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
 import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
+import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,16 @@ public class RoomController {
                 HttpStatus.OK.value(),
                 "성공적으로 조회가 되었습니다.",
                 responseDtoList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{roomId}")
+    public ResponseEntity<StatusCommonResponse> updateRoom(@PathVariable Long roomId,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @RequestBody UpdateRequestDto requestDto)
+    {
+        roomService.updateRoom(userDetails.getUser(), roomId, requestDto);
+        StatusCommonResponse response = new StatusCommonResponse(HttpStatus.OK.value(), "방 제목 변경 성공");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

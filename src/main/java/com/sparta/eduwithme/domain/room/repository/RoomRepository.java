@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long>, RoomRepositoryCustom {
     Optional<Room> findByRoomName(String roomName);
     Long countByManagerUserId(Long managerUserId);
+    Optional<Room> findByIdAndManagerUserId(Long roomId, Long managerUserId);
 }
