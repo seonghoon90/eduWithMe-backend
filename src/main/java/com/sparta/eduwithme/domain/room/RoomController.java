@@ -26,9 +26,8 @@ public class RoomController {
      * @return : message, HttpStatusCode
      */
     @PostMapping("/public")
-    public ResponseEntity<StatusCommonResponse> createPublicRoom(
-            @RequestBody @Valid CreatePublicRoomRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public ResponseEntity<StatusCommonResponse> createPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                 @RequestBody @Valid CreatePublicRoomRequestDto requestDto)
     {
         roomService.createPublicRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
@@ -38,9 +37,8 @@ public class RoomController {
     }
 
     @PostMapping("/private")
-    public ResponseEntity<StatusCommonResponse> createPrivateRoom(
-            @RequestBody @Valid CreatePrivateRoomRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public ResponseEntity<StatusCommonResponse> createPrivateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  @RequestBody @Valid CreatePrivateRoomRequestDto requestDto)
     {
         roomService.createPrivateRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
@@ -62,10 +60,9 @@ public class RoomController {
     }
 
     @PutMapping("/{roomId}")
-    public ResponseEntity<StatusCommonResponse> updateRoom(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody UpdateRequestDto requestDto,
-            @PathVariable Long roomId)
+    public ResponseEntity<StatusCommonResponse> updateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @RequestBody UpdateRequestDto requestDto,
+                                                           @PathVariable Long roomId)
     {
         roomService.updateRoom(userDetails.getUser(), roomId, requestDto);
         StatusCommonResponse response = new StatusCommonResponse(HttpStatus.OK.value(), "방 제목 변경 성공");
@@ -73,9 +70,8 @@ public class RoomController {
     }
 
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<StatusCommonResponse> deleteRoom(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long roomId)
+    public ResponseEntity<StatusCommonResponse> deleteRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @PathVariable Long roomId)
     {
         roomService.deleteRoom(userDetails.getUser(), roomId);
         StatusCommonResponse response = new StatusCommonResponse(
