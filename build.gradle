@@ -32,6 +32,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // mysql-connector
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // swagger 의존성 추가
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -49,4 +56,21 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def generated = 'src/main/generated'
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+clean {
+    delete file(generated)
+}
+jar {
+    enabled = false
 }

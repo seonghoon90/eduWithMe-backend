@@ -29,4 +29,8 @@ public class Room extends TimeStamp {
         this.managerUserId = managerUserId;
     }
 
+    public void updateRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
 }

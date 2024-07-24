@@ -9,15 +9,15 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class QuestionRequestDTO {
+public class QuestionUpdateRequestDto {
     private String title;
     private String content;
     private Category category;
     private Difficulty difficulty;
     private Long point;
-    private List<AnswerRequestDTO> answerList;
+    private List<AnswerRequestDto> answerList;
 
-    public QuestionRequestDTO(String title, String content, Category category, Difficulty difficulty, Long point, List<AnswerRequestDTO> answerList) {
+    public QuestionUpdateRequestDto(String title, String content, Category category, Difficulty difficulty, Long point, List<AnswerRequestDto> answerList) {
         this.title = title;
         this.content = content;
         this.category = category;

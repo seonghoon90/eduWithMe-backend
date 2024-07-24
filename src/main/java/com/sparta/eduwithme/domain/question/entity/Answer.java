@@ -1,6 +1,7 @@
 package com.sparta.eduwithme.domain.question.entity;
 
-import com.sparta.eduwithme.domain.question.dto.AnswerRequestDTO;
+import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.question.dto.AnswerRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "answers")
-public class Answer {
+public class Answer extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,12 +34,12 @@ public class Answer {
     @JoinColumn(name = "question_id")
     private Question question;
 
-    public Answer(AnswerRequestDTO answerRequestDTO) {
-        this.first = answerRequestDTO.getFirst();
-        this.second = answerRequestDTO.getSecond();
-        this.third = answerRequestDTO.getThird();
-        this.fourth = answerRequestDTO.getFourth();
-        this.answered = answerRequestDTO.getAnswered();
+    public Answer(AnswerRequestDto answerRequestDto) {
+        this.first = answerRequestDto.getFirst();
+        this.second = answerRequestDto.getSecond();
+        this.third = answerRequestDto.getThird();
+        this.fourth = answerRequestDto.getFourth();
+        this.answered = answerRequestDto.getAnswered();
     }
 
     public void setQuestion(Question question) {

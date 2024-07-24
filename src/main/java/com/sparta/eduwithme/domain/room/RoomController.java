@@ -1,16 +1,18 @@
 package com.sparta.eduwithme.domain.room;
 
+import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
+import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
+import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,5 +36,27 @@ public class RoomController {
                 HttpStatus.CREATED.value(),
                 "성공적으로 방 생성이 되었습니다.");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<DataCommonResponse<List<SelectRoomListResponseDto>>> getRoomListWithPage(
+            @RequestParam(value = "page") int page)
+    {
+        List<SelectRoomListResponseDto> responseDtoList = roomService.getRoomListWithPage(page);
+        DataCommonResponse<List<SelectRoomListResponseDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "성공적으로 조회가 되었습니다.",
+                responseDtoList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{roomId}")
+    public ResponseEntity<StatusCommonResponse> updateRoom(@PathVariable Long roomId,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @RequestBody UpdateRequestDto requestDto)
+    {
+        roomService.updateRoom(userDetails.getUser(), roomId, requestDto);
+        StatusCommonResponse response = new StatusCommonResponse(HttpStatus.OK.value(), "방 제목 변경 성공");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -19,13 +19,17 @@ public enum ErrorCode {
     EMAIL_MISMATCH(HttpStatus.NOT_FOUND, "이메일이 일치하지 않습니다."),
     USER_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "중복된 유저가 존재합니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 비밀번호 형식입니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "현재 비밀번호가 틀렸습니다."),
 
     // room
     SAME_NEW_ROOM_NAME(HttpStatus.BAD_REQUEST, "동일한 이름의 방을 생성할 수 없습니다."),
     CAN_NOT_MADE_ROOM(HttpStatus.BAD_REQUEST, "방을 2개 이상 만들 수 없습니다."),
     ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "방을 찾을 수 없습니다."),
     // question
-    KEYWORD_NOT_FOUND(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다.");
+    KEYWORD_NOT_FOUND(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다."),
+    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제를 찾을 수 없습니다."),
+    QUESTION_ROOM_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제가 선택한 방에 속하지 않습니다.");
+
 
     // comment
 

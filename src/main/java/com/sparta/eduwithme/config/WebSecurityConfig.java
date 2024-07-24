@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -57,19 +59,27 @@ public class WebSecurityConfig {
         http.csrf((csrf) -> csrf.disable());
 
         http.sessionManagement((sessionManagement) ->
-            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-            authorizeHttpRequests
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers(
-                    "/users/signup", // 회원가입[POST]
-                    "/users/login", // 로그인[POST]
-                    "/users/refresh", // 토큰 재발급[POST]
-                    "/users/kakao/**"
-                ).permitAll()
-                .anyRequest().authenticated()
+                authorizeHttpRequests
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(
+                                antMatcher("/swagger/**"),
+                                antMatcher("/swagger-ui.html/**"),
+                                antMatcher("/swagger-ui/**"),
+                                antMatcher("/api-docs"),
+                                antMatcher("/v3/api-docs/**"),
+                                antMatcher("/api-docs/**")
+                        ).permitAll()
+                        .requestMatchers(
+                                "/users/signup", // 회원가입[POST]
+                                "/users/login", // 로그인[POST]
+                                "/users/refresh", // 토큰 재발급[POST]
+                                "/users/kakao/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
