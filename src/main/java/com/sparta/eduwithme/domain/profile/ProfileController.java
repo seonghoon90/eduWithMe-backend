@@ -1,5 +1,7 @@
 package com.sparta.eduwithme.domain.profile;
 
+import com.sparta.eduwithme.common.response.DataCommonResponse;
+import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -20,29 +22,40 @@ public class ProfileController {
 
     // 프로필 조회
     @GetMapping
-    public ResponseEntity<UserProfileDto> getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<DataCommonResponse<UserProfileDto>> getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         UserProfileDto userProfile = profileService.getUserProfile(userId);
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        DataCommonResponse<UserProfileDto> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "프로필 조회 성공",
+                userProfile
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 닉네임 수정
     @PutMapping
-    public ResponseEntity<UpdateNicknameResponseDto> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                    @RequestBody UpdateNicknameRequestDto requestDto) {
+    public ResponseEntity<StatusCommonResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                               @RequestBody UpdateNicknameRequestDto requestDto) {
         Long userId = userDetails.getUser().getId();
         profileService.updateUserProfile(userId, requestDto.getEmail(), requestDto.getNickName());
-        UpdateNicknameResponseDto responseDto = new UpdateNicknameResponseDto(requestDto.getNickName());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        StatusCommonResponse response = new StatusCommonResponse(
+                HttpStatus.OK.value(),
+                "닉네임이 성공적으로 변경되었습니다."
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 비밀번호 수정
     @PutMapping("/password")
-    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                    @RequestBody @Valid UpdatePasswordRequestDto requestDto) {
+    public ResponseEntity<StatusCommonResponse> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                               @RequestBody @Valid UpdatePasswordRequestDto requestDto) {
         Long userId = userDetails.getUser().getId();
         profileService.updateUserPassword(userId, requestDto);
-        UpdatePasswordResponseDto responseDto = new UpdatePasswordResponseDto("비밀번호가 성공적으로 변경되었습니다.");
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        StatusCommonResponse response = new StatusCommonResponse(
+                HttpStatus.OK.value(),
+                "비밀번호가 성공적으로 변경되었습니다."
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
