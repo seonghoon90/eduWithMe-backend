@@ -27,7 +27,9 @@ public enum ErrorCode {
     ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "방을 찾을 수 없습니다."),
     // question
     KEYWORD_NOT_FOUND(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다."),
-    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제를 찾을 수 없습니다.");
+    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제를 찾을 수 없습니다."),
+    QUESTION_ROOM_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제가 선택한 방에 속하지 않습니다.");
+
 
     // comment
 

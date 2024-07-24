@@ -27,9 +27,9 @@ public class QuestionService {
 
     @Transactional
     public QuestionResponseDto createQuestion(Long roomId, QuestionRequestDto requestDto) {
-        Room checkRoom = roomService.findById(roomId);
+        Room room = roomService.findById(roomId);
 
-        Question question = new Question(checkRoom, requestDto);
+        Question question = new Question(room, requestDto);
 
         for (AnswerRequestDto answerRequestDTO : requestDto.getAnswerList()) {
             Answer answer = new Answer(answerRequestDTO);
@@ -43,10 +43,10 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<QuestionResponseDto> getAllQuestion(Long roomId, int page, int pageSize) {
-        Room checkRoom = roomService.findById(roomId);
+        Room room = roomService.findById(roomId);
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Question> questionPage = questionRepository.findAllByRoom(checkRoom, pageable);
+        Page<Question> questionPage = questionRepository.findAllByRoom(room, pageable);
         return questionPage.stream()
                 .map(QuestionResponseDto::new)
                 .toList();
@@ -59,11 +59,11 @@ public class QuestionService {
             throw new CustomException(ErrorCode.KEYWORD_NOT_FOUND);
         }
 
-        Room checkRoom = roomService.findById(roomId);
+        Room room = roomService.findById(roomId);
 
         String trimmedKeyword = keyword.trim();
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Question> questionPage = questionRepository.findByRoomAndTitleContainingIgnoreCase(checkRoom, trimmedKeyword, pageable);
+        Page<Question> questionPage = questionRepository.findByRoomAndTitleContainingIgnoreCase(room, trimmedKeyword, pageable);
 
         return questionPage.getContent().stream()
                 .map(QuestionTitleDto::new)
@@ -72,22 +72,33 @@ public class QuestionService {
 
     @Transactional
     public QuestionResponseDto updateQuestion(Long roomId, Long questionId, QuestionUpdateRequestDto requestDto) {
-        Room checkRoom = roomService.findById(roomId);
-        Question checkquestion = findById(questionId);
+        Room room = roomService.findById(roomId);
+        Question question = findById(questionId);
 
-        if (!checkquestion.getRoom().getId().equals(roomId)) {
-            throw new CustomException(ErrorCode.QUESTION_NOT_FOUND);
+        if (!question.getRoom().getId().equals(room.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
         }
 
-        checkquestion.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory(),
+        question.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory(),
                             requestDto.getDifficulty(), requestDto.getPoint());
 
-        checkquestion.getAnswers().clear();
+        question.getAnswers().clear();
         for (AnswerRequestDto answerRequestDto : requestDto.getAnswerList()) {
             Answer answer = new Answer(answerRequestDto);
-            checkquestion.addAnswer(answer);
+            question.addAnswer(answer);
         }
-        return new QuestionResponseDto(checkquestion);
+        return new QuestionResponseDto(question);
+    }
+
+    @Transactional
+    public void deleteQuestion(Long roomId, Long questionId) {
+        Room room = roomService.findById(roomId);
+        Question question = findById(questionId);
+
+        if (!question.getRoom().getId().equals(room.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
+        }
+        questionRepository.delete(question);
     }
 
     @Transactional(readOnly = true)
