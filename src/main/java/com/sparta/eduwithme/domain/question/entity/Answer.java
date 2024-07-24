@@ -1,5 +1,6 @@
 package com.sparta.eduwithme.domain.question.entity;
 
+import com.sparta.eduwithme.common.TimeStamp;
 import com.sparta.eduwithme.domain.question.dto.AnswerRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "answers")
-public class Answer {
+public class Answer extends TimeStamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
