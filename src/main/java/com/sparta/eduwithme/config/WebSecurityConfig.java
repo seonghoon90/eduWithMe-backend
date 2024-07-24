@@ -57,18 +57,31 @@ public class WebSecurityConfig {
         http.csrf((csrf) -> csrf.disable());
 
         http.sessionManagement((sessionManagement) ->
-            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-            authorizeHttpRequests
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers(
-                    "/users/signup", // 회원가입[POST]
-                    "/users/login", // 로그인[POST]
-                    "/users/refresh" // 토큰 재발급[POST]
-                ).permitAll()
-                .anyRequest().authenticated()
+                authorizeHttpRequests
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(
+                                "/swagger",
+                                "/swagger-ui.html/**",
+                                "/swagger-ui/**",
+                                "/api-docs",
+                                "/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/error",
+                                "/favicon.ico", "/**/*.png",
+                                "/**/*.gif", "/**/*.svg",
+                                "/**/*.jpg", "/**/*.html",
+                                "/**/*.css", "/**/*.js"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/users/signup", // 회원가입[POST]
+                                "/users/login", // 로그인[POST]
+                                "/users/refresh" // 토큰 재발급[POST]
+                        ).permitAll()
+                        .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
