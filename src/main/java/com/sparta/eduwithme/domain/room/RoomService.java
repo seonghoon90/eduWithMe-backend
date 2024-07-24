@@ -2,10 +2,7 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
-import com.sparta.eduwithme.domain.room.dto.CreatePrivateRoomRequestDto;
-import com.sparta.eduwithme.domain.room.dto.CreatePublicRoomRequestDto;
-import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
-import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
+import com.sparta.eduwithme.domain.room.dto.*;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.room.entity.Student;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -94,6 +92,17 @@ public class RoomService {
         return roomRepository.findByIdAndManagerUserId(roomId, user.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.ROOM_NOT_OWNER)
         );
+    }
+
+    // true = 비밀번호 있는 방
+    // false = 비밀번호 없는 방
+    @Transactional
+    public DetailRoomResponseDto selectDetailRoom(Long roomId) {
+        Room room = findById(roomId);
+        if(Objects.isNull(room.getRoomPassword())) {
+            return new DetailRoomResponseDto(room, false);
+        }
+        return new DetailRoomResponseDto(room, true);
     }
 
     @Transactional(readOnly = true)

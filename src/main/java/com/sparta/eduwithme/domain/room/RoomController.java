@@ -2,10 +2,7 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
-import com.sparta.eduwithme.domain.room.dto.CreatePrivateRoomRequestDto;
-import com.sparta.eduwithme.domain.room.dto.CreatePublicRoomRequestDto;
-import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
-import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
+import com.sparta.eduwithme.domain.room.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +26,8 @@ public class RoomController {
      * @return : message, HttpStatusCode
      */
     @PostMapping("/public")
-    public ResponseEntity<StatusCommonResponse> createPublicRoom(
-            @RequestBody @Valid CreatePublicRoomRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public ResponseEntity<StatusCommonResponse> createPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                 @RequestBody @Valid CreatePublicRoomRequestDto requestDto)
     {
         roomService.createPublicRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
@@ -41,9 +37,8 @@ public class RoomController {
     }
 
     @PostMapping("/private")
-    public ResponseEntity<StatusCommonResponse> createPrivateRoom(
-            @RequestBody @Valid CreatePrivateRoomRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public ResponseEntity<StatusCommonResponse> createPrivateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                  @RequestBody @Valid CreatePrivateRoomRequestDto requestDto)
     {
         roomService.createPrivateRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
@@ -76,11 +71,22 @@ public class RoomController {
 
     @DeleteMapping("/{roomId}")
     public ResponseEntity<StatusCommonResponse> deleteRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                           @PathVariable Long roomId) {
+                                                           @PathVariable Long roomId)
+    {
         roomService.deleteRoom(userDetails.getUser(), roomId);
         StatusCommonResponse response = new StatusCommonResponse(
                 HttpStatus.NO_CONTENT.value(),
                 "방 삭제가 완료 되었습니다.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 방 입장 전 상세 조회(password 가 있는 방 인지 아닌지 체크)
+    @PostMapping("/{roomId}")
+    public ResponseEntity<DataCommonResponse<DetailRoomResponseDto>> selectDetailRoom(@PathVariable Long roomId) {
+        DetailRoomResponseDto responseDto = roomService.selectDetailRoom(roomId);
+        DataCommonResponse<DetailRoomResponseDto> response = new DataCommonResponse<>(HttpStatus.OK.value(),
+                "방 상세 조회 성공",
+                responseDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
