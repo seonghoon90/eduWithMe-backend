@@ -2,10 +2,12 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
-import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
+import com.sparta.eduwithme.domain.room.dto.CreatePrivateRoomRequestDto;
+import com.sparta.eduwithme.domain.room.dto.CreatePublicRoomRequestDto;
 import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
 import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +24,31 @@ public class RoomController {
     private final RoomService roomService;
 
     /**
-     * [방 생성 기능]
-     * @param requestDto : (방 제목, 방 패스워드)
+     * [public room 생성 기능]
+     * @param requestDto : roomTitle
      * @return : message, HttpStatusCode
      */
-    @PostMapping
-    public ResponseEntity<StatusCommonResponse> createRoom(
-            @RequestBody CreateRoomRequestDto requestDto,
+    @PostMapping("/public")
+    public ResponseEntity<StatusCommonResponse> createPublicRoom(
+            @RequestBody @Valid CreatePublicRoomRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        roomService.createRoom(requestDto, userDetails.getUser());
+        roomService.createPublicRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
                 HttpStatus.CREATED.value(),
-                "성공적으로 방 생성이 되었습니다.");
+                "성공적으로 public 룸이 생성 되었습니다.");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<StatusCommonResponse> createPrivateRoom(
+            @RequestBody @Valid CreatePrivateRoomRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        roomService.createPrivateRoom(requestDto, userDetails.getUser());
+        StatusCommonResponse response = new StatusCommonResponse(
+                HttpStatus.CREATED.value(),
+                "성공적으로 private 룸이 생성 되었습니다.");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
