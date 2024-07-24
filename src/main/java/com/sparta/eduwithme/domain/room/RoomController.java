@@ -51,12 +51,22 @@ public class RoomController {
     }
 
     @PutMapping("/{roomId}")
-    public ResponseEntity<StatusCommonResponse> updateRoom(@PathVariable Long roomId,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                           @RequestBody UpdateRequestDto requestDto)
+    public ResponseEntity<StatusCommonResponse> updateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @RequestBody UpdateRequestDto requestDto,
+                                                           @PathVariable Long roomId)
     {
         roomService.updateRoom(userDetails.getUser(), roomId, requestDto);
         StatusCommonResponse response = new StatusCommonResponse(HttpStatus.OK.value(), "방 제목 변경 성공");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{roomId}")
+    public ResponseEntity<StatusCommonResponse> deleteRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                           @PathVariable Long roomId) {
+        roomService.deleteRoom(userDetails.getUser(), roomId);
+        StatusCommonResponse response = new StatusCommonResponse(
+                HttpStatus.NO_CONTENT.value(),
+                "방 삭제가 완료 되었습니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -1,10 +1,13 @@
 package com.sparta.eduwithme.domain.room.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.question.entity.Question;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Table(name = "rooms")
 @Entity
@@ -21,6 +24,12 @@ public class Room extends TimeStamp {
     private String roomPassword;
 
     private Long managerUserId;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Student> students;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions;
 
     @Builder
     public Room(String roomName, String roomPassword, Long managerUserId) {
