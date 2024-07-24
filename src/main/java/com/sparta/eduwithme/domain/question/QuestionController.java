@@ -76,4 +76,15 @@ public class QuestionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //Question 답변 제출
+    @PostMapping("/rooms/{roomId}/question/{questionId}/submit")
+    public ResponseEntity<DataCommonResponse<AnswerResultDto>> submitAnswer(@PathVariable Long roomId,
+                                                                            @PathVariable Long questionId,
+                                                                            @RequestBody AnswerSubmissionDto submissionDto) {
+        AnswerResultDto result = questionService.submitAnswer(roomId, questionId, submissionDto);
+        DataCommonResponse<AnswerResultDto> response = new DataCommonResponse<>(200, "답변이 제출되었습니다.", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+
 }

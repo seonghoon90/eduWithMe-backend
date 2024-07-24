@@ -124,6 +124,37 @@ public class QuestionService {
         return new QuestionDetailDto(question);
     }
 
+    @Transactional
+    public AnswerResultDto submitAnswer(Long roomId, Long questionId, AnswerSubmissionDto submissionDto) {
+        Room room = roomService.findById(roomId);
+        Question question = findById(questionId);
+
+        if (!question.getRoom().getId().equals(room.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
+        }
+
+        Answer answer = question.getAnswer();
+        if (answer == null) {
+            throw new CustomException(ErrorCode.ANSWER_NOT_FOUND);
+        }
+
+        boolean isCorrect = (submissionDto.getSelectedAnswer() == answer.getAnswered());
+        Long earnedPoints;
+        String message;
+        // 점수가 있는 경우
+        if(isCorrect) {
+            earnedPoints = question.getPoint();
+            message = "정답 입니다.";
+            // 학습 현황 DB에 해결한 타입으로 저장
+        } else {
+            earnedPoints = 0L;
+            message = "오답 입니다.";
+            // 학습 현황 DB에 오답 타입으로 저장
+        }
+
+        return new AnswerResultDto(isCorrect, earnedPoints, message);
+    }
+
     @Transactional(readOnly = true)
     public Question findById(Long questionId) {
         return questionRepository.findById(questionId).orElseThrow(
