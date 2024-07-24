@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.profile.dto.UpdateNicknameRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
+import com.sparta.eduwithme.domain.profile.dto.UploadPhotoResponseDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -62,21 +63,22 @@ public class ProfileController {
 
     // 프로필 사진 업로드
     @PostMapping("/photo")
-    public ResponseEntity<StatusCommonResponse> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                   @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<UploadPhotoResponseDto> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                     @RequestParam("file") MultipartFile file) {
         Long userId = userDetails.getUser().getId();
         try {
             String fileUrl = profileService.uploadProfilePhoto(userId, file);
-            StatusCommonResponse response = new StatusCommonResponse(
+            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
                     HttpStatus.OK.value(),
                     "프로필 사진이 성공적으로 업로드되었습니다.",
                     fileUrl
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            StatusCommonResponse response = new StatusCommonResponse(
+            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "프로필 사진 업로드에 실패했습니다."
+                    "프로필 사진 업로드에 실패했습니다.",
+                    null
             );
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
