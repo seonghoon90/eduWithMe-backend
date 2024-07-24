@@ -19,6 +19,7 @@ public enum ErrorCode {
     EMAIL_MISMATCH(HttpStatus.NOT_FOUND, "이메일이 일치하지 않습니다."),
     USER_NOT_UNIQUE(HttpStatus.BAD_REQUEST, "중복된 유저가 존재합니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 비밀번호 형식입니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "현재 비밀번호가 틀렸습니다."),
 
     // room
     SAME_NEW_ROOM_NAME(HttpStatus.BAD_REQUEST, "동일한 이름의 방을 생성할 수 없습니다."),

@@ -9,12 +9,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
     public UserProfileDto getUserProfile(Long userId) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
@@ -45,8 +49,14 @@ public class ProfileService {
         User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (!user.checkPassword(request.getCurrentPassword())) {
+        // 비밀번호 형식 검증
+        if (!PASSWORD_PATTERN.matcher(request.getNewPassword()).matches()) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        // 현재 비밀번호 검증
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
 
         user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
