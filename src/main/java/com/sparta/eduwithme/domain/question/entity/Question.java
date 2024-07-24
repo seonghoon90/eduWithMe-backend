@@ -1,6 +1,7 @@
 package com.sparta.eduwithme.domain.question.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.question.dto.QuestionRequestDto;
 import com.sparta.eduwithme.domain.question.dto.QuestionUpdateRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
@@ -45,6 +46,9 @@ public class Question extends TimeStamp {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "answer_id")
     private Answer answer;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
 
     public Question(Room room, String title, String content, Category category, Difficulty difficulty, Long point, Answer answer) {
