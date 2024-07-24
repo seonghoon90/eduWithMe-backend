@@ -50,11 +50,11 @@ public class User extends TimeStamp {
         this.nickName = newNickname;
     }
 
-    public boolean checkPassword(String currentPassword) {
-        return this.password.equals(currentPassword);
-    }
-
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void updatePhotoUrl(String newPhotoUrl) {
+        this.photoUrl = newPhotoUrl;
     }
 }
