@@ -2,15 +2,15 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
-import com.sparta.eduwithme.domain.profile.dto.*;
+import com.sparta.eduwithme.domain.profile.dto.UpdateNicknameRequestDto;
+import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
+import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
