@@ -82,9 +82,7 @@ public class RoomController {
 
     // 방 입장 전 상세 조회(password 가 있는 방 인지 아닌지 체크)
     @PostMapping("/{roomId}")
-    public ResponseEntity<DataCommonResponse<DetailRoomResponseDto>> selectDetailRoom(
-            @PathVariable Long roomId)
-    {
+    public ResponseEntity<DataCommonResponse<DetailRoomResponseDto>> selectDetailRoom(@PathVariable Long roomId) {
         DetailRoomResponseDto responseDto = roomService.selectDetailRoom(roomId);
         DataCommonResponse<DetailRoomResponseDto> response = new DataCommonResponse<>(HttpStatus.OK.value(),
                 "방 상세 조회 성공",
