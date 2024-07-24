@@ -2,7 +2,8 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
-import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
+import com.sparta.eduwithme.domain.room.dto.CreatePrivateRoomRequestDto;
+import com.sparta.eduwithme.domain.room.dto.CreatePublicRoomRequestDto;
 import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
 import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
@@ -27,15 +28,22 @@ public class RoomService {
     private static final int ROOM_CREATE_LIMIT = 2;
     private static final int pageSize = 5;
 
-    public void createRoom(CreateRoomRequestDto requestDto, User user) {
-        boolean isDuplicateRoomName = roomRepository.findByRoomName(requestDto.getRoomName()).isPresent();
-        if(isDuplicateRoomName) {
-            throw new CustomException(ErrorCode.SAME_NEW_ROOM_NAME);
-        }
-        Long countRooms = roomRepository.countByManagerUserId(user.getId());
-        if(countRooms >= ROOM_CREATE_LIMIT) {
-            throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
-        }
+    // public room
+    public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {
+        isDuplicationRoomName(requestDto.getRoomName());
+        countManagerRooms(user.getId());
+        Room room = roomRepository.save(Room.builder()
+                .roomName(requestDto.getRoomName())
+                .managerUserId(user.getId()).build());
+
+        Student student = Student.builder().user(user).room(room).build();
+        studentRepository.save(student);
+    }
+
+    // private room
+    public void createPrivateRoom(CreatePrivateRoomRequestDto requestDto, User user) {
+        isDuplicationRoomName(requestDto.getRoomName());
+        countManagerRooms(user.getId());
         Room room = roomRepository.save(Room.builder()
                 .roomName(requestDto.getRoomName())
                 .roomPassword(requestDto.getRoomPassword())
@@ -43,6 +51,21 @@ public class RoomService {
 
         Student student = Student.builder().user(user).room(room).build();
         studentRepository.save(student);
+    }
+
+    // 똑같은 이름에 대한 방 확인
+    private void isDuplicationRoomName(String roomName) {
+        if(roomRepository.findByRoomName(roomName).isPresent()) {
+            throw new CustomException(ErrorCode.SAME_NEW_ROOM_NAME);
+        }
+    }
+
+    // 방 만든 유저의 방 갯수 제한
+    private void countManagerRooms(Long userId) {
+        Long roomCount = roomRepository.countByManagerUserId(userId);
+        if(roomCount >= ROOM_CREATE_LIMIT) {
+            throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
+        }
     }
 
     public List<SelectRoomListResponseDto> getRoomListWithPage(int page) {
