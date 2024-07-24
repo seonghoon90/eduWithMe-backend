@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
 import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
+import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
@@ -44,6 +45,14 @@ public class RoomService {
         return roomRepository.getRoomListWithPage(pageRequest.getOffset(), pageRequest.getPageSize())
                 .stream()
                 .map(SelectRoomListResponseDto::new).toList();
+    }
+
+    @Transactional
+    public void updateRoom(User user, Long roomId, UpdateRequestDto requestDto) {
+        Room room = roomRepository.findByIdAndManagerUserId(user.getId(), roomId).orElseThrow(
+                () -> new CustomException(ErrorCode.ROOM_NOT_FOUND)
+        );
+        room.updateRoomName(requestDto.getRoomName());
     }
 
     @Transactional(readOnly = true)
