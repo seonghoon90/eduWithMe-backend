@@ -78,7 +78,8 @@ public class User extends TimeStamp {
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
-      
+    }
+
     public void updatePhotoUrl(String newPhotoUrl) {
         this.photoUrl = newPhotoUrl;
     }
