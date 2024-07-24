@@ -8,7 +8,13 @@ import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
@@ -17,6 +23,8 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private String uploadDir;
 
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
@@ -61,5 +69,44 @@ public class ProfileService {
 
         user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
+    }
+
+    // 프로필 사진 업로드
+    public String uploadProfilePhoto(Long userId, MultipartFile file) {
+        String directoryPath = uploadDir + "images/" + userId + "/";
+        String filename = storeFile(directoryPath, file);
+        String fileUrl = "/images/" + userId + "/" + filename;
+
+        // 사용자 프로필 사진 URL 업데이트
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.updatePhotoUrl(fileUrl);
+        profileRepository.save(user);
+
+        return fileUrl;
+    }
+
+    private String storeFile(String directoryPath, MultipartFile file) {
+        Path uploadPath = Paths.get(directoryPath);
+
+        // 디렉토리 생성
+        try {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_DIRECTORY_CREATION_FAILED);
+        }
+
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path destinationFile = uploadPath.resolve(Paths.get(filename)).normalize().toAbsolutePath();
+
+        try {
+            Files.copy(file.getInputStream(), destinationFile);
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_STORAGE_FAILED);
+        }
+
+        return filename;
     }
 }

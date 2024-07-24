@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,5 +58,27 @@ public class ProfileController {
                 "비밀번호가 성공적으로 변경되었습니다."
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 프로필 사진 업로드
+    @PostMapping("/photo")
+    public ResponseEntity<StatusCommonResponse> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                   @RequestParam("file") MultipartFile file) {
+        Long userId = userDetails.getUser().getId();
+        try {
+            String fileUrl = profileService.uploadProfilePhoto(userId, file);
+            StatusCommonResponse response = new StatusCommonResponse(
+                    HttpStatus.OK.value(),
+                    "프로필 사진이 성공적으로 업로드되었습니다.",
+                    fileUrl
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            StatusCommonResponse response = new StatusCommonResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "프로필 사진 업로드에 실패했습니다."
+            );
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
