@@ -6,7 +6,9 @@ import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
 import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
 import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
+import com.sparta.eduwithme.domain.room.entity.Student;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
+import com.sparta.eduwithme.domain.room.repository.StudentRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import java.util.List;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final StudentRepository studentRepository;
 
     private static final int ROOM_CREATE_LIMIT = 2;
     private static final int pageSize = 5;
@@ -33,11 +36,13 @@ public class RoomService {
         if(countRooms >= ROOM_CREATE_LIMIT) {
             throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
         }
-        Room room = Room.builder()
+        Room room = roomRepository.save(Room.builder()
                 .roomName(requestDto.getRoomName())
                 .roomPassword(requestDto.getRoomPassword())
-                .managerUserId(user.getId()).build();
-        roomRepository.save(room);
+                .managerUserId(user.getId()).build());
+
+        Student student = Student.builder().user(user).room(room).build();
+        studentRepository.save(student);
     }
 
     public List<SelectRoomListResponseDto> getRoomListWithPage(int page) {
@@ -49,10 +54,23 @@ public class RoomService {
 
     @Transactional
     public void updateRoom(User user, Long roomId, UpdateRequestDto requestDto) {
-        Room room = roomRepository.findByIdAndManagerUserId(user.getId(), roomId).orElseThrow(
-                () -> new CustomException(ErrorCode.ROOM_NOT_FOUND)
-        );
+        Room room = findByIdAndManagerUserId(user, roomId);
         room.updateRoomName(requestDto.getRoomName());
+    }
+
+    public void deleteRoom(User user, Long roomId) {
+        Room room = findByIdAndManagerUserId(user, roomId);
+        roomRepository.delete(room);
+    }
+
+    private Room findByIdAndManagerUserId(User user, Long roomId) {
+        boolean isRoomExist = roomRepository.findById(roomId).isPresent();
+        if(!isRoomExist) {
+            throw new CustomException(ErrorCode.ROOM_NOT_FOUND);
+        }
+        return roomRepository.findByIdAndManagerUserId(roomId, user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.ROOM_NOT_OWNER)
+        );
     }
 
     @Transactional(readOnly = true)

@@ -80,7 +80,7 @@ public class QuestionService {
         }
 
         question.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory(),
-                            requestDto.getDifficulty(), requestDto.getPoint());
+                requestDto.getDifficulty(), requestDto.getPoint());
 
         question.getAnswers().clear();
         for (AnswerRequestDto answerRequestDto : requestDto.getAnswerList()) {
@@ -99,6 +99,18 @@ public class QuestionService {
             throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
         }
         questionRepository.delete(question);
+    }
+
+    @Transactional(readOnly = true)
+    public QuestionDetailDto getQuestionDetail(Long roomId, Long questionId) {
+        Room room = roomService.findById(roomId);
+        Question question = findById(questionId);
+
+        if (!question.getRoom().getId().equals(room.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
+        }
+
+        return new QuestionDetailDto(question);
     }
 
     @Transactional(readOnly = true)
