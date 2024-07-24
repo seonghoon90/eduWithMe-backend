@@ -7,7 +7,7 @@ public class StatusCommonResponse {
 
     private final Integer httpStatusCode;
     private final String message;
-    private String photoUrl;
+    private final String photoUrl;
 
     // 세 가지 필드를 사용하는 생성자
     public StatusCommonResponse(int httpStatusCode, String message, String photoUrl) {
