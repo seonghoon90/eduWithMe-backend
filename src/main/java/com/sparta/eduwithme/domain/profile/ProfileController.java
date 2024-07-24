@@ -61,15 +61,24 @@ public class ProfileController {
     }
 
     // 프로필 사진 업로드
-    @PostMapping("/upload")
-    public ResponseEntity<DataCommonResponse<String>> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                         @RequestParam("file") MultipartFile file) {
+    @PostMapping("/photo")
+    public ResponseEntity<StatusCommonResponse> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                   @RequestParam("file") MultipartFile file) {
         Long userId = userDetails.getUser().getId();
-        String photoUrl = profileService.uploadProfilePhoto(userId, file);
-        DataCommonResponse<String> response = new DataCommonResponse<>(
-                HttpStatus.OK.value(),
-                "프로필 사진이 성공적으로 업로드되었습니다.", photoUrl
-        );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        try {
+            String fileUrl = profileService.uploadProfilePhoto(userId, file);
+            StatusCommonResponse response = new StatusCommonResponse(
+                    HttpStatus.OK.value(),
+                    "프로필 사진이 성공적으로 업로드되었습니다.",
+                    fileUrl
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            StatusCommonResponse response = new StatusCommonResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "프로필 사진 업로드에 실패했습니다."
+            );
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

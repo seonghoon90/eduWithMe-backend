@@ -24,7 +24,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String UPLOAD_DIR = "src/main/resources/static/images";
+    private String uploadDir;
 
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
@@ -73,30 +73,38 @@ public class ProfileService {
 
     // 프로필 사진 업로드
     public String uploadProfilePhoto(Long userId, MultipartFile file) {
-        User user = profileRepository.findById(userId).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        // 파일 저장
-        String filename = storeFile(file);
-
-        // 파일 URL 생성
-        String fileUrl = "/static/images/" + filename;
+        String directoryPath = uploadDir + "images/" + userId + "/";
+        String filename = storeFile(directoryPath, file);
+        String fileUrl = "/images/" + userId + "/" + filename;
 
         // 사용자 프로필 사진 URL 업데이트
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
         user.updatePhotoUrl(fileUrl);
         profileRepository.save(user);
 
         return fileUrl;
     }
 
-    private String storeFile(MultipartFile file) {
+    private String storeFile(String directoryPath, MultipartFile file) {
+        Path uploadPath = Paths.get(directoryPath);
+
+        // 디렉토리 생성
+        try {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_DIRECTORY_CREATION_FAILED);
+        }
+
         String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path destinationFile = Paths.get(UPLOAD_DIR).resolve(Paths.get(filename)).normalize().toAbsolutePath();
+        Path destinationFile = uploadPath.resolve(Paths.get(filename)).normalize().toAbsolutePath();
 
         try {
             Files.copy(file.getInputStream(), destinationFile);
         } catch (IOException e) {
-            throw new RuntimeException("파일 저장에 실패했습니다.", e);
+            throw new CustomException(ErrorCode.FILE_STORAGE_FAILED);
         }
 
         return filename;
