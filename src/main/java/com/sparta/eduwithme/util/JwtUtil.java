@@ -26,8 +26,8 @@ public class JwtUtil {
     public static final String ACCESS_TOKEN_HEADER = "AccessToken";
     public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
     public static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_TIME = 1800000;
-    private static final long REFRESH_TOKEN_TIME = 1209600000;
+    public static final long ACCESS_TOKEN_TIME = 1800000;
+    public static final long REFRESH_TOKEN_TIME = 1209600000;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -40,7 +40,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(User user, long tokenTime) {
+    private String createToken(User user, long tokenTime) {
         Date date = new Date();
 
         return BEARER_PREFIX +
