@@ -29,16 +29,26 @@ public class QuestionService {
     public QuestionResponseDto createQuestion(Long roomId, QuestionRequestDto requestDto) {
         Room room = roomService.findById(roomId);
 
-        Question question = new Question(room, requestDto);
+        Answer answer = new Answer(
+                requestDto.getAnswer().getFirst(),
+                requestDto.getAnswer().getSecond(),
+                requestDto.getAnswer().getThird(),
+                requestDto.getAnswer().getFourth(),
+                requestDto.getAnswer().getAnswered()
+        );
 
-        for (AnswerRequestDto answerRequestDTO : requestDto.getAnswerList()) {
-            Answer answer = new Answer(answerRequestDTO);
+        Question question = new Question(
+                room,
+                requestDto.getTitle(),
+                requestDto.getContent(),
+                requestDto.getCategory(),
+                requestDto.getDifficulty(),
+                requestDto.getPoint(),
+                answer
+        );
 
-            question.addAnswer(answer);
-        }
         questionRepository.save(question);
         return new QuestionResponseDto(question);
-
     }
 
     @Transactional(readOnly = true)
@@ -79,15 +89,16 @@ public class QuestionService {
             throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
         }
 
-        question.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory(),
-                requestDto.getDifficulty(), requestDto.getPoint());
+        question.updateQuestion(requestDto);
 
-        question.getAnswers().clear();
-        for (AnswerRequestDto answerRequestDto : requestDto.getAnswerList()) {
-            Answer answer = new Answer(answerRequestDto);
-            question.addAnswer(answer);
+        Answer answer = question.getAnswer();
+        if (answer == null) {
+            throw new CustomException(ErrorCode.ANSWER_NOT_FOUND);
         }
-        return new QuestionResponseDto(question);
+        answer.updateAnswer(requestDto.getAnswer());
+
+        Question updatedQuestion = questionRepository.save(question);
+        return new QuestionResponseDto(updatedQuestion);
     }
 
     @Transactional
@@ -111,6 +122,37 @@ public class QuestionService {
         }
 
         return new QuestionDetailDto(question);
+    }
+
+    @Transactional
+    public AnswerResultDto submitAnswer(Long roomId, Long questionId, AnswerSubmissionDto submissionDto) {
+        Room room = roomService.findById(roomId);
+        Question question = findById(questionId);
+
+        if (!question.getRoom().getId().equals(room.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
+        }
+
+        Answer answer = question.getAnswer();
+        if (answer == null) {
+            throw new CustomException(ErrorCode.ANSWER_NOT_FOUND);
+        }
+
+        boolean isCorrect = (submissionDto.getSelectedAnswer() == answer.getAnswered());
+        Long earnedPoints;
+        String message;
+        // 점수가 있는 경우
+        if(isCorrect) {
+            earnedPoints = question.getPoint();
+            message = "정답 입니다.";
+            // 학습 현황 DB에 해결한 타입으로 저장
+        } else {
+            earnedPoints = 0L;
+            message = "오답 입니다.";
+            // 학습 현황 DB에 오답 타입으로 저장
+        }
+
+        return new AnswerResultDto(isCorrect, earnedPoints, message);
     }
 
     @Transactional(readOnly = true)
