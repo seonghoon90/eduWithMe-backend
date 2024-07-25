@@ -6,8 +6,8 @@ import lombok.Getter;
 
 public enum QuestionType {
 
-    wrong("오답"),
-    solve("정답");
+    WRONG("오답"),
+    SOLVE("정답");
 
     private final String questionStatus;
 
