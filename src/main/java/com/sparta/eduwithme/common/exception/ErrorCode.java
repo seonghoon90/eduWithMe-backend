@@ -35,10 +35,14 @@ public enum ErrorCode {
     KEYWORD_NOT_FOUND(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다."),
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제를 찾을 수 없습니다."),
     QUESTION_ROOM_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제가 선택한 방에 속하지 않습니다."),
-    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제에 대한 내용을 찾을 수 없습니다.");
+    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제에 대한 내용을 찾을 수 없습니다."),
+
 
 
     // comment
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
+    COMMENT_QUESTION_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제에 대한 댓글이 아닙니다."),
+    UNAUTHORIZED_COMMENT_MODIFICATION(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 수정 할 수 있습니다.");
 
     // chat
 
