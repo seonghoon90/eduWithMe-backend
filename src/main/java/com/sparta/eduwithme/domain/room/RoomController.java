@@ -89,4 +89,23 @@ public class RoomController {
                 responseDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/{roomId}/private")
+    public ResponseEntity<DataCommonResponse<StudentResponseDto>> entryPrivateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                   @RequestBody EntryPrivateRoomRequestDto requestDto,
+                                                                                   @PathVariable Long roomId)
+    {
+        StudentResponseDto responseDto = roomService.entryPrivateRoom(roomId, requestDto.getRoomPassword(), userDetails.getUser());
+        DataCommonResponse<StudentResponseDto> response = new DataCommonResponse<>(HttpStatus.OK.value(), "비공개 방 안에 입장이 되었습니다.", responseDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/{roomId}/public")
+    public ResponseEntity<DataCommonResponse<StudentResponseDto>> entryPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                  @PathVariable Long roomId)
+    {
+        StudentResponseDto responseDto = roomService.entryPublicRoom(roomId, userDetails.getUser());
+        DataCommonResponse<StudentResponseDto> response = new DataCommonResponse<>(HttpStatus.OK.value(), "공개 방 안에 입장이 되었습니다.", responseDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
