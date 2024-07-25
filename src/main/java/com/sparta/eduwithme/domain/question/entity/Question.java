@@ -67,11 +67,11 @@ public class Question extends TimeStamp {
         }
     }
 
-    public void updateQuestion(QuestionUpdateRequestDto questionUpdateRequestDto) {
+    public void updateQuestion(QuestionUpdateRequestDto questionUpdateRequestDto, Long updatePoint) {
         this.title = questionUpdateRequestDto.getTitle();
         this.content = questionUpdateRequestDto.getContent();
         this.category = questionUpdateRequestDto.getCategory();
         this.difficulty = questionUpdateRequestDto.getDifficulty();
-        this.point = questionUpdateRequestDto.getPoint();
+        this.point = updatePoint;
     }
 }
