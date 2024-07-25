@@ -32,4 +32,8 @@ public class LearningStatus {
         this.user = user;
         this.questionType = questionType;
     }
+
+    public void updateStatus(QuestionType questionType) {
+        this.questionType = questionType;
+    }
 }

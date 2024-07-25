@@ -50,6 +50,9 @@ public class Question extends TimeStamp {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LearningStatus> learningStatusList = new ArrayList<>();
+
 
     public Question(Room room, String title, String content, Category category, Difficulty difficulty, Long point, Answer answer) {
         this.room = room;

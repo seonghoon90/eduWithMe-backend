@@ -4,9 +4,12 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.question.dto.*;
 import com.sparta.eduwithme.domain.question.entity.Answer;
+import com.sparta.eduwithme.domain.question.entity.LearningStatus;
 import com.sparta.eduwithme.domain.question.entity.Question;
+import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.room.RoomService;
 import com.sparta.eduwithme.domain.room.entity.Room;
+import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,6 +27,7 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final LearningStatusRepository learningStatusRepository;
     private final RoomService roomService;
 
     @Transactional
@@ -125,7 +130,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public AnswerResultDto submitAnswer(Long roomId, Long questionId, AnswerSubmissionDto submissionDto) {
+    public AnswerResultDto submitAnswer(Long roomId, Long questionId, AnswerSubmissionDto submissionDto, User user) {
         Room room = roomService.findById(roomId);
         Question question = findById(questionId);
 
@@ -139,17 +144,32 @@ public class QuestionService {
         }
 
         boolean isCorrect = (submissionDto.getSelectedAnswer() == answer.getAnswered());
-        Long earnedPoints;
+        Long earnedPoints = 0L;
         String message;
-        // 점수가 있는 경우
-        if(isCorrect) {
+
+        Optional<LearningStatus> learningStatusOptional = learningStatusRepository.findByQuestionAndUser(question, user);
+
+        if (isCorrect) {
             earnedPoints = question.getPoint();
-            message = "정답 입니다.";
-            // 학습 현황 DB에 해결한 타입으로 저장
+            message = "정답입니다.";
+
+            if (learningStatusOptional.isPresent()) { // 중복값 있는 경우 => DB에 저장되어있는 상태
+                LearningStatus status = learningStatusOptional.get();
+                if (status.getQuestionType() == QuestionType.WRONG) {
+                    status.updateStatus(QuestionType.SOLVE);
+                    learningStatusRepository.save(status);
+                }
+            } else { // 중복값이 없는 경우 => DB에 저장되어있지 않은 상태
+                LearningStatus newStatus = new LearningStatus(question, user, QuestionType.SOLVE);
+                learningStatusRepository.save(newStatus);
+            }
         } else {
-            earnedPoints = 0L;
-            message = "오답 입니다.";
-            // 학습 현황 DB에 오답 타입으로 저장
+            message = "오답입니다.";
+
+            if (!learningStatusOptional.isPresent()) {
+                LearningStatus newStatus = new LearningStatus(question, user, QuestionType.WRONG);
+                learningStatusRepository.save(newStatus);
+            }
         }
 
         return new AnswerResultDto(isCorrect, earnedPoints, message);
