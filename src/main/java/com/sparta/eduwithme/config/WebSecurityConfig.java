@@ -59,27 +59,29 @@ public class WebSecurityConfig {
         http.csrf((csrf) -> csrf.disable());
 
         http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(
-                                antMatcher("/swagger/**"),
-                                antMatcher("/swagger-ui.html/**"),
-                                antMatcher("/swagger-ui/**"),
-                                antMatcher("/api-docs"),
-                                antMatcher("/v3/api-docs/**"),
-                                antMatcher("/api-docs/**")
-                        ).permitAll()
-                        .requestMatchers(
-                                "/users/signup", // 회원가입[POST]
-                                "/users/login", // 로그인[POST]
-                                "/users/refresh", // 토큰 재발급[POST]
-                                "/users/kakao/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+            authorizeHttpRequests
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers(
+                    antMatcher("/swagger/**"),
+                    antMatcher("/swagger-ui.html/**"),
+                    antMatcher("/swagger-ui/**"),
+                    antMatcher("/api-docs"),
+                    antMatcher("/v3/api-docs/**"),
+                    antMatcher("/api-docs/**")
+                ).permitAll()
+                .requestMatchers(
+                    "/users/signup", // 회원가입[POST]
+                    "/users/login", // 로그인[POST]
+                    "/users/refresh", // 토큰 재발급[POST]
+                    "/users/kakao/**", // 카카오 로그인
+                    "/users/mailSend", // 인증코드 발급
+                    "/users/mailauthCheck" // 인증코드 체크
+                ).permitAll()
+                .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

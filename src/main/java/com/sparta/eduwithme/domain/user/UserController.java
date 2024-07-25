@@ -44,4 +44,7 @@ public class UserController {
         response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, token); // response header에 access token 넣기
         return ResponseEntity.status(HttpStatus.OK).body("카카오 로그인 하였습니다.");
     }
+
+
+
 }

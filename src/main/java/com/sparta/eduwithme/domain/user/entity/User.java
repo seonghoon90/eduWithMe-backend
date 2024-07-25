@@ -41,6 +41,7 @@ public class User extends TimeStamp {
 
     private Long kakaoId;
 
+
     public User(String email, String password, String nickName, String ranking, String photoUrl) {
         this.email = email;
         this.password = password;
