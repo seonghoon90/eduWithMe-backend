@@ -3,9 +3,11 @@ package com.sparta.eduwithme.domain.question;
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.question.dto.*;
+import com.sparta.eduwithme.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,8 +80,9 @@ public class QuestionController {
     @PostMapping("/rooms/{roomId}/question/{questionId}/submit")
     public ResponseEntity<DataCommonResponse<AnswerResultDto>> submitAnswer(@PathVariable Long roomId,
                                                                             @PathVariable Long questionId,
-                                                                            @RequestBody AnswerSubmissionDto submissionDto) {
-        AnswerResultDto result = questionService.submitAnswer(roomId, questionId, submissionDto);
+                                                                            @RequestBody AnswerSubmissionDto submissionDto,
+                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        AnswerResultDto result = questionService.submitAnswer(roomId, questionId, submissionDto, userDetails.getUser());
         DataCommonResponse<AnswerResultDto> response = new DataCommonResponse<>(200, "답변이 제출되었습니다.", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
