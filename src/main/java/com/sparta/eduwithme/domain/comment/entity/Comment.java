@@ -34,6 +34,11 @@ public class Comment extends TimeStamp {
         this.user = user;
     }
 
+    public void updateComment(CommentRequestDto commentRequestDto, User user) {
+        this.comment = commentRequestDto.getComment();
+        this.user = user;
+    }
+
     public String getUserNickname() {
         return this.user.getNickName();
     }

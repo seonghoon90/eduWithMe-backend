@@ -22,6 +22,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    //Comment 생성
     @PostMapping("/comments")
     public ResponseEntity<DataCommonResponse<CommentResponseDto>> createComment(@PathVariable Long questionId,
                                                                                 @Valid @RequestBody CommentRequestDto commentRequestDto,
@@ -31,11 +32,24 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    //Comment 조회
     @GetMapping("/comments")
     public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getAllComments(@PathVariable Long questionId,
                                                                                        @RequestParam(value = "page", defaultValue = "0") int page) {
         List<CommentResponseDto> responseDtoList = commentService.getAllComments(questionId, page, PAGE_SIZE);
         DataCommonResponse<List<CommentResponseDto>> response = new DataCommonResponse<>(200, "댓글 조회에 성공 하였습니다.", responseDtoList);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //Comment 수정
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<DataCommonResponse<CommentResponseDto>> updateComment(@PathVariable Long questionId,
+                                                                                @PathVariable Long commentId,
+                                                                                @Valid @RequestBody CommentRequestDto commentRequestDto,
+                                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        CommentResponseDto responseDto = commentService.updateComment(commentRequestDto, questionId, commentId, userDetails.getUser());
+        DataCommonResponse<CommentResponseDto> response = new DataCommonResponse<>(200, "댓글 수정 되었습니다.", responseDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }
