@@ -32,9 +32,4 @@ public class LearningStatus {
         this.user = user;
         this.questionType = questionType;
     }
-
-    public enum QuestionType {
-        SOLVE,
-        WRONG
-    }
 }
