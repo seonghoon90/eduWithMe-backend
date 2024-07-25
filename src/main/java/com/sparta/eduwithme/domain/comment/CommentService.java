@@ -5,6 +5,7 @@ import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.comment.dto.CommentRequestDto;
 import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
 import com.sparta.eduwithme.domain.comment.entity.Comment;
+import com.sparta.eduwithme.domain.profile.ProfileRepository;
 import com.sparta.eduwithme.domain.question.QuestionService;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.user.entity.User;
@@ -24,6 +25,7 @@ public class CommentService {
 
     private final QuestionService questionService;
     private final CommentRepository commentRepository;
+    private final ProfileRepository profileRepository;
 
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, Long questionId, User user) {
@@ -80,5 +82,13 @@ public class CommentService {
         return commentRepository.findById(commentId).orElseThrow(
                 () -> new CustomException(ErrorCode.UNAUTHORIZED_COMMENT_DELETE)
         );
+    }
+
+    // 사용자 댓글 조회
+    public Page<Comment> getCommentsByUser(Long userId, Pageable pageable) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        return commentRepository.findAllByUser(user, pageable);
     }
 }

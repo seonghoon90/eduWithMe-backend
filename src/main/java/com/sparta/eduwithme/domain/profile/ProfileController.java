@@ -2,6 +2,9 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
+import com.sparta.eduwithme.domain.comment.CommentService;
+import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
+import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -23,6 +26,7 @@ import java.util.List;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final CommentService commentService;
 
     // 프로필 조회
     @GetMapping
@@ -115,6 +119,30 @@ public class ProfileController {
                 "오답 문제 조회 성공",
                 wrongQuestions
         );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 작성한 댓글 조회
+    @GetMapping("/comments")
+    public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getUserComments(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+
+        Long userId = userDetails.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> userCommentsPage = commentService.getCommentsByUser(userId, pageable);
+
+        List<CommentResponseDto> commentsDtoList = userCommentsPage.stream()
+                .map(CommentResponseDto::new)
+                .toList();
+
+        DataCommonResponse<List<CommentResponseDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "댓글 조회 성공.",
+                commentsDtoList
+        );
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
