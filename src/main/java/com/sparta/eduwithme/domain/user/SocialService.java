@@ -10,6 +10,7 @@ import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,12 @@ public class SocialService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    @Value("${client.id}")
+    private String clientId;
+
+    @Value("${redirect.uri}")
+    private String redirectUri;
 
     public String kakaoLogin(String code) throws JsonProcessingException {
         // kakao로부터 카카오에 접속할 수 있는 accessToken을 받아온다.
@@ -69,8 +76,8 @@ public class SocialService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "dd5e2f4f527ce5fe70a2b42a798271ec");
-        body.add("redirect_uri", "http://1.231.37.130:8888/users/kakao/callback");
+        body.add("client_id", clientId);
+        body.add("redirect_uri", redirectUri);
         body.add("code", code);
 
         // 카카오에 보낼 데이터
