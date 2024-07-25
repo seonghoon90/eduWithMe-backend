@@ -1,7 +1,9 @@
 package com.sparta.eduwithme.domain.question.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.question.dto.QuestionRequestDto;
+import com.sparta.eduwithme.domain.question.dto.QuestionUpdateRequestDto;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,32 +43,35 @@ public class Question extends TimeStamp {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Answer> answers = new ArrayList<>();
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LearningStatus> learningStatusList = new ArrayList<>();
 
 
-    public Question(Room room, QuestionRequestDto requestDto) {
+    public Question(Room room, String title, String content, Category category, Difficulty difficulty, Long point, Answer answer) {
         this.room = room;
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
-        this.difficulty = requestDto.getDifficulty();
-        this.point = requestDto.getPoint();
-        this.answers = new ArrayList<>();
-    }
-
-    public void addAnswer(Answer answer) {
-        this.answers.add(answer);
-        answer.setQuestion(this);
-    }
-
-    public void update(String title, String content, Category category, Difficulty difficulty, Long point) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.difficulty = difficulty;
         this.point = point;
+        this.answer = answer;
+        if (answer != null) {
+            answer.initQuestion(this);
+        }
     }
 
-
+    public void updateQuestion(QuestionUpdateRequestDto questionUpdateRequestDto, Long updatePoint) {
+        this.title = questionUpdateRequestDto.getTitle();
+        this.content = questionUpdateRequestDto.getContent();
+        this.category = questionUpdateRequestDto.getCategory();
+        this.difficulty = questionUpdateRequestDto.getDifficulty();
+        this.point = updatePoint;
+    }
 }

@@ -2,17 +2,23 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
-import com.sparta.eduwithme.domain.profile.dto.UpdateNicknameRequestDto;
-import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
-import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
+import com.sparta.eduwithme.domain.comment.CommentService;
+import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
+import com.sparta.eduwithme.domain.comment.entity.Comment;
+import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final CommentService commentService;
 
     // 프로필 조회
     @GetMapping
@@ -62,23 +69,80 @@ public class ProfileController {
 
     // 프로필 사진 업로드
     @PostMapping("/photo")
-    public ResponseEntity<StatusCommonResponse> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                   @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<UploadPhotoResponseDto> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                     @RequestParam("file") MultipartFile file) {
         Long userId = userDetails.getUser().getId();
         try {
             String fileUrl = profileService.uploadProfilePhoto(userId, file);
-            StatusCommonResponse response = new StatusCommonResponse(
+            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
                     HttpStatus.OK.value(),
                     "프로필 사진이 성공적으로 업로드되었습니다.",
                     fileUrl
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            StatusCommonResponse response = new StatusCommonResponse(
+            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "프로필 사진 업로드에 실패했습니다."
+                    "프로필 사진 업로드에 실패했습니다.",
+                    null
             );
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // 해결한 문제 조회
+    @GetMapping("/solve")
+    public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getSolvedQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                                    @RequestParam(defaultValue = "5") int size) {
+        Long userId = userDetails.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<QuestionDto> solvedQuestions = profileService.getSolvedQuestions(userId, pageable);
+        DataCommonResponse<Page<QuestionDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "해결한 문제 조회 성공",
+                solvedQuestions
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 오답 문제 조회
+    @GetMapping("/wrong")
+    public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getWrongQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                                   @RequestParam(defaultValue = "5") int size) {
+        Long userId = userDetails.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<QuestionDto> wrongQuestions = profileService.getWrongQuestions(userId, pageable);
+        DataCommonResponse<Page<QuestionDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "오답 문제 조회 성공",
+                wrongQuestions
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 작성한 댓글 조회
+    @GetMapping("/comments")
+    public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getUserComments(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+
+        Long userId = userDetails.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> userCommentsPage = commentService.getCommentsByUser(userId, pageable);
+
+        List<CommentResponseDto> commentsDtoList = userCommentsPage.stream()
+                .map(CommentResponseDto::new)
+                .toList();
+
+        DataCommonResponse<List<CommentResponseDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "댓글 조회 성공.",
+                commentsDtoList
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

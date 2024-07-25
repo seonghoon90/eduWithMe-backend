@@ -2,10 +2,19 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
+import com.sparta.eduwithme.domain.profile.dto.QuestionDto;
 import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
+import com.sparta.eduwithme.domain.question.LearningStatusRepository;
+import com.sparta.eduwithme.domain.question.QuestionRepository;
+import com.sparta.eduwithme.domain.question.entity.LearningStatus;
+import com.sparta.eduwithme.domain.question.entity.Question;
+import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +23,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +34,8 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final QuestionRepository questionRepository;
+    private final LearningStatusRepository learningStatusRepository;
 
     private String uploadDir;
 
@@ -108,5 +121,47 @@ public class ProfileService {
         }
 
         return filename;
+    }
+
+    public Page<QuestionDto> getSolvedQuestions(Long userId, Pageable pageable) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Page<LearningStatus> learningStatuses = learningStatusRepository.findByUserAndQuestionType(user, QuestionType.SOLVE, pageable);
+
+        List<QuestionDto> solvedQuestions = learningStatuses.stream()
+                .map(ls -> {
+                    Question question = ls.getQuestion();
+                    return new QuestionDto(
+                            question.getId(),
+                            question.getTitle(),
+                            question.getDifficulty().toString(),
+                            question.getCreatedAt().toString()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(solvedQuestions, pageable, learningStatuses.getTotalElements());
+    }
+
+    public Page<QuestionDto> getWrongQuestions(Long userId, Pageable pageable) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Page<LearningStatus> learningStatuses = learningStatusRepository.findByUserAndQuestionType(user, QuestionType.WRONG, pageable);
+
+        List<QuestionDto> wrongQuestions = learningStatuses.stream()
+                .map(ls -> {
+                    Question question = ls.getQuestion();
+                    return new QuestionDto(
+                            question.getId(),
+                            question.getTitle(),
+                            question.getDifficulty().toString(),
+                            question.getCreatedAt().toString()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(wrongQuestions, pageable, learningStatuses.getTotalElements());
     }
 }

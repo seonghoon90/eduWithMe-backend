@@ -17,7 +17,7 @@ public class QuestionDetailDto {
     private Category category;
     private Difficulty difficulty;
     private Long point;
-    private List<AnswerOptionDto> answerOptions;
+    private AnswerOptionDto answerOption;
 
     public QuestionDetailDto(Question question) {
         this.id = question.getId();
@@ -26,8 +26,6 @@ public class QuestionDetailDto {
         this.category = question.getCategory();
         this.difficulty = question.getDifficulty();
         this.point = question.getPoint();
-        this.answerOptions = question.getAnswers().stream()
-                .map(AnswerOptionDto::new)
-                .toList();
+        this.answerOption = new AnswerOptionDto(question.getAnswer());
     }
 }

@@ -3,15 +3,16 @@ package com.sparta.eduwithme.domain.question;
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.question.dto.*;
+import com.sparta.eduwithme.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class QuestionController {
@@ -21,6 +22,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     //Question 생성
+    @Operation(summary = "createQuestion", description = "질문 생성 기능입니다.")
     @PostMapping("/rooms/{roomId}/question")
     public ResponseEntity<DataCommonResponse<QuestionResponseDto>> createQuestion(@PathVariable Long roomId,
                                                                                   @RequestBody QuestionRequestDto requestDto) {
@@ -30,6 +32,7 @@ public class QuestionController {
     }
 
     //Question 전체 조회
+    @Operation(summary = "getAllQuestion", description = "질문 전체 조회 기능입니다.")
     @GetMapping("/rooms/{roomId}/question")
     public ResponseEntity<DataCommonResponse<List<QuestionResponseDto>>> getAllQuestion(@PathVariable Long roomId,
                                                                                         @RequestParam(value = "page", defaultValue = "0") int page) {
@@ -39,6 +42,7 @@ public class QuestionController {
     }
 
     //Question 제목 조회
+    @Operation(summary = "searchQuestionByTitle", description = "질문 제목 검색 기능입니다.")
     @GetMapping("/search/rooms/{roomId}/question/title")
     public ResponseEntity<DataCommonResponse<List<QuestionTitleDto>>> searchQuestionByTitle(@PathVariable Long roomId,
                                                                                             @RequestParam String keyword,
@@ -49,6 +53,7 @@ public class QuestionController {
     }
 
     //Question 수정
+    @Operation(summary = "updateQuestion", description = "질문 수정 기능입니다.")
     @PutMapping("/rooms/{roomId}/question/{questionId}")
     public ResponseEntity<DataCommonResponse<QuestionResponseDto>> updateQuestion(@PathVariable Long roomId,
                                                                                   @PathVariable Long questionId,
@@ -59,6 +64,7 @@ public class QuestionController {
     }
 
     //Question 삭제
+    @Operation(summary = "deleteQuestion", description = "질문 삭제 기능입니다.")
     @DeleteMapping("/rooms/{roomId}/question/{questionId}")
     public ResponseEntity<StatusCommonResponse> deleteQuestion(@PathVariable Long roomId,
                                                                @PathVariable Long questionId) {
@@ -68,6 +74,7 @@ public class QuestionController {
     }
 
     //Question 단건 조회
+    @Operation(summary = "getQuestion", description = "질문 단 건 조회 기능입니다.")
     @GetMapping("/rooms/{roomId}/question/{questionId}")
     public ResponseEntity<DataCommonResponse<QuestionDetailDto>> getQuestion(@PathVariable Long roomId,
                                                                              @PathVariable Long questionId) {
@@ -75,5 +82,18 @@ public class QuestionController {
         DataCommonResponse<QuestionDetailDto> response = new DataCommonResponse<>(200, "문제 조회에 성공했습니다.", questionDetail);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //Question 답변 제출
+    @Operation(summary = "submitAnswer", description = "질문 단 건 조회 기능입니다.")
+    @PostMapping("/rooms/{roomId}/question/{questionId}/submit")
+    public ResponseEntity<DataCommonResponse<AnswerResultDto>> submitAnswer(@PathVariable Long roomId,
+                                                                            @PathVariable Long questionId,
+                                                                            @RequestBody AnswerSubmissionDto submissionDto,
+                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        AnswerResultDto result = questionService.submitAnswer(roomId, questionId, submissionDto, userDetails.getUser());
+        DataCommonResponse<AnswerResultDto> response = new DataCommonResponse<>(200, "답변이 제출되었습니다.", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
 
 }

@@ -2,9 +2,7 @@ package com.sparta.eduwithme.domain.room;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
-import com.sparta.eduwithme.domain.room.dto.CreateRoomRequestDto;
-import com.sparta.eduwithme.domain.room.dto.SelectRoomListResponseDto;
-import com.sparta.eduwithme.domain.room.dto.UpdateRequestDto;
+import com.sparta.eduwithme.domain.room.dto.*;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.room.entity.Student;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
@@ -16,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +27,22 @@ public class RoomService {
     private static final int ROOM_CREATE_LIMIT = 2;
     private static final int pageSize = 5;
 
-    public void createRoom(CreateRoomRequestDto requestDto, User user) {
-        boolean isDuplicateRoomName = roomRepository.findByRoomName(requestDto.getRoomName()).isPresent();
-        if(isDuplicateRoomName) {
-            throw new CustomException(ErrorCode.SAME_NEW_ROOM_NAME);
-        }
-        Long countRooms = roomRepository.countByManagerUserId(user.getId());
-        if(countRooms >= ROOM_CREATE_LIMIT) {
-            throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
-        }
+    // public room
+    public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {
+        isDuplicationRoomName(requestDto.getRoomName());
+        countManagerRooms(user.getId());
+        Room room = roomRepository.save(Room.builder()
+                .roomName(requestDto.getRoomName())
+                .managerUserId(user.getId()).build());
+
+        Student student = Student.builder().user(user).room(room).build();
+        studentRepository.save(student);
+    }
+
+    // private room
+    public void createPrivateRoom(CreatePrivateRoomRequestDto requestDto, User user) {
+        isDuplicationRoomName(requestDto.getRoomName());
+        countManagerRooms(user.getId());
         Room room = roomRepository.save(Room.builder()
                 .roomName(requestDto.getRoomName())
                 .roomPassword(requestDto.getRoomPassword())
@@ -43,6 +50,21 @@ public class RoomService {
 
         Student student = Student.builder().user(user).room(room).build();
         studentRepository.save(student);
+    }
+
+    // 똑같은 이름에 대한 방 확인
+    private void isDuplicationRoomName(String roomName) {
+        if(roomRepository.findByRoomName(roomName).isPresent()) {
+            throw new CustomException(ErrorCode.SAME_NEW_ROOM_NAME);
+        }
+    }
+
+    // 방 만든 유저의 방 갯수 제한
+    private void countManagerRooms(Long userId) {
+        Long roomCount = roomRepository.countByManagerUserId(userId);
+        if(roomCount >= ROOM_CREATE_LIMIT) {
+            throw new CustomException(ErrorCode.CAN_NOT_MADE_ROOM);
+        }
     }
 
     public List<SelectRoomListResponseDto> getRoomListWithPage(int page) {
@@ -71,6 +93,52 @@ public class RoomService {
         return roomRepository.findByIdAndManagerUserId(roomId, user.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.ROOM_NOT_OWNER)
         );
+    }
+
+    // true = 비밀번호 있는 방
+    // false = 비밀번호 없는 방
+    @Transactional
+    public DetailRoomResponseDto selectDetailRoom(Long roomId) {
+        Room room = findById(roomId);
+        if(Objects.isNull(room.getRoomPassword())) {
+            return new DetailRoomResponseDto(room, false);
+        }
+        return new DetailRoomResponseDto(room, true);
+    }
+
+    @Transactional
+    public StudentResponseDto entryPrivateRoom(Long roomId, String roomPassword, User user) {
+        Room room = findById(roomId);
+        if((Objects.isNull(room.getRoomPassword()))) {
+            throw new CustomException(ErrorCode.TRYING_TO_ENTER_INVALID_ROOM);
+        }
+        boolean isPwdVerification = roomRepository.findByIdAndRoomPassword(roomId, roomPassword).isPresent();
+        if(!isPwdVerification) {
+            throw new CustomException(ErrorCode.ROOM_INCORRECT_PASSWORD);
+        }
+        Optional<Student> studentOptional = studentRepository.findByRoomIdAndUserIdWithJoin(room.getId(), user.getId());
+
+        if(studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            return new StudentResponseDto(student);
+        }
+        Student student = studentRepository.save(Student.builder().user(user).room(room).build());
+        return new StudentResponseDto(student);
+    }
+
+    @Transactional
+    public StudentResponseDto entryPublicRoom(Long roomId, User user) {
+        Room room = findById(roomId);
+        if(!(Objects.isNull(room.getRoomPassword()))) {
+            throw new CustomException(ErrorCode.TRYING_TO_ENTER_INVALID_ROOM);
+        }
+        Optional<Student> studentOptional = studentRepository.findByRoomIdAndUserIdWithJoin(room.getId(), user.getId());
+        if(studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            return new StudentResponseDto(student);
+        }
+        Student student = studentRepository.save(Student.builder().user(user).room(room).build());
+        return new StudentResponseDto(student);
     }
 
     @Transactional(readOnly = true)
