@@ -95,4 +95,17 @@ public class ProfileController {
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    // 오답 문제 조회
+    @GetMapping("/wrong")
+    public ResponseEntity<DataCommonResponse<List<QuestionDto>>> getWrongQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getId();
+        List<QuestionDto> wrongQuestions = profileService.getWrongQuestions(userId);
+        DataCommonResponse<List<QuestionDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "오답 문제 조회 성공",
+                wrongQuestions
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
