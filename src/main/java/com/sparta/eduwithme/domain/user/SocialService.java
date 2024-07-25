@@ -147,8 +147,6 @@ public class SocialService {
 
                 String email = kakaoUserInfo.getEmail();
 
-//                String username = "kakao" + kakaoId;
-
                 kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), kakaoId);
             }
             userRepository.save(kakaoUser);

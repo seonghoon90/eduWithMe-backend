@@ -79,7 +79,9 @@ public class WebSecurityConfig {
                     "/users/refresh", // 토큰 재발급[POST]
                     "/users/kakao/**", // 카카오 로그인
                     "/users/mailSend", // 인증코드 발급
-                    "/users/mailauthCheck" // 인증코드 체크
+                    "/users/mailauthCheck", // 인증코드 체크
+                    "/users/temp-password-request", // 임시비밀번호발급 인증코드
+                    "/users/reset-password" // 임시비밀번호발급
                 ).permitAll()
                 .anyRequest().authenticated()
         );

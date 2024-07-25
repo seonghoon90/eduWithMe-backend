@@ -58,7 +58,7 @@ public class MailSendService {
         return Integer.toString(authNumber);
     }
 
-    //이메일을 전송합니다.
+    //이메일을 전송 메서드
     public void mailSend(String setFrom, String toMail, String title, String content) {
         MimeMessage message = mailSender.createMimeMessage();//JavaMailSender 객체를 사용하여 MimeMessage 객체를 생성
         try {
@@ -74,6 +74,37 @@ public class MailSendService {
             e.printStackTrace();//e.printStackTrace()는 예외를 기본 오류 스트림에 출력하는 메서드
         }
         redisUtil.setDataExpire(Integer.toString(authNumber),toMail,60*5L);
+    }
+
+    // 임시 비밀번호 발급을 위한 이메일을 보내는 메서드
+    public void sendTempPasswordEmail(String email) {
+        makeRandomNumber();
+        String setFrom = "leesw1945@gmail.com";
+        String toMail = email;
+        String title = "임시 비밀번호 발급을 위한 인증 코드입니다.";
+        String content =
+            "EduWithMe 임시 비밀번호 발급 인증 코드입니다." +
+                "<br><br>" +
+                "인증 코드는 " + authNumber + " 입니다." +
+                "<br>" +
+                "5분 내로 인증 코드를 입력해주세요.";
+
+        mailSend(setFrom, toMail, title, content);
+        redisUtil.setDataExpire(Integer.toString(authNumber), email, 60 * 5L);
+    }
+
+    public void sendTempPassword(String email, String tempPassword) {
+        String setFrom = "leesw1945@gmail.com";
+        String toMail = email;
+        String title = "임시 비밀번호가 발급되었습니다.";
+        String content =
+            "EduWithMe 임시 비밀번호입니다." +
+                "<br><br>" +
+                "임시 비밀번호: " + tempPassword +
+                "<br>" +
+                "보안을 위해 로그인 후 비밀번호를 변경해주세요.";
+
+        mailSend(setFrom, toMail, title, content);
     }
 
 }
