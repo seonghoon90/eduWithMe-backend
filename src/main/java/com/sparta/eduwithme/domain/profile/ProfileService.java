@@ -12,6 +12,9 @@ import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,13 +123,13 @@ public class ProfileService {
         return filename;
     }
 
-    public List<QuestionDto> getSolvedQuestions(Long userId) {
+    public Page<QuestionDto> getSolvedQuestions(Long userId, Pageable pageable) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        List<LearningStatus> learningStatuses = learningStatusRepository.findByUser(user);
-        return learningStatuses.stream()
-                .filter(ls -> ls.getQuestionType() == QuestionType.SOLVE)
+        Page<LearningStatus> learningStatuses = learningStatusRepository.findByUserAndQuestionType(user, QuestionType.SOLVE, pageable);
+
+        List<QuestionDto> solvedQuestions = learningStatuses.stream()
                 .map(ls -> {
                     Question question = ls.getQuestion();
                     return new QuestionDto(
@@ -137,15 +140,17 @@ public class ProfileService {
                     );
                 })
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(solvedQuestions, pageable, learningStatuses.getTotalElements());
     }
 
-    public List<QuestionDto> getWrongQuestions(Long userId) {
+    public Page<QuestionDto> getWrongQuestions(Long userId, Pageable pageable) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        List<LearningStatus> learningStatuses = learningStatusRepository.findByUser(user);
-        return learningStatuses.stream()
-                .filter(ls -> ls.getQuestionType() == QuestionType.WRONG)
+        Page<LearningStatus> learningStatuses = learningStatusRepository.findByUserAndQuestionType(user, QuestionType.WRONG, pageable);
+
+        List<QuestionDto> wrongQuestions = learningStatuses.stream()
                 .map(ls -> {
                     Question question = ls.getQuestion();
                     return new QuestionDto(
@@ -156,5 +161,7 @@ public class ProfileService {
                     );
                 })
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(wrongQuestions, pageable, learningStatuses.getTotalElements());
     }
 }
