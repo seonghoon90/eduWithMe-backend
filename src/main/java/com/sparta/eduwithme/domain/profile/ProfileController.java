@@ -2,10 +2,7 @@ package com.sparta.eduwithme.domain.profile;
 
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
-import com.sparta.eduwithme.domain.profile.dto.UpdateNicknameRequestDto;
-import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
-import com.sparta.eduwithme.domain.profile.dto.UploadPhotoResponseDto;
-import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
+import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -82,5 +81,18 @@ public class ProfileController {
             );
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // 해결한 문제 조회
+    @GetMapping("/solve")
+    public ResponseEntity<DataCommonResponse<List<QuestionDto>>> getSolvedQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getId();
+        List<QuestionDto> solvedQuestions = profileService.getSolvedQuestions(userId);
+        DataCommonResponse<List<QuestionDto>> response = new DataCommonResponse<>(
+                HttpStatus.OK.value(),
+                "해결한 문제 조회 성공",
+                solvedQuestions
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
