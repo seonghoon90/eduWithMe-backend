@@ -6,6 +6,9 @@ import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -85,10 +88,13 @@ public class ProfileController {
 
     // 해결한 문제 조회
     @GetMapping("/solve")
-    public ResponseEntity<DataCommonResponse<List<QuestionDto>>> getSolvedQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getSolvedQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                                    @RequestParam(defaultValue = "5") int size) {
         Long userId = userDetails.getUser().getId();
-        List<QuestionDto> solvedQuestions = profileService.getSolvedQuestions(userId);
-        DataCommonResponse<List<QuestionDto>> response = new DataCommonResponse<>(
+        Pageable pageable = PageRequest.of(page, size);
+        Page<QuestionDto> solvedQuestions = profileService.getSolvedQuestions(userId, pageable);
+        DataCommonResponse<Page<QuestionDto>> response = new DataCommonResponse<>(
                 HttpStatus.OK.value(),
                 "해결한 문제 조회 성공",
                 solvedQuestions
@@ -98,10 +104,13 @@ public class ProfileController {
 
     // 오답 문제 조회
     @GetMapping("/wrong")
-    public ResponseEntity<DataCommonResponse<List<QuestionDto>>> getWrongQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getWrongQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                                   @RequestParam(defaultValue = "5") int size) {
         Long userId = userDetails.getUser().getId();
-        List<QuestionDto> wrongQuestions = profileService.getWrongQuestions(userId);
-        DataCommonResponse<List<QuestionDto>> response = new DataCommonResponse<>(
+        Pageable pageable = PageRequest.of(page, size);
+        Page<QuestionDto> wrongQuestions = profileService.getWrongQuestions(userId, pageable);
+        DataCommonResponse<Page<QuestionDto>> response = new DataCommonResponse<>(
                 HttpStatus.OK.value(),
                 "오답 문제 조회 성공",
                 wrongQuestions
