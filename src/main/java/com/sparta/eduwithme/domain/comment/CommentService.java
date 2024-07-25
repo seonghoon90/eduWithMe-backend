@@ -50,8 +50,8 @@ public class CommentService {
             throw new CustomException(ErrorCode.COMMENT_QUESTION_MISMATCH);
         }
 
-        if (!comment.getUserNickname().equals(user.getNickName())) {
-            throw new CustomException(ErrorCode.UNAUTHORIZED_COMMENT_MODIFICATION);
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_COMMENT_UPDATE);
         }
 
         comment.updateComment(commentRequestDto,user);
@@ -59,10 +59,26 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    @Transactional
+    public void deleteComment(Long questionId, Long commentId, User user) {
+        Question question = questionService.findById(questionId);
+        Comment comment = findById(commentId);
+
+        if (!question.equals(comment.getQuestion())) {
+            throw new CustomException(ErrorCode.COMMENT_QUESTION_MISMATCH);
+        }
+
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_COMMENT_DELETE);
+        }
+
+        commentRepository.delete(comment);
+    }
+
     @Transactional(readOnly = true)
     public Comment findById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(
-                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
+                () -> new CustomException(ErrorCode.UNAUTHORIZED_COMMENT_DELETE)
         );
     }
 }
