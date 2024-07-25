@@ -38,6 +38,7 @@ public enum ErrorCode {
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제를 찾을 수 없습니다."),
     QUESTION_ROOM_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제가 선택한 방에 속하지 않습니다."),
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제에 대한 내용을 찾을 수 없습니다."),
+    INVALID_NOT_DIFFICULTY(HttpStatus.BAD_REQUEST,"잘못된 난이도 설정입니다."),
 
 
 

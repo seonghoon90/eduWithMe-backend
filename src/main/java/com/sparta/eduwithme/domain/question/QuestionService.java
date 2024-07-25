@@ -190,7 +190,7 @@ public class QuestionService {
             case LEVEL_THREE -> 30L;
             case LEVEL_FOUR -> 40L;
             case LEVEL_FIVE -> 50L;
-            default -> throw new IllegalArgumentException("Invalid difficulty level");
+            default -> throw new CustomException(ErrorCode.INVALID_NOT_DIFFICULTY);
         };
     }
 }
