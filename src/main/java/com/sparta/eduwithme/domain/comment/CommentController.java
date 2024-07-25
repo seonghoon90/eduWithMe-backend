@@ -5,6 +5,7 @@ import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.comment.dto.CommentRequestDto;
 import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class CommentController {
     private final CommentService commentService;
 
     //Comment 생성
+    @Operation(summary = "createComment", description = "댓글 생성 기능입니다.")
     @PostMapping("/comments")
     public ResponseEntity<DataCommonResponse<CommentResponseDto>> createComment(@PathVariable Long questionId,
                                                                                 @Valid @RequestBody CommentRequestDto commentRequestDto,
@@ -34,6 +36,7 @@ public class CommentController {
     }
 
     //Comment 조회
+    @Operation(summary = "getAllComments", description = "댓글 전체 조회 기능입니다.")
     @GetMapping("/comments")
     public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getAllComments(@PathVariable Long questionId,
                                                                                        @RequestParam(value = "page", defaultValue = "0") int page) {
@@ -43,6 +46,7 @@ public class CommentController {
     }
 
     //Comment 수정
+    @Operation(summary = "updateComment", description = "댓글 수정 기능입니다.")
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<DataCommonResponse<CommentResponseDto>> updateComment(@PathVariable Long questionId,
                                                                                 @PathVariable Long commentId,
@@ -54,6 +58,7 @@ public class CommentController {
     }
 
     //Comment 삭제
+    @Operation(summary = "deleteComment", description = "댓글 삭제 기능입니다.")
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<StatusCommonResponse> deleteComment(@PathVariable Long questionId,
                                                               @PathVariable Long commentId,
