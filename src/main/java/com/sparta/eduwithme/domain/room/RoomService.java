@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -103,6 +104,41 @@ public class RoomService {
             return new DetailRoomResponseDto(room, false);
         }
         return new DetailRoomResponseDto(room, true);
+    }
+
+    @Transactional
+    public StudentResponseDto entryPrivateRoom(Long roomId, String roomPassword, User user) {
+        Room room = findById(roomId);
+        if((Objects.isNull(room.getRoomPassword()))) {
+            throw new CustomException(ErrorCode.TRYING_TO_ENTER_INVALID_ROOM);
+        }
+        boolean isPwdVerification = roomRepository.findByIdAndRoomPassword(roomId, roomPassword).isPresent();
+        if(!isPwdVerification) {
+            throw new CustomException(ErrorCode.ROOM_INCORRECT_PASSWORD);
+        }
+        Optional<Student> studentOptional = studentRepository.findByRoomIdAndUserIdWithJoin(room.getId(), user.getId());
+
+        if(studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            return new StudentResponseDto(student);
+        }
+        Student student = studentRepository.save(Student.builder().user(user).room(room).build());
+        return new StudentResponseDto(student);
+    }
+
+    @Transactional
+    public StudentResponseDto entryPublicRoom(Long roomId, User user) {
+        Room room = findById(roomId);
+        if(!(Objects.isNull(room.getRoomPassword()))) {
+            throw new CustomException(ErrorCode.TRYING_TO_ENTER_INVALID_ROOM);
+        }
+        Optional<Student> studentOptional = studentRepository.findByRoomIdAndUserIdWithJoin(room.getId(), user.getId());
+        if(studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            return new StudentResponseDto(student);
+        }
+        Student student = studentRepository.save(Student.builder().user(user).room(room).build());
+        return new StudentResponseDto(student);
     }
 
     @Transactional(readOnly = true)

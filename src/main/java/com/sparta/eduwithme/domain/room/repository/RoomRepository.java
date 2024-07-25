@@ -9,4 +9,5 @@ public interface RoomRepository extends JpaRepository<Room, Long>, RoomRepositor
     Optional<Room> findByRoomName(String roomName);
     Long countByManagerUserId(Long managerUserId);
     Optional<Room> findByIdAndManagerUserId(Long roomId, Long managerUserId);
+    Optional<Room> findByIdAndRoomPassword(Long roomId, String roomPassword);
 }
