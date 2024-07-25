@@ -138,4 +138,23 @@ public class ProfileService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<QuestionDto> getWrongQuestions(Long userId) {
+        User user = profileRepository.findById(userId).orElseThrow(() ->
+                new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<LearningStatus> learningStatuses = learningStatusRepository.findByUser(user);
+        return learningStatuses.stream()
+                .filter(ls -> ls.getQuestionType() == QuestionType.WRONG)
+                .map(ls -> {
+                    Question question = ls.getQuestion();
+                    return new QuestionDto(
+                            question.getId(),
+                            question.getTitle(),
+                            question.getDifficulty().toString(),
+                            question.getCreatedAt().toString()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
 }
