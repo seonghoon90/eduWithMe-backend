@@ -1,6 +1,9 @@
 package com.sparta.eduwithme.domain.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.eduwithme.domain.user.dto.EmailCheckDto;
+import com.sparta.eduwithme.domain.user.dto.EmailRequestDto;
+import com.sparta.eduwithme.domain.user.dto.KeyValueResponseDto;
 import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +38,12 @@ public class UserController {
         return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
     }
 
+    @GetMapping("/key-value")
+    public ResponseEntity<KeyValueResponseDto> loadKeyValue() {
+        KeyValueResponseDto responseDto = new KeyValueResponseDto(socialService.getRedirectUri(), socialService.getAppKey());
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
     @GetMapping("/kakao/callback")
     public ResponseEntity<String> kakaoLogin(@RequestParam String code,
         HttpServletResponse response)
@@ -44,4 +53,22 @@ public class UserController {
         response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, token); // response header에 access token 넣기
         return ResponseEntity.status(HttpStatus.OK).body("카카오 로그인 하였습니다.");
     }
+
+    // 임시 비밀번호 발급 요청을 처리하는 엔드포인트
+    @PostMapping("/temp-password-request")
+    public ResponseEntity<String> requestTempPassword(@RequestBody @Valid EmailRequestDto emailDto) {
+        if (!userService.isRegisteredEmail(emailDto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("등록되지 않은 이메일입니다.");
+        }
+        // 임시 비밀번호 발급을 요청합니다.
+        userService.requestTempPassword(emailDto.getEmail());
+        return ResponseEntity.ok("임시 비밀번호 발급을 위한 인증 코드가 이메일로 전송되었습니다.");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody EmailCheckDto emailCheckDto) {
+        userService.resetPasswordWithTempPassword(emailCheckDto.getEmail(), emailCheckDto.getAuthNum());
+        return ResponseEntity.ok("임시 비밀번호가 이메일로 전송되었습니다.");
+    }
+
 }

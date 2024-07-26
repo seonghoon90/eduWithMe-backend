@@ -8,8 +8,10 @@ import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import java.net.URI;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j(topic = "SocialService")
 @Service
+@Getter
 @RequiredArgsConstructor
 public class SocialService {
 
@@ -30,6 +33,19 @@ public class SocialService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    //카카오 디벨로퍼에서 REST API 키 입력
+    @Value("${client.id}")
+    private String clientId;
+
+    //redirectUri는 http://개인pc IP주소 입력:8888/users/kakao/callback
+    //마지막에 도메인 사면 도메인 입력
+    @Value("${redirect.uri}")
+    private String redirectUri;
+
+    //카카오 디벨로퍼에서 자바스크립트 앱키 입력
+    @Value("${kakao.init}")
+    private String appKey;
 
     public String kakaoLogin(String code) throws JsonProcessingException {
         // kakao로부터 카카오에 접속할 수 있는 accessToken을 받아온다.
@@ -69,8 +85,8 @@ public class SocialService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "dd5e2f4f527ce5fe70a2b42a798271ec");
-        body.add("redirect_uri", "http://1.231.37.130:8888/users/kakao/callback");
+        body.add("client_id", clientId);
+        body.add("redirect_uri", redirectUri);
         body.add("code", code);
 
         // 카카오에 보낼 데이터
@@ -146,8 +162,6 @@ public class SocialService {
                 String encodedPassword = passwordEncoder.encode(password);
 
                 String email = kakaoUserInfo.getEmail();
-
-//                String username = "kakao" + kakaoId;
 
                 kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), kakaoId);
             }

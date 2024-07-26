@@ -1,8 +1,7 @@
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
         integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4" crossorigin="anonymous"></script>
-<script>
-  Kakao.init('1bce840317440a3a2846a3e78531d889'); // 사용하려는 앱의 JavaScript 키 입력
-</script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
 <a id="kakao-login-btn" href="javascript:loginWithKakao()">
   <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
@@ -11,9 +10,25 @@
 <p id="token-result"></p>
 
 <script>
+  let redirectUri;
+  let appKey;
+
   function loginWithKakao() {
-    Kakao.Auth.authorize({
-      redirectUri: 'http://1.231.37.130:8888/users/kakao/callback',
+    $.ajax({
+      url: "http://localhost:8888/users/key-value",
+      dataType: "json",
+      success: function (data) {
+        redirectUri = data.redirectUri;
+        appKey = data.appKey;
+        Kakao.init(appKey);
+        console.log(data);
+        Kakao.Auth.authorize({
+          redirectUri: redirectUri,
+        });
+      },
+      error: function (request, status, error) {
+        // 실패 했을 때 처리
+      }
     });
   }
 
