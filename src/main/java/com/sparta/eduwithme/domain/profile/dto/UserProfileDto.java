@@ -10,4 +10,5 @@ public class UserProfileDto {
     private String nickName;
     private String photoUrl;
     private String ranking;
+    private Long points;
 }

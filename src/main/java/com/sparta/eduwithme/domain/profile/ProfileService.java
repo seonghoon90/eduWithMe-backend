@@ -45,11 +45,17 @@ public class ProfileService {
         User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        Long totalPoints = learningStatusRepository.findTotalPointsByUserIdAndQuestionType(userId, QuestionType.SOLVE);
+        if (totalPoints == null) {
+            totalPoints = 0L;
+        }
+
         return UserProfileDto.builder()
                 .email(user.getEmail())
                 .nickName(user.getNickName())
                 .photoUrl(user.getPhotoUrl())
                 .ranking(user.getRanking())
+                .points(totalPoints)
                 .build();
     }
 
