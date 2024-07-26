@@ -93,7 +93,7 @@ public class WebSecurityConfig {
                     antMatcher("/api-docs/**")
                 ).permitAll()
                 .requestMatchers(
-                    "/users/signup", // 회원가입[POST]
+                    "/users/signup/**", // 회원가입[POST]
                     "/users/login", // 로그인[POST]
                     "/users/refresh", // 토큰 재발급[POST]
                     "/users/kakao/**", // 카카오 로그인
