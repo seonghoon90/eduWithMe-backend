@@ -14,15 +14,13 @@ public class QuestionRequestDto {
     private String content;
     private Category category;
     private Difficulty difficulty;
-    private Long point;
     private AnswerRequestDto answer;
 
-    public QuestionRequestDto(String title, String content, Category category, Difficulty difficulty, Long point, AnswerRequestDto answer) {
+    public QuestionRequestDto(String title, String content, Category category, Difficulty difficulty, AnswerRequestDto answer) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.difficulty = difficulty;
-        this.point = point;
         this.answer = answer;
     }
 }

@@ -3,10 +3,7 @@ package com.sparta.eduwithme.domain.question;
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.question.dto.*;
-import com.sparta.eduwithme.domain.question.entity.Answer;
-import com.sparta.eduwithme.domain.question.entity.LearningStatus;
-import com.sparta.eduwithme.domain.question.entity.Question;
-import com.sparta.eduwithme.domain.question.entity.QuestionType;
+import com.sparta.eduwithme.domain.question.entity.*;
 import com.sparta.eduwithme.domain.room.RoomService;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.entity.User;
@@ -42,13 +39,15 @@ public class QuestionService {
                 requestDto.getAnswer().getAnswered()
         );
 
+        Long point = calculatePointByDifficulty(requestDto.getDifficulty());
+
         Question question = new Question(
                 room,
                 requestDto.getTitle(),
                 requestDto.getContent(),
                 requestDto.getCategory(),
                 requestDto.getDifficulty(),
-                requestDto.getPoint(),
+                point,
                 answer
         );
 
@@ -94,7 +93,9 @@ public class QuestionService {
             throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
         }
 
-        question.updateQuestion(requestDto);
+        Long updatedPoint = calculatePointByDifficulty(requestDto.getDifficulty());
+
+        question.updateQuestion(requestDto,updatedPoint);
 
         Answer answer = question.getAnswer();
         if (answer == null) {
@@ -182,4 +183,14 @@ public class QuestionService {
         );
     }
 
+    private Long calculatePointByDifficulty(Difficulty difficulty) {
+        return switch (difficulty) {
+            case LEVEL_ONE -> 10L;
+            case LEVEL_TWO -> 20L;
+            case LEVEL_THREE -> 30L;
+            case LEVEL_FOUR -> 40L;
+            case LEVEL_FIVE -> 50L;
+            default -> throw new CustomException(ErrorCode.INVALID_NOT_DIFFICULTY);
+        };
+    }
 }
