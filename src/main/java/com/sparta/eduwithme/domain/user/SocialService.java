@@ -38,6 +38,9 @@ public class SocialService {
     @Value("${redirect.uri}")
     private String redirectUri;
 
+    @Value("${kakao.init}")
+    private String appKey;
+
     public String kakaoLogin(String code) throws JsonProcessingException {
         // kakao로부터 카카오에 접속할 수 있는 accessToken을 받아온다.
         String accessToken = getToken(code);

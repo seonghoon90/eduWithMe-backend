@@ -81,7 +81,8 @@ public class WebSecurityConfig {
                     "/users/mailSend", // 인증코드 발급
                     "/users/mailauthCheck", // 인증코드 체크
                     "/users/temp-password-request", // 임시비밀번호발급 인증코드
-                    "/users/reset-password" // 임시비밀번호발급
+                    "/users/reset-password", // 임시비밀번호발급
+                    "/users/key-value" // 앱 키
                 ).permitAll()
                 .anyRequest().authenticated()
         );
