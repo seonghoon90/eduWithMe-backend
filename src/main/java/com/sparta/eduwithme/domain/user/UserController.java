@@ -25,11 +25,10 @@ public class UserController {
 
     private final UserService userService;
     private final SocialService socialService;
-    private final MailSendService mailSendService;
 
     @PostMapping("/signup/request")
     public ResponseEntity<String> signupRequest(@Valid @RequestBody EmailRequestDto emailDto) {
-        String authCode = userService.sendSignupVerificationEmail(emailDto.getEmail());
+        userService.sendSignupVerificationEmail(emailDto.getEmail());
         return ResponseEntity.ok("인증 코드가 이메일로 전송되었습니다.");
     }
 
