@@ -7,6 +7,7 @@ import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
 import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class ProfileController {
     private final ProfileService profileService;
     private final CommentService commentService;
 
-    // 프로필 조회
+    @Operation(summary = "getProfile", description = "프로필 조회 기능입니다.")
     @GetMapping
     public ResponseEntity<DataCommonResponse<UserProfileDto>> getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
@@ -41,7 +42,7 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 닉네임 수정
+    @Operation(summary = "putProfile", description = "프로필 닉네임 수정 기능입니다.")
     @PutMapping
     public ResponseEntity<StatusCommonResponse> updateNickname(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                @RequestBody UpdateNicknameRequestDto requestDto) {
@@ -54,7 +55,7 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 비밀번호 수정
+    @Operation(summary = "putProfile", description = "프로필 비밀번호 수정 기능입니다.")
     @PutMapping("/password")
     public ResponseEntity<StatusCommonResponse> updatePassword(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                @RequestBody @Valid UpdatePasswordRequestDto requestDto) {
@@ -67,7 +68,7 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 프로필 사진 업로드
+    @Operation(summary = "postProfile", description = "프로필 이미지 업로드 기능입니다.")
     @PostMapping("/photo")
     public ResponseEntity<UploadPhotoResponseDto> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                      @RequestParam("file") MultipartFile file) {
@@ -90,7 +91,7 @@ public class ProfileController {
         }
     }
 
-    // 해결한 문제 조회
+    @Operation(summary = "getProfile", description = "해결한 문제 조회 기능입니다.")
     @GetMapping("/solve")
     public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getSolvedQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                     @RequestParam(defaultValue = "0") int page,
@@ -106,7 +107,7 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 오답 문제 조회
+    @Operation(summary = "getProfile", description = "오답 문제 조회 기능입니다.")
     @GetMapping("/wrong")
     public ResponseEntity<DataCommonResponse<Page<QuestionDto>>> getWrongQuestions(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                    @RequestParam(defaultValue = "0") int page,
@@ -122,7 +123,7 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 작성한 댓글 조회
+    @Operation(summary = "getProfile", description = "작성한 댓글 조회 기능입니다.")
     @GetMapping("/comments")
     public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getUserComments(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
