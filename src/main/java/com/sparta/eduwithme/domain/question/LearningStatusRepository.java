@@ -7,6 +7,8 @@ import com.sparta.eduwithme.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -14,4 +16,7 @@ public interface LearningStatusRepository extends JpaRepository<LearningStatus, 
     Page<LearningStatus> findByUserAndQuestionType(User user, QuestionType questionType, Pageable pageable);
 
     Optional<LearningStatus> findByQuestionAndUser(Question question, User user);
+
+    @Query("SELECT SUM(q.point) FROM LearningStatus ls JOIN ls.question q WHERE ls.user.id = :userId")
+    Long findTotalPointsByUserId(@Param("userId") Long userId);
 }
