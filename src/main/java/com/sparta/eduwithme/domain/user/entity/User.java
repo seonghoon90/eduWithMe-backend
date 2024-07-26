@@ -1,15 +1,15 @@
 package com.sparta.eduwithme.domain.user.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.sparta.eduwithme.domain.question.entity.LearningStatus;
+import com.sparta.eduwithme.domain.question.entity.QuestionType;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -83,5 +83,14 @@ public class User extends TimeStamp {
     public void updatePhotoUrl(String newPhotoUrl) {
         this.photoUrl = newPhotoUrl;
     }
-      
+
+    @OneToMany(mappedBy = "user")
+    private List<LearningStatus> learningStatusList = new ArrayList<>();
+
+    public Long getTotalPoints() {
+        return learningStatusList.stream()
+                .filter(ls -> ls.getQuestionType() == QuestionType.SOLVE) // 해결된 문제만 계산
+                .mapToLong(ls -> ls.getQuestion().getPoint()) // 문제의 포인트를 합산
+                .sum();
+    }
 }

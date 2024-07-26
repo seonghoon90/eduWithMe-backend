@@ -17,6 +17,6 @@ public interface LearningStatusRepository extends JpaRepository<LearningStatus, 
 
     Optional<LearningStatus> findByQuestionAndUser(Question question, User user);
 
-    @Query("SELECT SUM(q.point) FROM LearningStatus ls JOIN ls.question q WHERE ls.user.id = :userId")
-    Long findTotalPointsByUserId(@Param("userId") Long userId);
+    @Query("SELECT SUM(q.point) FROM LearningStatus ls JOIN ls.question q WHERE ls.user.id = :userId AND ls.questionType = :questionType")
+    Long findTotalPointsByUserIdAndQuestionType(@Param("userId") Long userId, @Param("questionType") QuestionType questionType);
 }

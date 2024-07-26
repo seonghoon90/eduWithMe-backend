@@ -72,6 +72,6 @@ public class Question extends TimeStamp {
         this.content = questionUpdateRequestDto.getContent();
         this.category = questionUpdateRequestDto.getCategory();
         this.difficulty = questionUpdateRequestDto.getDifficulty();
-        this.point = updatePoint;
+        this.point = questionUpdateRequestDto.getPoint();
     }
 }
