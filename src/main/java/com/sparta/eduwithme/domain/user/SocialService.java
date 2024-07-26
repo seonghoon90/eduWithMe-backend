@@ -34,12 +34,16 @@ public class SocialService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    //카카오 디벨로퍼에서 REST API 키 입력
     @Value("${client.id}")
     private String clientId;
 
+    //redirectUri는 http://개인pc IP주소 입력:8888/users/kakao/callback
+    //마지막에 도메인 사면 도메인 입력
     @Value("${redirect.uri}")
     private String redirectUri;
 
+    //카카오 디벨로퍼에서 자바스크립트 앱키 입력
     @Value("${kakao.init}")
     private String appKey;
 
