@@ -34,7 +34,6 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
-    private final QuestionRepository questionRepository;
     private final LearningStatusRepository learningStatusRepository;
 
     private String uploadDir;
@@ -45,18 +44,39 @@ public class ProfileService {
         User user = profileRepository.findById(userId).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 문제를 푼 포인트 총합 가져오기
         Long totalPoints = learningStatusRepository.findTotalPointsByUserIdAndQuestionType(userId, QuestionType.SOLVE);
         if (totalPoints == null) {
             totalPoints = 0L;
         }
 
+        // 랭킹 계산
+        String ranking = calculateRanking(totalPoints);
+
         return UserProfileDto.builder()
                 .email(user.getEmail())
                 .nickName(user.getNickName())
                 .photoUrl(user.getPhotoUrl())
-                .ranking(user.getRanking())
+                .ranking(ranking)
                 .points(totalPoints)
                 .build();
+    }
+
+    private String calculateRanking(Long totalPoints) {
+        if(totalPoints == null) {
+            return "F";
+        }
+        if(totalPoints <= 50) {
+            return "F";
+        } else if (totalPoints <= 100) {
+            return "D";
+        } else if (totalPoints <= 150) {
+            return "C";
+        } else if (totalPoints <= 200) {
+            return "B";
+        } else {
+            return "A";
+        }
     }
 
     public void updateUserProfile(Long userId, String email, String newNickname) {
