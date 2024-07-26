@@ -3,6 +3,7 @@ package com.sparta.eduwithme.domain.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.eduwithme.domain.user.dto.EmailCheckDto;
 import com.sparta.eduwithme.domain.user.dto.EmailRequestDto;
+import com.sparta.eduwithme.domain.user.dto.KeyValueResponseDto;
 import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +36,12 @@ public class UserController {
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/key-value")
+    public ResponseEntity<KeyValueResponseDto> loadKeyValue() {
+        KeyValueResponseDto responseDto = new KeyValueResponseDto(socialService.getRedirectUri(), socialService.getAppKey());
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @GetMapping("/kakao/callback")

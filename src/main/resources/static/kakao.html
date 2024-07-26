@@ -10,9 +10,25 @@
 <p id="token-result"></p>
 
 <script>
+  let redirectUri;
+  let appKey;
+
   function loginWithKakao() {
-    Kakao.Auth.authorize({
-      redirectUri: 'http://1.231.37.130:8888/users/kakao/callback',
+    $.ajax({
+      url: "http://localhost:8888/users/key-value",
+      dataType: "json",
+      success: function (data) {
+        redirectUri = data.redirectUri;
+        appKey = data.appKey;
+        Kakao.init(appKey);
+        console.log(data);
+        Kakao.Auth.authorize({
+          redirectUri: redirectUri,
+        });
+      },
+      error: function (request, status, error) {
+        // 실패 했을 때 처리
+      }
     });
   }
 

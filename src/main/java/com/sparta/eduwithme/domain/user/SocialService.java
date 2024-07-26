@@ -8,6 +8,7 @@ import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import java.net.URI;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j(topic = "SocialService")
 @Service
+@Getter
 @RequiredArgsConstructor
 public class SocialService {
 
