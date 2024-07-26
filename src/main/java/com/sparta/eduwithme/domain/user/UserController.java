@@ -25,6 +25,19 @@ public class UserController {
 
     private final UserService userService;
     private final SocialService socialService;
+    private final MailSendService mailSendService;
+
+    @PostMapping("/signup/request")
+    public ResponseEntity<String> signupRequest(@Valid @RequestBody EmailRequestDto emailDto) {
+        String authCode = userService.sendSignupVerificationEmail(emailDto.getEmail());
+        return ResponseEntity.ok("인증 코드가 이메일로 전송되었습니다.");
+    }
+
+    @PostMapping("/signup/verify")
+    public ResponseEntity<String> verifySignup(@Valid @RequestBody EmailCheckDto emailCheckDto) {
+        userService.verifySignupEmail(emailCheckDto.getEmail(), emailCheckDto.getAuthNum());
+        return ResponseEntity.ok("이메일 인증이 완료되었습니다.");
+    }
 
     /**
      * 회원가입 API

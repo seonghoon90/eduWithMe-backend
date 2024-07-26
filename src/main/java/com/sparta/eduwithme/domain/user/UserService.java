@@ -21,20 +21,44 @@ public class UserService {
     private final MailSendService mailSendService;
     private final RedisUtil redisUtil;
 
+    // 회원가입 이메일 인증 코드 발송 메서드
+    public String sendSignupVerificationEmail(String email) {
+        // 이미 존재하는 이메일인지 확인
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new CustomException(ErrorCode.USER_NOT_UNIQUE);
+        }
+        return mailSendService.joinEmail(email);
+    }
+
+    // 이메일 인증 코드 확인 메서드
+    public void verifySignupEmail(String email, String authCode) {
+        // 인증 코드 일치 여부 확인
+        if (!mailSendService.CheckAuthNum(email, authCode)) {
+            throw new CustomException(ErrorCode.INVALID_VERIFICATION_CODE);
+        }
+        // 인증 완료 상태를 Redis에 5분간 저장
+        redisUtil.setDataExpire(email, "VERIFIED", 60 * 5L);
+    }
+
+    // 회원가입 처리 메서드
     @Transactional
     public void signup(SignupRequestDto requestDto) {
         String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickName = requestDto.getNickName();
 
-        // 중복 체크 있으면 => 이미 등록된 회원
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
+        // 이메일 중복 확인
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new CustomException(ErrorCode.USER_NOT_UNIQUE);
         }
 
-        // 회원가입한 user DB에 저장
+        // 이메일 인증 완료 여부 확인
+        if (!"VERIFIED".equals(redisUtil.getData(email))) {
+            throw new CustomException(ErrorCode.EMAIL_NOT_VERIFIED);
+        }
+
         userRepository.save(new User(email, password, nickName));
+        redisUtil.deleteData(email);
     }
 
     // 주어진 이메일이 등록된 이메일인지 확인하는 메서드
