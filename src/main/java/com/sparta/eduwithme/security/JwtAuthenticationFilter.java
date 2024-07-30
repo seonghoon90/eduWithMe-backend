@@ -76,8 +76,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         StatusCommonResponse responseDto = new StatusCommonResponse(HttpStatus.OK.value(), "로그인이 성공적으로 되었습니다.");
 
-        response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
-        response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+        response.setHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
+        response.setHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("text/plain;charset=UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));

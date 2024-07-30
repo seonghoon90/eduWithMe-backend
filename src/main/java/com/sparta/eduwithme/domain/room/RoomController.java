@@ -29,6 +29,7 @@ public class RoomController {
     public ResponseEntity<StatusCommonResponse> createPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                  @RequestBody @Valid CreatePublicRoomRequestDto requestDto)
     {
+        System.out.println("요청이옴");
         roomService.createPublicRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
                 HttpStatus.CREATED.value(),
