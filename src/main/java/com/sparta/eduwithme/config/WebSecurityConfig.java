@@ -62,20 +62,41 @@ public class WebSecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트엔드 URL
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 프론트엔드 URL만 허용
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+
+        // 노출할 헤더 설정
         configuration.setExposedHeaders(Arrays.asList("AccessToken", "Refresh-Token"));
+
+        // 쿠키 및 자격 증명을 포함할지 여부 설정
         configuration.setAllowCredentials(true);
 
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
+    // 이거 혹시 모를 CORS 백업용
+//        @Bean
+//        public CorsConfigurationSource corsConfigurationSource() {
+//            final CorsConfiguration configuration = new CorsConfiguration();
+//            configuration.setAllowedOriginPatterns(List.of("*"));
+//            configuration.addAllowedHeader("*");
+//            configuration.addAllowedMethod("*");
+//            configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트엔드 URL
+//            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//            configuration.setAllowedHeaders(List.of("*"));
+//            configuration.setExposedHeaders(Arrays.asList("AccessToken", "Refresh-Token"));
+//            configuration.setAllowCredentials(true);
+//
+//            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//            source.registerCorsConfiguration("/**", configuration);
+//            return source;
+//        }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
