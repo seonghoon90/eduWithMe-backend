@@ -5,6 +5,8 @@ import com.sparta.eduwithme.domain.question.entity.Difficulty;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class QuestionResponseDto {
 
@@ -14,6 +16,8 @@ public class QuestionResponseDto {
     private Category category;
     private Difficulty difficulty;
     private Long point;
+    private final LocalDateTime updatedAt;
+
 
     public QuestionResponseDto(Question question) {
         this.questionId = question.getId();
@@ -22,6 +26,7 @@ public class QuestionResponseDto {
         this.category = question.getCategory();
         this.difficulty = question.getDifficulty();
         this.point = question.getPoint();
+        this.updatedAt = question.getUpdatedAt();
     }
 
 }
