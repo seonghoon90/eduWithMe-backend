@@ -5,6 +5,8 @@ import com.sparta.eduwithme.security.JwtAuthenticationFilter;
 import com.sparta.eduwithme.security.JwtAuthorizationFilter;
 import com.sparta.eduwithme.security.UserDetailsServiceImpl;
 import com.sparta.eduwithme.util.JwtUtil;
+
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,6 +66,10 @@ public class WebSecurityConfig {
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트엔드 URL
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(Arrays.asList("AccessToken", "Refresh-Token"));
         configuration.setAllowCredentials(true);
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -73,7 +80,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf((csrf) -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
@@ -90,7 +97,8 @@ public class WebSecurityConfig {
                     antMatcher("/swagger-ui/**"),
                     antMatcher("/api-docs"),
                     antMatcher("/v3/api-docs/**"),
-                    antMatcher("/api-docs/**")
+                    antMatcher("/api-docs/**"),
+                    antMatcher("/chat.html")
                 ).permitAll()
                 .requestMatchers(
                     "/users/signup/**", // 회원가입[POST]
@@ -101,7 +109,11 @@ public class WebSecurityConfig {
                     "/users/mailauthCheck", // 인증코드 체크
                     "/users/temp-password-request", // 임시비밀번호발급 인증코드
                     "/users/reset-password", // 임시비밀번호발급
-                    "/users/key-value" // 앱 키
+                    "/users/key-value", // 앱 키
+                    "/ws/**", // webSocket 프로토콜 => connect
+                    "/chat/**", // chat
+                    "/topic/**",
+                    "/chat-page"
                 ).permitAll()
                 .anyRequest().authenticated()
         );
