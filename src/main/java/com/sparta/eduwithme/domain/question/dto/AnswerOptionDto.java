@@ -12,6 +12,7 @@ public class AnswerOptionDto {
     private String second;
     private String third;
     private String fourth;
+    private int answered;
 
     public AnswerOptionDto(Answer answer) {
         this.id = answer.getId();
@@ -19,5 +20,6 @@ public class AnswerOptionDto {
         this.second = answer.getSecond();
         this.third = answer.getThird();
         this.fourth = answer.getFourth();
+        this.answered = answer.getAnswered();
     }
 }
