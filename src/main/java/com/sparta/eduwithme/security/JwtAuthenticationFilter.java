@@ -79,9 +79,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
         response.setHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
         String nickName = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getNickName();
+        Long userId = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId();
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json");
-        String jsonResponse = String.format("{\"nickName\": \"%s\"}", nickName);
+        String jsonResponse = String.format("{\"userId\": \"%s\", \"nickName\": \"%s\"}", userId, nickName);
         response.getWriter().write(jsonResponse);
     }
 
