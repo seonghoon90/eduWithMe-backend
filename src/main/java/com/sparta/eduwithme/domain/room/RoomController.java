@@ -63,6 +63,13 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<DataCommonResponse<List<SelectAllUsersRoomResponseDto>>> selectAllUsersRoom(@PathVariable Long userId) {
+        List<SelectAllUsersRoomResponseDto> responseDtoList = roomService.selectAllUsersRoom(userId);
+        DataCommonResponse<List<SelectAllUsersRoomResponseDto>> response = new DataCommonResponse<>(200, "조회 성공", responseDtoList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PutMapping("/{roomId}")
     public ResponseEntity<StatusCommonResponse> updateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @RequestBody UpdateRequestDto requestDto,
