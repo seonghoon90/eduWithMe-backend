@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class SolvedQuestionDto {
-    private Long questionNo;
+    private Long questionId;
     private String category;
     private String title;
     private Difficulty difficulty;
