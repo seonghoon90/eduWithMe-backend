@@ -4,9 +4,13 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.sparta.eduwithme.util.JwtUtil;
 import com.sparta.eduwithme.util.RedisUtil;
 import java.util.Optional;
 import java.util.UUID;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MailSendService mailSendService;
     private final RedisUtil redisUtil;
+    private final JwtUtil jwtUtil;
 
     // 회원가입 이메일 인증 코드 발송 메서드
     public String sendSignupVerificationEmail(String email) {
@@ -38,6 +43,22 @@ public class UserService {
         }
         // 인증 완료 상태를 Redis에 5분간 저장
         redisUtil.setDataExpire(email, "VERIFIED", 60 * 5L);
+    }
+
+    public void accessTokenReissue(String refreshToken, HttpServletResponse res) {
+        Claims info = jwtUtil.getUserInfoFromToken(jwtUtil.refreshTokenSubstring(refreshToken));
+
+        User user = userRepository.findByEmail(info.getSubject()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        String newAccessToken = jwtUtil.createAccessToken(user);
+        String newRefreshToken = jwtUtil.createRefreshToken(user);
+        res.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, newAccessToken);
+        res.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, newRefreshToken);
+        String newRefreshTokenOriginal = jwtUtil.refreshTokenSubstring(newRefreshToken);
+        user.updateRefreshToken(newRefreshTokenOriginal);
+
     }
 
     // 회원가입 처리 메서드

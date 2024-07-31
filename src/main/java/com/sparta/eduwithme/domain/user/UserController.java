@@ -1,10 +1,7 @@
 package com.sparta.eduwithme.domain.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta.eduwithme.domain.user.dto.EmailCheckDto;
-import com.sparta.eduwithme.domain.user.dto.EmailRequestDto;
-import com.sparta.eduwithme.domain.user.dto.KeyValueResponseDto;
-import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
+import com.sparta.eduwithme.domain.user.dto.*;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -48,6 +45,12 @@ public class UserController {
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refresh(@RequestBody RefreshTokenRequestDto request, HttpServletResponse res) {
+        userService.accessTokenReissue(request.getRefreshToken(), res);
+        return new ResponseEntity<>("토큰 재발급 성공", HttpStatus.OK);
     }
 
     @GetMapping("/key-value")
