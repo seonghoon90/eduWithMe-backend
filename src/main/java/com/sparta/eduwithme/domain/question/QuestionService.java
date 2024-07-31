@@ -59,7 +59,7 @@ public class QuestionService {
     public List<QuestionResponseDto> getAllQuestion(Long roomId, int page, int pageSize) {
         Room room = roomService.findById(roomId);
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "updatedAt"));
         Page<Question> questionPage = questionRepository.findAllByRoom(room, pageable);
         return questionPage.stream()
                 .map(QuestionResponseDto::new)
@@ -76,7 +76,7 @@ public class QuestionService {
         Room room = roomService.findById(roomId);
 
         String trimmedKeyword = keyword.trim();
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "updatedAt"));
         Page<Question> questionPage = questionRepository.findByRoomAndTitleContainingIgnoreCase(room, trimmedKeyword, pageable);
 
         return questionPage.getContent().stream()
