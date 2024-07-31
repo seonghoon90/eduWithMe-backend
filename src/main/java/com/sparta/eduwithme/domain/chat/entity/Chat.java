@@ -1,7 +1,6 @@
 package com.sparta.eduwithme.domain.chat.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
-import com.sparta.eduwithme.domain.chat.dto.ChatMessage;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.entity.User;
 import jakarta.persistence.*;
