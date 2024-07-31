@@ -8,6 +8,8 @@ import com.sparta.eduwithme.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,10 +40,15 @@ public class CommentController {
     //Comment 조회
     @Operation(summary = "getAllComments", description = "댓글 전체 조회 기능입니다.")
     @GetMapping("/comments")
-    public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getAllComments(@PathVariable Long questionId,
-                                                                                       @RequestParam(value = "page", defaultValue = "0") int page) {
-        List<CommentResponseDto> responseDtoList = commentService.getAllComments(questionId, page, PAGE_SIZE);
-        DataCommonResponse<List<CommentResponseDto>> response = new DataCommonResponse<>(200, "댓글 조회에 성공 하였습니다.", responseDtoList);
+    public ResponseEntity<DataCommonResponse<Page<CommentResponseDto>>> getAllComments(@PathVariable Long questionId,
+                                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                                       @RequestParam(value = "sort", defaultValue = "createdAt,asc") String sort) {
+
+        String[] sortParams = sort.split(",");
+        Sort.Direction direction = sortParams[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Page<CommentResponseDto> commentPage = commentService.getAllComments(questionId, page, PAGE_SIZE, Sort.by(direction, sortParams[0]));
+        DataCommonResponse<Page<CommentResponseDto>> response = new DataCommonResponse<>(200, "댓글 조회에 성공 하였습니다.", commentPage);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

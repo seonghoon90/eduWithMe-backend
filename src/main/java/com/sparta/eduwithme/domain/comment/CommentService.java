@@ -35,12 +35,11 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getAllComments(Long questionId, int page, int pageSize) {
+    public Page<CommentResponseDto> getAllComments(Long questionId, int page, int pageSize, Sort sort) {
         Question question = questionService.findById(questionId);
-
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Comment> commentsPage = commentRepository.findAllByQuestion(question,pageable);
-        return commentsPage.stream().map(CommentResponseDto::new).toList();
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+        Page<Comment> commentsPage = commentRepository.findAllByQuestion(question, pageable);
+        return commentsPage.map(CommentResponseDto::new);
     }
 
     @Transactional
