@@ -57,13 +57,11 @@ public class UserController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<String> kakaoLogin(@RequestParam String code,
-        HttpServletResponse response)
-        throws JsonProcessingException {
+    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         String token = socialService.kakaoLogin(code);
-
-        response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, token); // response header에 access token 넣기
-        return ResponseEntity.status(HttpStatus.OK).body("카카오 로그인 하였습니다.");
+        response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, token);
+        response.setHeader("Location", "http://localhost:3000/main");
+        response.setStatus(HttpServletResponse.SC_FOUND);
     }
 
     // 임시 비밀번호 발급 요청을 처리하는 엔드포인트
