@@ -141,10 +141,17 @@ public class RoomService {
         return new StudentResponseDto(student);
     }
 
+    public List<RoomUserListResponseDto> selectRoomUsers(Long roomId) {
+        List<Student> student = studentRepository.findByRoomId(roomId);
+        return student.stream().map(RoomUserListResponseDto::new).toList();
+    }
+
     @Transactional(readOnly = true)
     public Room findById(Long roomId) {
         return roomRepository.findById(roomId).orElseThrow(
                 () -> new CustomException(ErrorCode.ROOM_NOT_FOUND)
         );
     }
+
+
 }

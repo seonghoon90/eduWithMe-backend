@@ -6,6 +6,8 @@ import com.sparta.eduwithme.domain.room.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("/rooms")
 public class RoomController {
 
+    private static final Logger log = LoggerFactory.getLogger(RoomController.class);
     private final RoomService roomService;
 
     /**
@@ -109,4 +112,12 @@ public class RoomController {
         DataCommonResponse<StudentResponseDto> response = new DataCommonResponse<>(HttpStatus.OK.value(), "공개 방 안에 입장이 되었습니다.", responseDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/{roomId}/users")
+    public ResponseEntity<DataCommonResponse<List<RoomUserListResponseDto>>> selectRoomUsers(@PathVariable Long roomId) {
+        List<RoomUserListResponseDto> responseDtoList = roomService.selectRoomUsers(roomId);
+        DataCommonResponse<List<RoomUserListResponseDto>> response = new DataCommonResponse<>(200, "방 입장 인원 전체 조회 성공", responseDtoList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
