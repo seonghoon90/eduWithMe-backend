@@ -13,4 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByRoomIdAndUserIdWithJoin(@Param("roomId") Long roomId, @Param("userId") Long userId);
 
     List<Student> findByRoomId(Long roomId);
+
+    @Query("SELECT s FROM Student s LEFT JOIN FETCH s.room r WHERE s.user.id = :userId")
+    List<Student> findStudentsWithRoomByUserId(@Param("userId") Long userId);
 }
