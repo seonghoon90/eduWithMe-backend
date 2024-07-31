@@ -122,6 +122,7 @@ public class WebSecurityConfig {
                     antMatcher("/chat.html")
                 ).permitAll()
                 .requestMatchers(
+                    "/room/**",
                     "/rooms",
                     "users/refresh",
                     "/users/signup/**", // 회원가입[POST]
