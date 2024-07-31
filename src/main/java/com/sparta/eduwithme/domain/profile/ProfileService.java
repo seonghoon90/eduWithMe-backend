@@ -160,6 +160,7 @@ public class ProfileService {
                     Question question = ls.getQuestion();
                     return new QuestionDto(
                             question.getId(),
+                            question.getCategory().name(),
                             question.getTitle(),
                             question.getDifficulty().toString(),
                             question.getCreatedAt().toString()
@@ -181,6 +182,7 @@ public class ProfileService {
                     Question question = ls.getQuestion();
                     return new QuestionDto(
                             question.getId(),
+                            question.getCategory().name(),
                             question.getTitle(),
                             question.getDifficulty().toString(),
                             question.getCreatedAt().toString()

@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class QuestionDto {
     private Long questionNo;
+    private String category;
     private String title;
     private String difficulty;
     private String createdAt;

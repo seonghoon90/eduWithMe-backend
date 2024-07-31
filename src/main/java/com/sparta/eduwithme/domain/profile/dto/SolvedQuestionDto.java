@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SolvedQuestionDto {
     private Long questionNo;
+    private String category;
     private String title;
     private Difficulty difficulty;
     private LocalDateTime createdAt;
