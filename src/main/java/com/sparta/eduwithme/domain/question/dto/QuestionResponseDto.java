@@ -1,7 +1,5 @@
 package com.sparta.eduwithme.domain.question.dto;
 
-import com.sparta.eduwithme.domain.question.entity.Category;
-import com.sparta.eduwithme.domain.question.entity.Difficulty;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import lombok.Getter;
 
@@ -10,12 +8,12 @@ import java.time.LocalDateTime;
 @Getter
 public class QuestionResponseDto {
 
-    private Long questionId;
-    private String title;
-    private String content;
-    private Category category;
-    private Difficulty difficulty;
-    private Long point;
+    private final Long questionId;
+    private final String title;
+    private final String content;
+    private final String category;
+    private final String difficulty;
+    private final Long point;
     private final LocalDateTime updatedAt;
 
 
@@ -23,8 +21,8 @@ public class QuestionResponseDto {
         this.questionId = question.getId();
         this.title = question.getTitle();
         this.content = question.getContent();
-        this.category = question.getCategory();
-        this.difficulty = question.getDifficulty();
+        this.category = question.getCategory().getCategoryName();
+        this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
         this.updatedAt = question.getUpdatedAt();
     }

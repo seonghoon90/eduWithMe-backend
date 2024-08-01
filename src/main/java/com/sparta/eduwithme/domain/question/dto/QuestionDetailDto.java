@@ -1,30 +1,24 @@
 package com.sparta.eduwithme.domain.question.dto;
 
-import com.sparta.eduwithme.domain.question.entity.Category;
-import com.sparta.eduwithme.domain.question.entity.Difficulty;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
-@NoArgsConstructor
 public class QuestionDetailDto {
-    private Long id;
-    private String title;
-    private String content;
-    private Category category;
-    private Difficulty difficulty;
-    private Long point;
-    private AnswerOptionDto answerOption;
+    private final Long id;
+    private final String title;
+    private final String content;
+    private final String category;
+    private final String difficulty;
+    private final Long point;
+    private final AnswerOptionDto answerOption;
 
     public QuestionDetailDto(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
         this.content = question.getContent();
-        this.category = question.getCategory();
-        this.difficulty = question.getDifficulty();
+        this.category = question.getCategory().getCategoryName();
+        this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
         this.answerOption = new AnswerOptionDto(question.getAnswer());
     }
