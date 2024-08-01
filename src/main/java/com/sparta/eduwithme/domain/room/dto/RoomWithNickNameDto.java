@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class RoomWithNickNameDto {
-    private Long id;
+    private Long roomId;
     private String roomName;
     private String roomPassword;
     private Long managerUserId;
