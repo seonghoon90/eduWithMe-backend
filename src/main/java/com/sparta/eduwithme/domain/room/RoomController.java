@@ -51,6 +51,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    // 방 전체 조회
     @GetMapping
     public ResponseEntity<DataCommonResponse<List<RoomWithNickNameDto>>> getRoomListWithPage(
             @RequestParam(value = "page") int page)
@@ -63,6 +64,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 특정 유저가 속한 방 전체 조회
     @GetMapping("/{userId}")
     public ResponseEntity<DataCommonResponse<List<SelectAllUsersRoomResponseDto>>> selectAllUsersRoom(@PathVariable Long userId) {
         List<SelectAllUsersRoomResponseDto> responseDtoList = roomService.selectAllUsersRoom(userId);
