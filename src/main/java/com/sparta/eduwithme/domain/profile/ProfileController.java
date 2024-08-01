@@ -3,8 +3,7 @@ package com.sparta.eduwithme.domain.profile;
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.comment.CommentService;
-import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
-import com.sparta.eduwithme.domain.comment.entity.Comment;
+import com.sparta.eduwithme.domain.comment.dto.CommentRoomDto;
 import com.sparta.eduwithme.domain.profile.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -125,25 +122,14 @@ public class ProfileController {
 
     @Operation(summary = "getProfile", description = "작성한 댓글 조회 기능입니다.")
     @GetMapping("/comments")
-    public ResponseEntity<DataCommonResponse<List<CommentResponseDto>>> getUserComments(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size) {
+    public ResponseEntity<DataCommonResponse<Page<CommentRoomDto>>> getUserComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                                    @RequestParam(value = "size", defaultValue = "5") int size) {
 
-        Long userId = userDetails.getUser().getId();
         Pageable pageable = PageRequest.of(page, size);
-        Page<Comment> userCommentsPage = commentService.getCommentsByUser(userId, pageable);
+        Page<CommentRoomDto> userCommentsPage = commentService.getCommentsWithRoomByUser(userDetails.getUser().getId(), pageable);
 
-        List<CommentResponseDto> commentsDtoList = userCommentsPage.stream()
-                .map(CommentResponseDto::new)
-                .toList();
-
-        DataCommonResponse<List<CommentResponseDto>> response = new DataCommonResponse<>(
-                HttpStatus.OK.value(),
-                "댓글 조회 성공.",
-                commentsDtoList
-        );
-
+        DataCommonResponse<Page<CommentRoomDto>> response = new DataCommonResponse<>(HttpStatus.OK.value(), "댓글 조회 성공.", userCommentsPage);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -5,8 +5,6 @@ import com.sparta.eduwithme.domain.question.entity.Difficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 public class QuestionUpdateRequestDto {
