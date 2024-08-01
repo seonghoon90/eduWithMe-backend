@@ -1,5 +1,6 @@
 package com.sparta.eduwithme.domain.question;
 
+import com.sparta.eduwithme.domain.profile.dto.QuestionDto;
 import com.sparta.eduwithme.domain.question.entity.LearningStatus;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
@@ -19,4 +20,18 @@ public interface LearningStatusRepository extends JpaRepository<LearningStatus, 
 
     @Query("SELECT SUM(q.point) FROM LearningStatus ls JOIN ls.question q WHERE ls.user.id = :userId AND ls.questionType = :questionType")
     Long findTotalPointsByUserIdAndQuestionType(@Param("userId") Long userId, @Param("questionType") QuestionType questionType);
+
+    @Query("SELECT new com.sparta.eduwithme.domain.profile.dto.QuestionDto(" +
+            "ls.question.id, " +
+            "ls.question.category, " +
+            "ls.question.title, " +
+            "ls.question.difficulty, " +
+            "ls.question.createdAt, " +
+            "ls.question.updatedAt, " +
+            "r.roomName) " +
+            "FROM LearningStatus ls " +
+            "JOIN ls.question q " +
+            "JOIN q.room r " +
+            "WHERE ls.user.id = :userId AND ls.questionType = :questionType")
+    Page<QuestionDto> findQuestionsWithRoomByUserAndQuestionType(@Param("userId") Long userId, @Param("questionType") QuestionType questionType, Pageable pageable);
 }

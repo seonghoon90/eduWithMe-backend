@@ -1,5 +1,6 @@
 package com.sparta.eduwithme.domain.question.entity;
 
+import com.sparta.eduwithme.common.TimeStamp;
 import com.sparta.eduwithme.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "Learning_status")
-public class LearningStatus {
+public class LearningStatus extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
