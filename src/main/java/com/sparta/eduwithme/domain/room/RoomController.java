@@ -52,11 +52,11 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<DataCommonResponse<List<SelectRoomListResponseDto>>> getRoomListWithPage(
+    public ResponseEntity<DataCommonResponse<List<RoomWithNickNameDto>>> getRoomListWithPage(
             @RequestParam(value = "page") int page)
     {
-        List<SelectRoomListResponseDto> responseDtoList = roomService.getRoomListWithPage(page);
-        DataCommonResponse<List<SelectRoomListResponseDto>> response = new DataCommonResponse<>(
+        List<RoomWithNickNameDto> responseDtoList = roomService.getRoomListWithPage(page);
+        DataCommonResponse<List<RoomWithNickNameDto>> response = new DataCommonResponse<>(
                 HttpStatus.OK.value(),
                 "성공적으로 조회가 되었습니다.",
                 responseDtoList);
