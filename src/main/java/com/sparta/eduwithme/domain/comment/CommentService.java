@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.comment.dto.CommentRequestDto;
 import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
+import com.sparta.eduwithme.domain.comment.dto.CommentRoomDto;
 import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.profile.ProfileRepository;
 import com.sparta.eduwithme.domain.question.QuestionService;
@@ -84,10 +85,8 @@ public class CommentService {
     }
 
     // 사용자 댓글 조회
-    public Page<Comment> getCommentsByUser(Long userId, Pageable pageable) {
-        User user = profileRepository.findById(userId).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-        return commentRepository.findAllByUser(user, pageable);
+    @Transactional(readOnly = true)
+    public Page<CommentRoomDto> getCommentsWithRoomByUser(Long userId, Pageable pageable) {
+        return commentRepository.findCommentsWithRoomByUserId(userId, pageable);
     }
 }
