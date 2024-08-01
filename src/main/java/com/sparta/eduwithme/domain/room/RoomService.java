@@ -69,11 +69,9 @@ public class RoomService {
         }
     }
 
-    public List<SelectRoomListResponseDto> getRoomListWithPage(int page) {
+    public List<RoomWithNickNameDto> getRoomListWithPage(int page) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        return roomRepository.getRoomListWithPage(pageRequest.getOffset(), pageRequest.getPageSize())
-                .stream()
-                .map(SelectRoomListResponseDto::new).toList();
+        return roomRepository.getRoomListWithPage(pageRequest.getOffset(), pageRequest.getPageSize());
     }
 
     public List<SelectAllUsersRoomResponseDto> selectAllUsersRoom(Long userId) {
