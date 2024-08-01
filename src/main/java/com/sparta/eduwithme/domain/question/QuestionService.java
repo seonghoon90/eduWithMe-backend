@@ -56,15 +56,16 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponseDto> getAllQuestion(Long roomId, int page, int pageSize) {
+    public Page<QuestionResponseDto> getAllQuestion(Long roomId, Pageable pageable) {
         Room room = roomService.findById(roomId);
 
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "updatedAt"));
+        // Room 엔티티와 Pageable을 사용하여 페이지네이션된 Question 객체 목록을 조회
         Page<Question> questionPage = questionRepository.findAllByRoom(room, pageable);
-        return questionPage.stream()
-                .map(QuestionResponseDto::new)
-                .toList();
+
+        // Question 엔티티를 QuestionResponseDto로 변환하고 페이지네이션된 결과를 반환
+        return questionPage.map(QuestionResponseDto::new);
     }
+
 
     @Transactional(readOnly = true)
     public List<QuestionTitleDto> searchQuestionByTitle(Long roomId, String keyword, int page, int pageSize) {

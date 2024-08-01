@@ -6,6 +6,10 @@ import com.sparta.eduwithme.domain.question.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,10 +38,12 @@ public class QuestionController {
     //Question 전체 조회
     @Operation(summary = "getAllQuestion", description = "질문 전체 조회 기능입니다.")
     @GetMapping("/rooms/{roomId}/question")
-    public ResponseEntity<DataCommonResponse<List<QuestionResponseDto>>> getAllQuestion(@PathVariable Long roomId,
-                                                                                        @RequestParam(value = "page", defaultValue = "0") int page) {
-        List<QuestionResponseDto> responseDtoList = questionService.getAllQuestion(roomId, page, PAGE_SIZE);
-        DataCommonResponse<List<QuestionResponseDto>> response = new DataCommonResponse<>(200, "문제 전체 조회를 성공하였습니다.", responseDtoList);
+    public ResponseEntity<DataCommonResponse<Page<QuestionResponseDto>>> getAllQuestion(@PathVariable Long roomId,
+                                                                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                                        @RequestParam(value = "size", defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
+        Page<QuestionResponseDto> responseDtoPage = questionService.getAllQuestion(roomId, pageable);
+        DataCommonResponse<Page<QuestionResponseDto>> response = new DataCommonResponse<>(200, "문제 전체 조회를 성공하였습니다.", responseDtoPage);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
