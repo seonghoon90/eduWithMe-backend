@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE =10;
 
     private final CommentService commentService;
 
