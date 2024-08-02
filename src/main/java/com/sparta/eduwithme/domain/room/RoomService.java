@@ -151,6 +151,13 @@ public class RoomService {
         return student.stream().map(RoomUserListResponseDto::new).toList();
     }
 
+    public SelectOneRoomResponseDto selectOneRoom(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CustomException(ErrorCode.ROOM_NOT_FOUND)
+        );
+        return new SelectOneRoomResponseDto(room);
+    }
+
     @Transactional(readOnly = true)
     public Room findById(Long roomId) {
         return roomRepository.findById(roomId).orElseThrow(
