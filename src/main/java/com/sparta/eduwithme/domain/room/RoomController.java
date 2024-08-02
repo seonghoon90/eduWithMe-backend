@@ -129,7 +129,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{roomId}")
+    @GetMapping("/one/{roomId}")
     public ResponseEntity<DataCommonResponse<SelectOneRoomResponseDto>> selectOneRoom(@PathVariable Long roomId) {
         SelectOneRoomResponseDto responseDto = roomService.selectOneRoom(roomId);
         DataCommonResponse<SelectOneRoomResponseDto> response = new DataCommonResponse<>(200, "방 단건 조회 성공", responseDto);
