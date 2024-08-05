@@ -11,6 +11,7 @@ public class QuestionDetailDto {
     private final String category;
     private final String difficulty;
     private final Long point;
+    private final Integer orderInRoom;
     private final AnswerOptionDto answerOption;
 
     public QuestionDetailDto(Question question) {
@@ -20,6 +21,7 @@ public class QuestionDetailDto {
         this.category = question.getCategory().getCategoryName();
         this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
+        this.orderInRoom = question.getOrderInRoom();
         this.answerOption = new AnswerOptionDto(question.getAnswer());
     }
 }
