@@ -31,6 +31,9 @@ public class QuestionService {
     public QuestionResponseDto createQuestion(Long roomId, QuestionRequestDto requestDto) {
         Room room = roomService.findById(roomId);
 
+        Integer maxOrder = questionRepository.findMaxOrderInRoom(roomId);
+        int newOrder = (maxOrder == null) ? 1 : maxOrder + 1;
+
         Answer answer = new Answer(
                 requestDto.getAnswer().getFirst(),
                 requestDto.getAnswer().getSecond(),
@@ -50,6 +53,7 @@ public class QuestionService {
                 point,
                 answer
         );
+        question.setOrderInRoom(newOrder);
 
         questionRepository.save(question);
         return new QuestionResponseDto(question);

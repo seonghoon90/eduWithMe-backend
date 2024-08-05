@@ -12,6 +12,7 @@ public class QuestionTitleDto {
     private final String category;
     private final String difficulty;
     private final Long point;
+    private final Integer orderInRoom;
     private final LocalDateTime updatedAt;
 
     public QuestionTitleDto(Question question) {
@@ -20,6 +21,7 @@ public class QuestionTitleDto {
         this.category = question.getCategory().getCategoryName();
         this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
+        this.orderInRoom = question.getOrderInRoom();
         this.updatedAt = question.getUpdatedAt();
     }
 }

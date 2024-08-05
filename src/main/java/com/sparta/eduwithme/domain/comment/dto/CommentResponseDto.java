@@ -13,6 +13,7 @@ public class CommentResponseDto {
     private final String comment;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final Integer questionOrderInRoom;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
@@ -21,5 +22,6 @@ public class CommentResponseDto {
         this.comment = comment.getComment();
         this.createdAt = comment.getUpdatedAt();
         this.updatedAt = comment.getCreatedAt();
+        this.questionOrderInRoom = comment.getQuestion().getOrderInRoom();
     }
 }

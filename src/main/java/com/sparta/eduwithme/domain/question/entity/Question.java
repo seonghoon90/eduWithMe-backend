@@ -39,6 +39,9 @@ public class Question extends TimeStamp {
     @Column
     private Long point;
 
+    @Column(name = "order_in_room")
+    private Integer orderInRoom;
+
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
@@ -73,5 +76,9 @@ public class Question extends TimeStamp {
         this.category = questionUpdateRequestDto.getCategory();
         this.difficulty = questionUpdateRequestDto.getDifficulty();
         this.point = questionUpdateRequestDto.getPoint();
+    }
+
+    public void setOrderInRoom(Integer orderInRoom) {
+        this.orderInRoom = orderInRoom;
     }
 }
