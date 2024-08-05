@@ -14,4 +14,5 @@ public class CommentRoomDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String roomName;
+    private Integer questionOrderInRoom;
 }

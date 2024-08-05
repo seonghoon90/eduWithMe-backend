@@ -14,4 +14,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("SELECT q FROM Question q WHERE q.room = :room AND LOWER(q.title) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Question> findByRoomAndTitleContainingIgnoreCase(@Param("room") Room room, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT MAX(q.orderInRoom) FROM Question q WHERE q.room.id = :roomId")
+    Integer findMaxOrderInRoom(@Param("roomId") Long roomId);
 }

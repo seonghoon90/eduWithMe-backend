@@ -87,6 +87,6 @@ public class CommentService {
     // 사용자 댓글 조회
     @Transactional(readOnly = true)
     public Page<CommentRoomDto> getCommentsWithRoomByUser(Long userId, Pageable pageable) {
-        return commentRepository.findCommentsWithRoomByUserId(userId, pageable);
+        return commentRepository.findCommentsWithRoomAndQuestionByUserId(userId, pageable);
     }
 }

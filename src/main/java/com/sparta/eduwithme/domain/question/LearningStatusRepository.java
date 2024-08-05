@@ -28,7 +28,8 @@ public interface LearningStatusRepository extends JpaRepository<LearningStatus, 
             "ls.question.difficulty, " +
             "ls.question.createdAt, " +
             "ls.question.updatedAt, " +
-            "r.roomName) " +
+            "r.roomName, " +
+            "q.orderInRoom) " +
             "FROM LearningStatus ls " +
             "JOIN ls.question q " +
             "JOIN q.room r " +
