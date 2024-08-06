@@ -13,7 +13,7 @@ public class CommentResponseDto {
     private final String comment;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final Integer questionOrderInRoom;
+    private final Long questionOrderInRoom;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();

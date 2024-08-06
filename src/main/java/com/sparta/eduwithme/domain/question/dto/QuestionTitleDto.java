@@ -12,7 +12,7 @@ public class QuestionTitleDto {
     private final String category;
     private final String difficulty;
     private final Long point;
-    private final Integer orderInRoom;
+    private final Long orderInRoom;
     private final LocalDateTime updatedAt;
 
     public QuestionTitleDto(Question question) {

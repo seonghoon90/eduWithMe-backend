@@ -16,5 +16,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Page<Question> findByRoomAndTitleContainingIgnoreCase(@Param("room") Room room, @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT MAX(q.orderInRoom) FROM Question q WHERE q.room.id = :roomId")
-    Integer findMaxOrderInRoom(@Param("roomId") Long roomId);
+    Long findMaxOrderInRoom(@Param("roomId") Long roomId);
 }

@@ -40,7 +40,7 @@ public class Question extends TimeStamp {
     private Long point;
 
     @Column(name = "order_in_room")
-    private Integer orderInRoom;
+    private Long orderInRoom;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -78,7 +78,7 @@ public class Question extends TimeStamp {
         this.point = questionUpdateRequestDto.getPoint();
     }
 
-    public void setOrderInRoom(Integer orderInRoom) {
+    public void setOrderInRoom(Long orderInRoom) {
         this.orderInRoom = orderInRoom;
     }
 }

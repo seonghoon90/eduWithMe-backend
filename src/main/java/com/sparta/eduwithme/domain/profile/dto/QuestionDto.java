@@ -15,10 +15,10 @@ public class QuestionDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String roomName;
-    private final Integer orderInRoom;
+    private final Long orderInRoom;
 
     public QuestionDto(Long questionId, Category category, String title, Difficulty difficulty,
-                       LocalDateTime createdAt, LocalDateTime updatedAt, String roomName, Integer orderInRoom) {
+                       LocalDateTime createdAt, LocalDateTime updatedAt, String roomName, Long orderInRoom) {
         this.questionId = questionId;
         this.category = category.getCategoryName();
         this.title = title;

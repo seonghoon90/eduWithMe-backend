@@ -11,7 +11,7 @@ public class QuestionDetailDto {
     private final String category;
     private final String difficulty;
     private final Long point;
-    private final Integer orderInRoom;
+    private final Long orderInRoom;
     private final AnswerOptionDto answerOption;
 
     public QuestionDetailDto(Question question) {
