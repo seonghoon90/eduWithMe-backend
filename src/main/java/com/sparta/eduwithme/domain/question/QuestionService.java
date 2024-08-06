@@ -6,7 +6,9 @@ import com.sparta.eduwithme.domain.question.dto.*;
 import com.sparta.eduwithme.domain.question.entity.*;
 import com.sparta.eduwithme.domain.room.RoomService;
 import com.sparta.eduwithme.domain.room.entity.Room;
+import com.sparta.eduwithme.domain.user.dto.UserDto;
 import com.sparta.eduwithme.domain.user.entity.User;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -179,6 +181,18 @@ public class QuestionService {
         }
 
         return new AnswerResultDto(isCorrect, earnedPoints, message);
+    }
+
+    public List<UserDto> getSolvedStudents(Long roomId, Long questionId) {
+        Question question = findById(questionId);
+        if (!question.getRoom().getId().equals(roomId)) {
+            throw new CustomException(ErrorCode.QUESTION_ROOM_MISMATCH);
+        }
+
+        return learningStatusRepository.findByQuestionAndQuestionType(question, QuestionType.SOLVE)
+            .stream()
+            .map(status -> new UserDto(status.getUser()))
+            .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

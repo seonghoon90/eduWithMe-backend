@@ -3,6 +3,7 @@ package com.sparta.eduwithme.domain.question;
 import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.question.dto.*;
+import com.sparta.eduwithme.domain.user.dto.UserDto;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -100,6 +101,14 @@ public class QuestionController {
         DataCommonResponse<AnswerResultDto> response = new DataCommonResponse<>(200, "답변이 제출되었습니다.", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/rooms/{roomId}/question/{questionId}/solved-students")
+    public ResponseEntity<DataCommonResponse<List<UserDto>>> getSolvedStudents(
+        @PathVariable Long roomId,
+        @PathVariable Long questionId
+    ) {
+        List<UserDto> solvedStudents = questionService.getSolvedStudents(roomId, questionId);
+        return ResponseEntity.ok(new DataCommonResponse<>(200, "문제를 푼 학생 목록 조회 성공", solvedStudents));
+    }
 
 }
