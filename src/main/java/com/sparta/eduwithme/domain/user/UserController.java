@@ -2,6 +2,7 @@ package com.sparta.eduwithme.domain.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.eduwithme.domain.user.dto.*;
+import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final SocialService socialService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/signup/request")
     public ResponseEntity<String> signupRequest(@Valid @RequestBody EmailRequestDto emailDto) {
@@ -61,9 +63,16 @@ public class UserController {
 
     @GetMapping("/kakao/callback")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        String token = socialService.kakaoLogin(code);
-        response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, token);
-        response.setHeader("Location", "http://localhost:3000/main");
+        User user = socialService.kakaoLogin(code);
+        String token = jwtUtil.createAccessToken(user);
+        String userId = user.getId().toString();
+
+        // Set cookies
+        response.addHeader("Set-Cookie", "AccessToken=" + token + "; Path=/; HttpOnly; SameSite=Strict");
+        response.addHeader("Set-Cookie", "userId=" + userId + "; Path=/; HttpOnly; SameSite=Strict");
+
+        // Redirect to frontend
+        response.setHeader("Location", "http://localhost:3000/kakao-redirect?token=" + token + "&userId=" + userId);
         response.setStatus(HttpServletResponse.SC_FOUND);
     }
 
