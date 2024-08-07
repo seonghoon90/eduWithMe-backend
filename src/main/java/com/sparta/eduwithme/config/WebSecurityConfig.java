@@ -137,7 +137,8 @@ public class WebSecurityConfig {
                     "/ws/**", // webSocket 프로토콜 => connect
                     "/chat/**", // chat
                     "/topic/**",
-                    "/chat-page"
+                    "/chat-page",
+                    "/profiles/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         );

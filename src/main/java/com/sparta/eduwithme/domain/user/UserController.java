@@ -6,6 +6,9 @@ import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/users")
@@ -62,17 +66,17 @@ public class UserController {
     }
 
     @GetMapping("/kakao/callback")
-    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         User user = socialService.kakaoLogin(code);
         String token = jwtUtil.createAccessToken(user);
-        String userId = user.getId().toString();
 
-        // Set cookies
-        response.addHeader("Set-Cookie", "AccessToken=" + token + "; Path=/; HttpOnly; SameSite=Strict");
-        response.addHeader("Set-Cookie", "userId=" + userId + "; Path=/; HttpOnly; SameSite=Strict");
+        String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/kakao-redirect")
+            .queryParam("token", token)
+            .queryParam("userId", user.getId())
+            .queryParam("nickName", URLEncoder.encode(user.getNickName(), StandardCharsets.UTF_8.toString()))
+            .build().toUriString();
 
-        // Redirect to frontend
-        response.setHeader("Location", "http://localhost:3000/kakao-redirect?token=" + token + "&userId=" + userId);
+        response.setHeader("Location", redirectUrl);
         response.setStatus(HttpServletResponse.SC_FOUND);
     }
 
