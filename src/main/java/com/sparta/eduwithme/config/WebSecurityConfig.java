@@ -122,23 +122,23 @@ public class WebSecurityConfig {
                     antMatcher("/chat.html")
                 ).permitAll()
                 .requestMatchers(
-                    "/room/**",
-                    "/rooms",
-                    "users/refresh",
-                    "/users/signup/**", // 회원가입[POST]
-                    "/users/login", // 로그인[POST]
-                    "/users/refresh", // 토큰 재발급[POST]
-                    "/users/kakao/**", // 카카오 로그인
-                    "/users/mailSend", // 인증코드 발급
-                    "/users/mailauthCheck", // 인증코드 체크
-                    "/users/temp-password-request", // 임시비밀번호발급 인증코드
-                    "/users/reset-password", // 임시비밀번호발급
-                    "/users/key-value", // 앱 키
-                    "/ws/**", // webSocket 프로토콜 => connect
-                    "/chat/**", // chat
-                    "/topic/**",
-                    "/chat-page",
-                    "/profiles/**"
+                    "/api/room/**",
+                    "/api/rooms",
+                    "/api/users/refresh",
+                    "/api/users/signup/**", // 회원가입[POST]
+                    "/api/users/login", // 로그인[POST]
+                    "/api/users/refresh", // 토큰 재발급[POST]
+                    "/api/users/kakao/**", // 카카오 로그인
+                    "/api/users/mailSend", // 인증코드 발급
+                    "/api/users/mailauthCheck", // 인증코드 체크
+                    "/api/users/temp-password-request", // 임시비밀번호발급 인증코드
+                    "/api/users/reset-password", // 임시비밀번호발급
+                    "/api/users/key-value", // 앱 키
+                    "/api/ws/**", // webSocket 프로토콜 => connect
+                    "/api/chat/**", // chat
+                    "/api/topic/**",
+                    "/api/chat-page",
+                    "/api/profiles/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         );

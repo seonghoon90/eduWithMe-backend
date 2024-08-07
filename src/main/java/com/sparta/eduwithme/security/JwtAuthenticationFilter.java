@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JwtAuthenticationFilter(JwtUtil jwtUtil, UserRepository userRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
-        setFilterProcessesUrl("/users/login");
+        setFilterProcessesUrl("/api/users/login");
     }
 
     // 내부 로직에서 호출 ( 인증 )

@@ -20,13 +20,13 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/api/room/{roomId}")
     public List<ChatMessageResponse> getChats(@PathVariable Long roomId) {
         return chatService.getRecentChats(roomId);
     }
 
     @MessageMapping("/chat/{roomId}")
-    @SendTo("/topic/room/{roomId}")
+    @SendTo("/api/topic/room/{roomId}")
     public ChatMessage send(
             @DestinationVariable Long roomId,
             ChatMessage message)
