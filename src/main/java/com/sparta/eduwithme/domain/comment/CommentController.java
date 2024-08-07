@@ -16,7 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/question/{questionId}")
+@RequestMapping("/api/question/{questionId}")
 @RequiredArgsConstructor
 public class CommentController {
 
