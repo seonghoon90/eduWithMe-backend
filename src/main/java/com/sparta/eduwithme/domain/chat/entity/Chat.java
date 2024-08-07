@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "chats")
 @Entity
 @Getter
+
 @NoArgsConstructor
 public class Chat extends TimeStamp {
 
