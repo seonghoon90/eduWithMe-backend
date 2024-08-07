@@ -9,26 +9,24 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ChatController {
 
     private final ChatService chatService;
 
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/api/room/{roomId}")
     public List<ChatMessageResponse> getChats(@PathVariable Long roomId) {
         return chatService.getRecentChats(roomId);
     }
 
     @MessageMapping("/chat/{roomId}")
-    @SendTo("/topic/room/{roomId}")
+    @SendTo("/api/topic/room/{roomId}")
     public ChatMessage send(
             @DestinationVariable Long roomId,
             ChatMessage message)
