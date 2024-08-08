@@ -47,7 +47,7 @@ public class SocialService {
     @Value("${kakao.init}")
     private String appKey;
 
-    public String kakaoLogin(String code) throws JsonProcessingException {
+    public User kakaoLogin(String code) throws JsonProcessingException {
         // kakao로부터 카카오에 접속할 수 있는 accessToken을 받아온다.
         String accessToken = getToken(code);
 
@@ -55,11 +55,12 @@ public class SocialService {
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
         // 기존에 있는 회원이 아니라면 등록 시켜주기
-        User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
+//        User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 우리 사이트에 접속할 수 있는 토큰 발급
-        String createToken = jwtUtil.createAccessToken(kakaoUser);
-        return createToken;
+//        String createToken = jwtUtil.createAccessToken(kakaoUser);
+//        return createToken;
+        return registerKakaoUserIfNeeded(kakaoUserInfo);
     }
 
     /**
@@ -120,7 +121,7 @@ public class SocialService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/X-WWW-form-urlencoded;charset=utf-8");
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
             .post(uri)
@@ -169,4 +170,5 @@ public class SocialService {
         }
         return kakaoUser;
     }
+
 }
