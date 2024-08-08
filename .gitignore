@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### env ###
-application-secret.properties
+.env
 
 ### QueryDsl Qclass ###
 **/generated
