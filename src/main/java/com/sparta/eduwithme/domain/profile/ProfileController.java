@@ -9,6 +9,8 @@ import com.sparta.eduwithme.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/profiles")
 public class ProfileController {
 
+    private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
     private final ProfileService profileService;
     private final CommentService commentService;
+    private final S3ImageService s3ImageService;
 
     @Operation(summary = "getProfile", description = "프로필 조회 기능입니다.")
     @GetMapping
@@ -68,24 +72,15 @@ public class ProfileController {
     @Operation(summary = "postProfile", description = "프로필 이미지 업로드 기능입니다.")
     @PostMapping("/photo")
     public ResponseEntity<UploadPhotoResponseDto> uploadProfilePhoto(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                     @RequestParam("file") MultipartFile file) {
-        Long userId = userDetails.getUser().getId();
-        try {
-            String fileUrl = profileService.uploadProfilePhoto(userId, file);
-            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
-                    HttpStatus.OK.value(),
-                    "프로필 사진이 성공적으로 업로드되었습니다.",
-                    fileUrl
-            );
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            UploadPhotoResponseDto response = new UploadPhotoResponseDto(
-                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "프로필 사진 업로드에 실패했습니다.",
-                    null
-            );
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+                                                                     @RequestParam("file") MultipartFile image) {
+        String uploadImageUrl = s3ImageService.upload(image, userDetails.getUser().getId());
+        UploadPhotoResponseDto response = new UploadPhotoResponseDto(
+                HttpStatus.OK.value(),
+                "프로필 사진이 성공적으로 업로드되었습니다.",
+                uploadImageUrl
+        );
+        log.info("imageUrl : {}", uploadImageUrl);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "getProfile", description = "해결한 문제 조회 기능입니다.")
