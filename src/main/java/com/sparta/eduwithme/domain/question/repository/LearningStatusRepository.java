@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -38,4 +39,8 @@ public interface LearningStatusRepository extends JpaRepository<LearningStatus, 
             "JOIN q.room r " +
             "WHERE ls.user.id = :userId AND ls.questionType = :questionType")
     Page<QuestionDto> findQuestionsWithRoomByUserAndQuestionType(@Param("userId") Long userId, @Param("questionType") QuestionType questionType, Pageable pageable);
+
+    @Modifying
+    @Query("DELETE FROM LearningStatus ls WHERE ls.user.id = :userId")
+    void deleteAllByUserId(Long userId);
 }

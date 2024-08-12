@@ -1,19 +1,25 @@
 package com.sparta.eduwithme.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.user.service.SocialService;
 import com.sparta.eduwithme.domain.user.service.UserService;
 import com.sparta.eduwithme.domain.user.dto.*;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.sparta.eduwithme.security.UserDetailsImpl;
 import com.sparta.eduwithme.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -97,6 +103,25 @@ public class UserController {
     public ResponseEntity<String> resetPassword(@RequestBody EmailCheckDto emailCheckDto) {
         userService.resetPasswordWithTempPassword(emailCheckDto.getEmail(), emailCheckDto.getAuthNum());
         return ResponseEntity.ok("임시 비밀번호가 이메일로 전송되었습니다.");
+    }
+
+    @GetMapping("/check-nickname")
+    public ResponseEntity<?> checkNicknameAvailability(@RequestParam String nickname) {
+        boolean isAvailable = userService.isNicknameAvailable(nickname);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("available", isAvailable);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            userService.deleteUser(userDetails.getUser().getId());
+            return ResponseEntity.ok().body(new StatusCommonResponse(200, "회원탈퇴가 완료되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new StatusCommonResponse(500, "회원탈퇴 처리 중 오류가 발생했습니다."));
+        }
     }
 
 }

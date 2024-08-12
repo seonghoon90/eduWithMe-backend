@@ -46,7 +46,7 @@ public class Question extends TimeStamp {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "answer_id")
     private Answer answer;
 

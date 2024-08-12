@@ -2,16 +2,22 @@ package com.sparta.eduwithme.domain.user.service;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
+import com.sparta.eduwithme.domain.comment.CommentRepository;
+import com.sparta.eduwithme.domain.question.repository.AnswerRepository;
+import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
+import com.sparta.eduwithme.domain.question.repository.QuestionRepository;
+import com.sparta.eduwithme.domain.room.entity.Room;
+import com.sparta.eduwithme.domain.room.repository.RoomRepository;
+import com.sparta.eduwithme.domain.room.repository.StudentRepository;
 import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import com.sparta.eduwithme.util.RedisUtil;
-
-import java.util.UUID;
-
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,11 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailSendService mailSendService;
     private final RedisUtil redisUtil;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final RoomRepository roomRepository;
+
 
     // 회원가입 이메일 인증 코드 발송 메서드
     public String sendSignupVerificationEmail(String email) {
@@ -119,8 +128,33 @@ public class UserService {
         return UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public User findById(Long userId){
-        return userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_UNIQUE));
+    public boolean isNicknameAvailable(String nickname) {
+        return !userRepository.findByNickName(nickname).isPresent();
+    }
+
+    // 회원탈퇴
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 사용자가 생성한 방 삭제
+        List<Room> userRooms = roomRepository.findAllByManagerUserId(userId);
+        roomRepository.deleteAll(userRooms);
+
+        studentRepository.deleteAllByUserId(userId);
+
+        // 사용자가 참여한 방에서 학생 정보 삭제
+        user.getStudents().clear();
+
+        // 사용자의 학습 상태 삭제
+//        learningStatusRepository.deleteAllByUserId(userId);
+
+        // 사용자가 작성한 댓글 삭제
+//        commentRepository.deleteAllByUserId(userId);
+
+        // 마지막으로 사용자 삭제
+        userRepository.delete(user);
     }
 }
 

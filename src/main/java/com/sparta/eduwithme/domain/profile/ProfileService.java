@@ -7,12 +7,14 @@ import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
+import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final LearningStatusRepository learningStatusRepository;
+    private final UserRepository userRepository;
 
     private String uploadDir;
 
@@ -73,17 +76,25 @@ public class ProfileService {
         }
     }
 
+    @Transactional
     public void updateUserProfile(Long userId, String email, String newNickname) {
-        User user = profileRepository.findById(userId).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // 이메일이 일치하는지 확인
         if (!user.getEmail().equals(email)) {
             throw new CustomException(ErrorCode.EMAIL_MISMATCH);
         }
 
+        if (!user.getNickName().equals(newNickname) && !isNicknameAvailable(newNickname)) {
+            throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+        }
+
         user.updateNickname(newNickname);
-        profileRepository.save(user);
+        userRepository.save(user);
+    }
+
+    private boolean isNicknameAvailable(String nickname) {
+        return !userRepository.findByNickName(nickname).isPresent();
     }
 
     public void updateUserPassword(Long userId, UpdatePasswordRequestDto request) {

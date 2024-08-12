@@ -120,7 +120,8 @@ public class WebSecurityConfig {
                     "/api/ws/**", // webSocket 프로토콜 => connect
                     "/api/chat/**", // chat
                     "/api/topic/**",
-                    "/api/profiles/**"
+                    "/api/profiles/**",
+                    "/api/users/check-nickname"
                 ).permitAll()
                 .anyRequest().authenticated()
         );
