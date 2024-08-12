@@ -1,4 +1,4 @@
-package com.sparta.eduwithme.domain.question;
+package com.sparta.eduwithme.domain.question.repository;
 
 import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.room.entity.Room;

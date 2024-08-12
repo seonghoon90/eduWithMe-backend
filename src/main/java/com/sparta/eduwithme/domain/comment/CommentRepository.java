@@ -1,6 +1,5 @@
 package com.sparta.eduwithme.domain.comment;
 
-import com.sparta.eduwithme.domain.comment.dto.CommentResponseDto;
 import com.sparta.eduwithme.domain.comment.dto.CommentRoomDto;
 import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.question.entity.Question;

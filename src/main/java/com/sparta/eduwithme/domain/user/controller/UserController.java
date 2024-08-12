@@ -1,6 +1,8 @@
-package com.sparta.eduwithme.domain.user;
+package com.sparta.eduwithme.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.eduwithme.domain.user.service.SocialService;
+import com.sparta.eduwithme.domain.user.service.UserService;
 import com.sparta.eduwithme.domain.user.dto.*;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
@@ -64,13 +66,13 @@ public class UserController {
         KeyValueResponseDto responseDto = new KeyValueResponseDto(socialService.getRedirectUri(), socialService.getAppKey());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
-
+    // https://eduwithme.com:8888/api/users/kakao/callback
     @GetMapping("/kakao/callback")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         User user = socialService.kakaoLogin(code);
         String token = jwtUtil.createAccessToken(user);
 
-        String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/kakao-redirect")
+        String redirectUrl = UriComponentsBuilder.fromUriString("https://eduwithme.com/kakao-redirect")
             .queryParam("token", token)
             .queryParam("userId", user.getId())
             .queryParam("nickName", URLEncoder.encode(user.getNickName(), StandardCharsets.UTF_8.toString()))

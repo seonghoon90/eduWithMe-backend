@@ -7,7 +7,6 @@ import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.room.entity.Student;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
 import com.sparta.eduwithme.domain.room.repository.StudentRepository;
-import com.sparta.eduwithme.domain.user.UserService;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,6 @@ public class RoomService {
 
     private static final int ROOM_CREATE_LIMIT = 2;
     private static final int pageSize = 8;
-    private final UserService userService;
 
     // public room
     public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {

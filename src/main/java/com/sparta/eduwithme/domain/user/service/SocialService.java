@@ -1,8 +1,9 @@
-package com.sparta.eduwithme.domain.user;
+package com.sparta.eduwithme.domain.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.dto.KakaoUserInfoDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;

@@ -1,5 +1,6 @@
-package com.sparta.eduwithme.domain.user;
+package com.sparta.eduwithme.domain.user.controller;
 
+import com.sparta.eduwithme.domain.user.service.MailSendService;
 import com.sparta.eduwithme.domain.user.dto.EmailCheckDto;
 import com.sparta.eduwithme.domain.user.dto.EmailRequestDto;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class MailController {
     }
     @PostMapping("/mailauthCheck")
     public String AuthCheck(@RequestBody @Valid EmailCheckDto emailCheckDto){
-        Boolean Checked=mailService.CheckAuthNum(emailCheckDto.getEmail(),emailCheckDto.getAuthNum());
+        boolean Checked=mailService.CheckAuthNum(emailCheckDto.getEmail(),emailCheckDto.getAuthNum());
         if(Checked){
             return "ok";
         }

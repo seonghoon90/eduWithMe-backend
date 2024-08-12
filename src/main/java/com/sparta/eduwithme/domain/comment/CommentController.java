@@ -72,5 +72,4 @@ public class CommentController {
         StatusCommonResponse response = new StatusCommonResponse(204, "댓글 삭제가 완료되었습니다.");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }

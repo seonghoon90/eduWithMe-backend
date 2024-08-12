@@ -4,6 +4,8 @@ import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.question.dto.*;
 import com.sparta.eduwithme.domain.question.entity.*;
+import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
+import com.sparta.eduwithme.domain.question.repository.QuestionRepository;
 import com.sparta.eduwithme.domain.room.RoomService;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.dto.UserDto;
@@ -19,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor

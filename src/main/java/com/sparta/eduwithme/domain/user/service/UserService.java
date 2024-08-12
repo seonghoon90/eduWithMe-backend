@@ -1,12 +1,13 @@
-package com.sparta.eduwithme.domain.user;
+package com.sparta.eduwithme.domain.user.service;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
+import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import com.sparta.eduwithme.util.RedisUtil;
-import java.util.Optional;
+
 import java.util.UUID;
 
 import io.jsonwebtoken.Claims;

@@ -5,7 +5,7 @@ import com.sparta.eduwithme.common.exception.ErrorCode;
 import com.sparta.eduwithme.domain.profile.dto.QuestionDto;
 import com.sparta.eduwithme.domain.profile.dto.UpdatePasswordRequestDto;
 import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
-import com.sparta.eduwithme.domain.question.LearningStatusRepository;
+import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;

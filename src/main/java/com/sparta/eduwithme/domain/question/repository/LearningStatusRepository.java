@@ -1,4 +1,4 @@
-package com.sparta.eduwithme.domain.question;
+package com.sparta.eduwithme.domain.question.repository;
 
 import com.sparta.eduwithme.domain.profile.dto.QuestionDto;
 import com.sparta.eduwithme.domain.question.entity.LearningStatus;

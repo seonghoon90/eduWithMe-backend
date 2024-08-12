@@ -43,7 +43,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // 로그인 상태를 유지하기 위해 context에 유저 정보를 담아둔다. userDetails는 context 안에 들어가 있음
     private void setAuthentication(String email) {
         Authentication authentication = createAuthentication(email);
         SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -51,10 +50,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-//    @AuthenticationPrincipal UserDetails userDetails;
-//    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-    // 유저 정보를 userDetails에 담아둔다.
     private Authentication createAuthentication(String email) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -42,15 +42,11 @@ public enum ErrorCode {
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 문제에 대한 내용을 찾을 수 없습니다."),
     INVALID_NOT_DIFFICULTY(HttpStatus.BAD_REQUEST,"잘못된 난이도 설정입니다."),
 
-
-
     // comment
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
     COMMENT_QUESTION_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제에 대한 댓글이 아닙니다."),
     UNAUTHORIZED_COMMENT_UPDATE(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 수정 할 수 있습니다."),
     UNAUTHORIZED_COMMENT_DELETE(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 삭제 할 수 있습니다.");
-
-    // chat
 
     private final HttpStatus status;
     private final String message;

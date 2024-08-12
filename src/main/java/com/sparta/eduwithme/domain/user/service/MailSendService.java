@@ -1,20 +1,21 @@
-package com.sparta.eduwithme.domain.user;
+package com.sparta.eduwithme.domain.user.service;
 
 import com.sparta.eduwithme.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MailSendService {
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    private RedisUtil redisUtil;
+
+    private final JavaMailSender mailSender;
+    private final RedisUtil redisUtil;
     private int authNumber;
 
     //사용자가 입력한 인증코드와 실제 인증코드 비교
@@ -40,7 +41,6 @@ public class MailSendService {
 
         authNumber = Integer.parseInt(randomNumber);
     }
-
 
     //인증 번호를 html 형식으로 보냅니다.
     public String joinEmail(String email) {

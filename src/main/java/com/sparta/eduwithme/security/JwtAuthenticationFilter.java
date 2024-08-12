@@ -57,10 +57,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
-    // 내부에서 호출하는데 new UsernamePasswordAuthenticationToken(
-    //                    requestDto.getUsername(),
-    //                    requestDto.getPassword(),
-    // 이 값이 존재하는지 if문으로 되어있고 값이 있으면 successfulAuthentication
     @Override
     protected void successfulAuthentication(
         HttpServletRequest request,

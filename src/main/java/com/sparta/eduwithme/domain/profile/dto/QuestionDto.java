@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 
 @Getter
 public class QuestionDto {
-    private Long questionId;
-    private String category;
-    private String title;
-    private String difficulty;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private String roomName;
+    private final Long questionId;
+    private final String category;
+    private final String title;
+    private final String difficulty;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+    private final String roomName;
     private final Long orderInRoom;
 
     public QuestionDto(Long questionId, Category category, String title, Difficulty difficulty,

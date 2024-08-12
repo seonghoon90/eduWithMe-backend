@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.eduwithme.domain.room.dto.RoomWithNickNameDto;
 import com.sparta.eduwithme.domain.room.entity.QRoom;
-import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.entity.QUser;
 import lombok.RequiredArgsConstructor;
 
@@ -14,16 +13,6 @@ import java.util.List;
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-//    @Override
-//    public List<Room> getRoomListWithPage(long page, int pageSize) {
-//        QRoom room = QRoom.room;
-//
-//        return jpaQueryFactory.selectFrom(room)
-//                .offset(page)
-//                .limit(pageSize)
-//                .fetch();
-//    }
 
     @Override
     public List<RoomWithNickNameDto> getRoomListWithPage(long page, int pageSize) {
