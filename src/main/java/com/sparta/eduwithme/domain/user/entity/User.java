@@ -1,8 +1,10 @@
 package com.sparta.eduwithme.domain.user.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.question.entity.LearningStatus;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
+import com.sparta.eduwithme.domain.room.entity.Student;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -85,8 +87,14 @@ public class User extends TimeStamp {
         this.photoUrl = newPhotoUrl;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LearningStatus> learningStatusList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Student> students = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     public Long getTotalPoints() {
         return learningStatusList.stream()

@@ -18,4 +18,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s FROM Student s LEFT JOIN FETCH s.room r WHERE s.user.id = :userId")
     List<Student> findStudentsWithRoomByUserId(@Param("userId") Long userId);
 
+    void deleteAllByUserId(Long userId);
+
 }

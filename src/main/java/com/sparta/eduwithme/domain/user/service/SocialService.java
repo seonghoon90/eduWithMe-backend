@@ -8,6 +8,7 @@ import com.sparta.eduwithme.domain.user.dto.KakaoUserInfoDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import java.net.URI;
+import java.util.Random;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -162,14 +163,24 @@ public class SocialService {
             } else { // DB에 새로운 유저를 등록해준다.
                 String password = UUID.randomUUID().toString();
                 String encodedPassword = passwordEncoder.encode(password);
-
                 String email = kakaoUserInfo.getEmail();
+                String nickname = generateUniqueNickname();
 
-                kakaoUser = new User(email, encodedPassword, kakaoUserInfo.getNickname(), kakaoId);
+                while (userRepository.findByNickName(nickname).isPresent()) {
+                    nickname = generateUniqueNickname();
+                }
+
+                kakaoUser = new User(email, encodedPassword, nickname, kakaoId);
             }
             userRepository.save(kakaoUser);
         }
         return kakaoUser;
+    }
+
+    private String generateUniqueNickname() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(100000); // 0 to 99999
+        return String.format("Kakao#%05d", randomNumber);
     }
 
 }
