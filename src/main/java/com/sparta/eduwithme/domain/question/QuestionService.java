@@ -11,6 +11,8 @@ import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.dto.UserDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import java.util.stream.Collectors;
+
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,13 +31,25 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final LearningStatusRepository learningStatusRepository;
     private final RoomService roomService;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     @Transactional
     public QuestionResponseDto createQuestion(Long roomId, QuestionRequestDto requestDto) {
         Room room = roomService.findById(roomId);
 
+        if (badWordFiltering.check(requestDto.getTitle()) || badWordFiltering.check(requestDto.getContent())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         Long maxOrder = questionRepository.findMaxOrderInRoom(roomId);
         long newOrder = (maxOrder == null) ? 1 : maxOrder + 1;
+
+        if (badWordFiltering.check(requestDto.getAnswer().getFirst()) ||
+                badWordFiltering.check(requestDto.getAnswer().getSecond()) ||
+                badWordFiltering.check(requestDto.getAnswer().getThird()) ||
+                badWordFiltering.check(requestDto.getAnswer().getFourth())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
 
         Answer answer = new Answer(
                 requestDto.getAnswer().getFirst(),
@@ -77,6 +91,10 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public List<QuestionTitleDto> searchQuestionByTitle(Long roomId, String keyword, int page, int pageSize) {
 
+        if (badWordFiltering.check(keyword)) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         if (keyword == null || keyword.trim().isEmpty()) {
             throw new CustomException(ErrorCode.KEYWORD_NOT_FOUND);
         }
@@ -104,6 +122,17 @@ public class QuestionService {
         Long updatedPoint = calculatePointByDifficulty(requestDto.getDifficulty());
 
         question.updateQuestion(requestDto,updatedPoint);
+
+        if (badWordFiltering.check(requestDto.getTitle()) || badWordFiltering.check(requestDto.getContent())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
+        if (badWordFiltering.check(requestDto.getAnswer().getFirst()) ||
+                badWordFiltering.check(requestDto.getAnswer().getSecond()) ||
+                badWordFiltering.check(requestDto.getAnswer().getThird()) ||
+                badWordFiltering.check(requestDto.getAnswer().getFourth())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
 
         Answer answer = question.getAnswer();
         if (answer == null) {
