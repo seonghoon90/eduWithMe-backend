@@ -2,10 +2,6 @@ package com.sparta.eduwithme.domain.user.service;
 
 import com.sparta.eduwithme.common.exception.CustomException;
 import com.sparta.eduwithme.common.exception.ErrorCode;
-import com.sparta.eduwithme.domain.comment.CommentRepository;
-import com.sparta.eduwithme.domain.question.repository.AnswerRepository;
-import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
-import com.sparta.eduwithme.domain.question.repository.QuestionRepository;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
 import com.sparta.eduwithme.domain.room.repository.StudentRepository;
@@ -14,10 +10,11 @@ import com.sparta.eduwithme.domain.user.dto.SignupRequestDto;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.util.JwtUtil;
 import com.sparta.eduwithme.util.RedisUtil;
+import java.util.UUID;
+import com.vane.badwordfiltering.BadWordFiltering;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +32,7 @@ public class UserService {
     private final StudentRepository studentRepository;
     private final RoomRepository roomRepository;
 
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     // 회원가입 이메일 인증 코드 발송 메서드
     public String sendSignupVerificationEmail(String email) {
@@ -77,6 +75,10 @@ public class UserService {
         String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickName = requestDto.getNickName();
+
+        if (badWordFiltering.check(requestDto.getNickName())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
 
         // 이메일 중복 확인
         if (userRepository.findByEmail(email).isPresent()) {

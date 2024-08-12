@@ -13,6 +13,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "토큰을 찾을 수 없습니다."),
+    PROFANITY_DETECTED(HttpStatus.BAD_REQUEST,"비속어는 사용 하실 수 없습니다."),
 
     // user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
@@ -47,7 +48,15 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
     COMMENT_QUESTION_MISMATCH(HttpStatus.NOT_FOUND,"해당 문제에 대한 댓글이 아닙니다."),
     UNAUTHORIZED_COMMENT_UPDATE(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 수정 할 수 있습니다."),
-    UNAUTHORIZED_COMMENT_DELETE(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 삭제 할 수 있습니다.");
+    UNAUTHORIZED_COMMENT_DELETE(HttpStatus.BAD_REQUEST,"본인이 작성한 댓글만 삭제 할 수 있습니다."),
+
+    // aws s3
+    EMPTY_FILE(HttpStatus.BAD_REQUEST, "업로드된 파일이 비어 있습니다."),
+    IO_EXCEPTION_UPLOAD(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 중 IO 예외가 발생했습니다."),
+    NO_EXTENSION(HttpStatus.BAD_REQUEST, "파일에 확장자가 없습니다."),
+    INVALID_EXTENSION(HttpStatus.BAD_REQUEST, "유효하지 않은 파일 확장자입니다."),
+    PUT_OBJECT_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "S3에 파일을 업로드하는 중 문제가 발생했습니다."),
+    IO_EXCEPTION_DELETE(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 삭제 중 IO 예외가 발생했습니다.");
 
     private final HttpStatus status;
     private final String message;

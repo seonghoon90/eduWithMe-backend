@@ -9,6 +9,7 @@ import com.sparta.eduwithme.domain.room.RoomService;
 import com.sparta.eduwithme.domain.room.entity.Room;
 import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,20 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final RoomService roomService;
     private final UserRepository userRepository;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     public void sendMessage(Long roomId, ChatMessage message) {
         Room room = roomService.findById(roomId);
         User user = userRepository.findByNickName(message.getSender()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
+
         Chat chat = Chat.builder().content(message.getContent()).room(room).user(user).build();
+
+        if (badWordFiltering.check(message.getContent())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         chatRepository.save(chat);
     }
 

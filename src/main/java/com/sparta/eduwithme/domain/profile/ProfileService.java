@@ -9,6 +9,7 @@ import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.user.UserRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
@@ -31,6 +27,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final LearningStatusRepository learningStatusRepository;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
     private final UserRepository userRepository;
 
     private String uploadDir;
@@ -89,6 +86,10 @@ public class ProfileService {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }
 
+        if (badWordFiltering.check(newNickname)) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         user.updateNickname(newNickname);
         userRepository.save(user);
     }
@@ -113,45 +114,6 @@ public class ProfileService {
 
         user.updatePassword(passwordEncoder.encode(request.getNewPassword()));
         profileRepository.save(user);
-    }
-
-    // 프로필 사진 업로드
-    public String uploadProfilePhoto(Long userId, MultipartFile file) {
-        String directoryPath = uploadDir + "images/" + userId + "/";
-        String filename = storeFile(directoryPath, file);
-        String fileUrl = "/images/" + userId + "/" + filename;
-
-        // 사용자 프로필 사진 URL 업데이트
-        User user = profileRepository.findById(userId).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));
-        user.updatePhotoUrl(fileUrl);
-        profileRepository.save(user);
-
-        return fileUrl;
-    }
-
-    private String storeFile(String directoryPath, MultipartFile file) {
-        Path uploadPath = Paths.get(directoryPath);
-
-        // 디렉토리 생성
-        try {
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_DIRECTORY_CREATION_FAILED);
-        }
-
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path destinationFile = uploadPath.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-
-        try {
-            Files.copy(file.getInputStream(), destinationFile);
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_STORAGE_FAILED);
-        }
-
-        return filename;
     }
 
     public Page<QuestionDto> getSolvedQuestions(Long userId, Pageable pageable) {

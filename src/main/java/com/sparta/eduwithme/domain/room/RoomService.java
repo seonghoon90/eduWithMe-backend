@@ -8,6 +8,7 @@ import com.sparta.eduwithme.domain.room.entity.Student;
 import com.sparta.eduwithme.domain.room.repository.RoomRepository;
 import com.sparta.eduwithme.domain.room.repository.StudentRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final StudentRepository studentRepository;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     private static final int ROOM_CREATE_LIMIT = 2;
     private static final int pageSize = 8;
@@ -31,6 +33,11 @@ public class RoomService {
     public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {
         isDuplicationRoomName(requestDto.getRoomName());
         countManagerRooms(user.getId());
+
+        if (badWordFiltering.check(requestDto.getRoomName())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         Room room = roomRepository.save(Room.builder()
                 .roomName(requestDto.getRoomName())
                 .managerUserId(user.getId()).build());
@@ -43,6 +50,11 @@ public class RoomService {
     public void createPrivateRoom(CreatePrivateRoomRequestDto requestDto, User user) {
         isDuplicationRoomName(requestDto.getRoomName());
         countManagerRooms(user.getId());
+
+        if (badWordFiltering.check(requestDto.getRoomName())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         Room room = roomRepository.save(Room.builder()
                 .roomName(requestDto.getRoomName())
                 .roomPassword(requestDto.getRoomPassword())
@@ -80,6 +92,11 @@ public class RoomService {
     @Transactional
     public void updateRoom(User user, Long roomId, UpdateRequestDto requestDto) {
         Room room = findByIdAndManagerUserId(user, roomId);
+
+        if (badWordFiltering.check(requestDto.getRoomName())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
+
         room.updateRoomName(requestDto.getRoomName());
     }
 
