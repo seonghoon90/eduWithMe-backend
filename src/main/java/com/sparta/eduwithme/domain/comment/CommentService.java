@@ -10,6 +10,7 @@ import com.sparta.eduwithme.domain.profile.ProfileRepository;
 import com.sparta.eduwithme.domain.question.QuestionService;
 import com.sparta.eduwithme.domain.question.entity.Question;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,10 +26,14 @@ public class CommentService {
     private final QuestionService questionService;
     private final CommentRepository commentRepository;
     private final ProfileRepository profileRepository;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, Long questionId, User user) {
         Question question = questionService.findById(questionId);
+        if (badWordFiltering.check(commentRequestDto.getComment())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
         Comment comment = commentRepository.save(new Comment(commentRequestDto, question, user));
         return new CommentResponseDto(comment);
     }
@@ -45,6 +50,10 @@ public class CommentService {
     public CommentResponseDto updateComment(CommentRequestDto commentRequestDto, Long questionId, Long commentId, User user) {
         Question question = questionService.findById(questionId);
         Comment comment = findById(commentId);
+
+        if (badWordFiltering.check(commentRequestDto.getComment())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
 
         if (!question.equals(comment.getQuestion())) {
             throw new CustomException(ErrorCode.COMMENT_QUESTION_MISMATCH);

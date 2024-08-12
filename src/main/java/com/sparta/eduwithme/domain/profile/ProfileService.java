@@ -8,6 +8,7 @@ import com.sparta.eduwithme.domain.profile.dto.UserProfileDto;
 import com.sparta.eduwithme.domain.question.repository.LearningStatusRepository;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
 import com.sparta.eduwithme.domain.user.entity.User;
+import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final LearningStatusRepository learningStatusRepository;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
@@ -72,6 +74,10 @@ public class ProfileService {
         // 이메일이 일치하는지 확인
         if (!user.getEmail().equals(email)) {
             throw new CustomException(ErrorCode.EMAIL_MISMATCH);
+        }
+
+        if (badWordFiltering.check(newNickname)) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
         }
 
         user.updateNickname(newNickname);

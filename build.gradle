@@ -60,6 +60,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     // env
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+    // badWord
+    implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
     // aws -> s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
