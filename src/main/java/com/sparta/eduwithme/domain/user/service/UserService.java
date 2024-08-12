@@ -10,6 +10,7 @@ import com.sparta.eduwithme.util.RedisUtil;
 
 import java.util.UUID;
 
+import com.vane.badwordfiltering.BadWordFiltering;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UserService {
     private final MailSendService mailSendService;
     private final RedisUtil redisUtil;
     private final JwtUtil jwtUtil;
+    private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     // 회원가입 이메일 인증 코드 발송 메서드
     public String sendSignupVerificationEmail(String email) {
@@ -68,6 +70,10 @@ public class UserService {
         String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
         String nickName = requestDto.getNickName();
+
+        if (badWordFiltering.check(requestDto.getNickName())) {
+            throw new CustomException(ErrorCode.PROFANITY_DETECTED);
+        }
 
         // 이메일 중복 확인
         if (userRepository.findByEmail(email).isPresent()) {
