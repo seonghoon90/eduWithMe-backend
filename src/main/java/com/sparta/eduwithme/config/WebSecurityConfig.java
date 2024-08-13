@@ -106,7 +106,7 @@ public class WebSecurityConfig {
                 ).permitAll()
                 .requestMatchers(
                     "/api/room/**",
-                    "/api/rooms",
+                    "/api/rooms/**",
                     "/api/users/refresh",
                     "/api/users/signup/**", // 회원가입[POST]
                     "/api/users/login", // 로그인[POST]

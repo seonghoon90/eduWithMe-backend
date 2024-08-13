@@ -14,10 +14,8 @@ import org.springframework.data.repository.query.Param;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findAllByQuestion(Question question, Pageable pageable);
-    Page<Comment> findAllByUser(User user, Pageable pageable);
 
-    @Query("SELECT new com.sparta.eduwithme.domain.comment.dto.CommentRoomDto(" +
-            "c.id, c.user.nickName, c.comment, c.createdAt, c.updatedAt, r.roomName, q.orderInRoom) " +
+    @Query("SELECT new com.sparta.eduwithme.domain.comment.dto.CommentRoomDto(" + "c.id, c.user.nickName, c.comment, c.createdAt, c.updatedAt, r.roomName, q.orderInRoom) " +
             "FROM Comment c " +
             "JOIN c.question q " +
             "JOIN q.room r " +
