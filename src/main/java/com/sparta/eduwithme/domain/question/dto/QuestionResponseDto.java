@@ -15,8 +15,8 @@ public class QuestionResponseDto {
     private final String difficulty;
     private final Long point;
     private final Long orderInRoom;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final String formattedCreatedAt;
+    private final String formattedUpdatedAt;
 
 
     public QuestionResponseDto(Question question) {
@@ -27,8 +27,8 @@ public class QuestionResponseDto {
         this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
         this.orderInRoom = question.getOrderInRoom();
-        this.createdAt = question.getCreatedAt();
-        this.updatedAt = question.getUpdatedAt();
+        this.formattedCreatedAt = question.getFormattedCreatedAt();
+        this.formattedUpdatedAt = question.getFormattedUpdatedAt();
     }
 
 }
