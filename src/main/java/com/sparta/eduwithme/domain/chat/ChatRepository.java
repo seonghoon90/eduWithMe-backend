@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    List<Chat> findTop20ByRoomIdOrderByCreatedAtAsc(Long roomId); // limit을 20으로 설정
+    List<Chat> findTop100ByRoomIdOrderByCreatedAtAsc(Long roomId); // limit을 20으로 설정
 }
