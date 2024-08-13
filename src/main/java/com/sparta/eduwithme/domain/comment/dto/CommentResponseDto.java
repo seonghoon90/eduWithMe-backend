@@ -11,8 +11,8 @@ public class CommentResponseDto {
     private final Long userId;
     private final String nickName;
     private final String comment;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final String formattedCreatedAt;
+    private final String formattedUpdatedAt;
     private final Long questionOrderInRoom;
 
     public CommentResponseDto(Comment comment) {
@@ -20,8 +20,8 @@ public class CommentResponseDto {
         this.userId = comment.getUser().getId();
         this.nickName = comment.getUserNickname();
         this.comment = comment.getComment();
-        this.createdAt = comment.getUpdatedAt();
-        this.updatedAt = comment.getCreatedAt();
+        this.formattedCreatedAt = comment.getFormattedCreatedAt();
+        this.formattedUpdatedAt = comment.getFormattedUpdatedAt();
         this.questionOrderInRoom = comment.getQuestion().getOrderInRoom();
     }
 }

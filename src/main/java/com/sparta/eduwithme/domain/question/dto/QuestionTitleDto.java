@@ -13,8 +13,8 @@ public class QuestionTitleDto {
     private final String difficulty;
     private final Long point;
     private final Long orderInRoom;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final String formattedCreatedAt;
+    private final String formattedUpdatedAt;
 
     public QuestionTitleDto(Question question) {
         this.questionId = question.getId();
@@ -23,7 +23,7 @@ public class QuestionTitleDto {
         this.difficulty = question.getDifficulty().getLevel();
         this.point = question.getPoint();
         this.orderInRoom = question.getOrderInRoom();
-        this.createdAt = question.getCreatedAt();
-        this.updatedAt = question.getUpdatedAt();
+        this.formattedCreatedAt = question.getFormattedCreatedAt();
+        this.formattedUpdatedAt = question.getFormattedUpdatedAt();
     }
 }

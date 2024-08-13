@@ -11,8 +11,8 @@ public class CommentRoomDto {
     private Long commentId;
     private String nickName;
     private String comment;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final String formattedCreatedAt;
+    private final String formattedUpdatedAt;
     private String roomName;
     private Long questionOrderInRoom;
 }
