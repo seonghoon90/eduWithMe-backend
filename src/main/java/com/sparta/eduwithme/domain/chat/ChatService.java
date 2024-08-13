@@ -41,10 +41,10 @@ public class ChatService {
     }
 
     public List<ChatMessageResponse> getRecentChats(Long roomId) {
-        List<Chat> chats = chatRepository.findTop20ByRoomIdOrderByCreatedAtAsc(roomId);
+        List<Chat> chats = chatRepository.findTop100ByRoomIdOrderByCreatedAtAsc(roomId);
 
         return chats.stream()
-                .map(chat -> new ChatMessageResponse(chat.getContent(), chat.getUser().getNickName(), chat.getCreatedAt()))
+                .map(chat -> new ChatMessageResponse(chat.getContent(), chat.getUser().getNickName(), chat.getUser().getPhotoUrl(), chat.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 }
