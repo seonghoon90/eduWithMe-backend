@@ -64,6 +64,8 @@ dependencies {
     implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
     // aws -> s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    // Gemini
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 }
 
 tasks.named('test') {

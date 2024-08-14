@@ -109,6 +109,7 @@ public class WebSecurityConfig {
                     antMatcher("/chat.html")
                 ).permitAll()
                 .requestMatchers(
+                    "/api/gemini/**",
                     "/api/room/**",
                     "/api/rooms/**",
                     "/api/users/refresh",
