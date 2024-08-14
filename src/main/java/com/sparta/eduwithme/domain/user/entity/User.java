@@ -1,6 +1,7 @@
 package com.sparta.eduwithme.domain.user.entity;
 
 import com.sparta.eduwithme.common.TimeStamp;
+import com.sparta.eduwithme.domain.chat.entity.Chat;
 import com.sparta.eduwithme.domain.comment.entity.Comment;
 import com.sparta.eduwithme.domain.question.entity.LearningStatus;
 import com.sparta.eduwithme.domain.question.entity.QuestionType;
@@ -41,8 +42,10 @@ public class User extends TimeStamp {
     @Column
     private String refreshToken;
 
-    private Long kakaoId;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Chat> chats;
 
+    private Long kakaoId;
 
     public User(String email, String password, String nickName, String ranking, String photoUrl) {
         this.email = email;
