@@ -27,7 +27,7 @@ public class RoomService {
     private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     private static final int ROOM_CREATE_LIMIT = 2;
-    private static final int pageSize = 8;
+    private static final int pageSize = 50;
 
     // public room
     public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {
@@ -162,7 +162,7 @@ public class RoomService {
     }
 
     public List<RoomUserListResponseDto> selectRoomUsers(Long roomId) {
-        List<Student> student = studentRepository.findByRoomId(roomId);
+        List<Student> student = studentRepository.findByRoomIdWithUser(roomId);
         return student.stream().map(RoomUserListResponseDto::new).toList();
     }
 

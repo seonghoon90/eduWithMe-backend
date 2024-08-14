@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +37,9 @@ public class UserController {
     private final UserService userService;
     private final SocialService socialService;
     private final JwtUtil jwtUtil;
+
+    @Value("${frontend.kakao.domain}")
+    private String kakaoDomain;
 
     @PostMapping("/signup/request")
     public ResponseEntity<String> signupRequest(@Valid @RequestBody EmailRequestDto emailDto) {
@@ -72,13 +76,13 @@ public class UserController {
         KeyValueResponseDto responseDto = new KeyValueResponseDto(socialService.getRedirectUri(), socialService.getAppKey());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
-    // https://eduwithme.com:8888/api/users/kakao/callback
+
     @GetMapping("/kakao/callback")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         User user = socialService.kakaoLogin(code);
         String token = jwtUtil.createAccessToken(user);
 
-        String redirectUrl = UriComponentsBuilder.fromUriString("https://eduwithme.com/kakao-redirect")
+        String redirectUrl = UriComponentsBuilder.fromUriString(kakaoDomain)
             .queryParam("token", token)
             .queryParam("userId", user.getId())
             .queryParam("nickName", URLEncoder.encode(user.getNickName(), StandardCharsets.UTF_8.toString()))
