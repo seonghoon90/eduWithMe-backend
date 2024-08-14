@@ -38,7 +38,7 @@
 
 
 # 📊 ERD DIAGRAM
-![eduWithMeERD](https://github.com/user-attachments/assets/c9a42916-765f-4529-9d30-db58c53790ec)
+![image](https://github.com/user-attachments/assets/2aae0197-3ec8-4676-a02d-fcfb8576ad86)
 
 
 <br>
