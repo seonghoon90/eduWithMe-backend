@@ -8,6 +8,7 @@ import com.sparta.eduwithme.domain.user.dto.*;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.sparta.eduwithme.security.UserDetailsImpl;
 import com.sparta.eduwithme.util.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -41,12 +42,14 @@ public class UserController {
     @Value("${frontend.kakao.domain}")
     private String kakaoDomain;
 
+    @Operation(summary = "회원가입 이메일 인증코드 발급")
     @PostMapping("/signup/request")
     public ResponseEntity<String> signupRequest(@Valid @RequestBody EmailRequestDto emailDto) {
         userService.sendSignupVerificationEmail(emailDto.getEmail());
         return ResponseEntity.ok("인증 코드가 이메일로 전송되었습니다.");
     }
 
+    @Operation(summary = "회원가입 이메일 인증코드 검증")
     @PostMapping("/signup/verify")
     public ResponseEntity<String> verifySignup(@Valid @RequestBody EmailCheckDto emailCheckDto) {
         userService.verifySignupEmail(emailCheckDto.getEmail(), emailCheckDto.getAuthNum());
@@ -59,24 +62,28 @@ public class UserController {
      * @param requestDto : 회원가입 정보가 담긴 dto
      * @return
      */
+    @Operation(summary = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.CREATED);
     }
 
+    @Operation(summary = "리프레시 토큰 발급")
     @PostMapping("/refresh")
     public ResponseEntity<String> refresh(@RequestBody RefreshTokenRequestDto request, HttpServletResponse res) {
         userService.accessTokenReissue(request.getRefreshToken(), res);
         return new ResponseEntity<>("토큰 재발급 성공", HttpStatus.OK);
     }
 
+    @Operation(summary = "카카오 로그인 정보 조회, redirectUri, appKey")
     @GetMapping("/key-value")
     public ResponseEntity<KeyValueResponseDto> loadKeyValue() {
         KeyValueResponseDto responseDto = new KeyValueResponseDto(socialService.getRedirectUri(), socialService.getAppKey());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
+    @Operation(summary = "카카오 로그인 콜백")
     @GetMapping("/kakao/callback")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
         User user = socialService.kakaoLogin(code);
@@ -93,6 +100,7 @@ public class UserController {
     }
 
     // 임시 비밀번호 발급 요청을 처리하는 엔드포인트
+    @Operation(summary = "임시 비밀번호 발급 요청")
     @PostMapping("/temp-password-request")
     public ResponseEntity<String> requestTempPassword(@RequestBody @Valid EmailRequestDto emailDto) {
         if (!userService.isRegisteredEmail(emailDto.getEmail())) {
@@ -103,12 +111,14 @@ public class UserController {
         return ResponseEntity.ok("임시 비밀번호 발급을 위한 인증 코드가 이메일로 전송되었습니다.");
     }
 
+    @Operation(summary = "임시 비밀번호 발급")
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody EmailCheckDto emailCheckDto) {
         userService.resetPasswordWithTempPassword(emailCheckDto.getEmail(), emailCheckDto.getAuthNum());
         return ResponseEntity.ok("임시 비밀번호가 이메일로 전송되었습니다.");
     }
 
+    @Operation(summary = "닉네임 중복 체크")
     @GetMapping("/check-nickname")
     public ResponseEntity<?> checkNicknameAvailability(@RequestParam String nickname) {
         boolean isAvailable = userService.isNicknameAvailable(nickname);
@@ -117,6 +127,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "회원탈퇴")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAccount(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
