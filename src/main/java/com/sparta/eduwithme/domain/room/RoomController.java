@@ -4,6 +4,7 @@ import com.sparta.eduwithme.common.response.DataCommonResponse;
 import com.sparta.eduwithme.common.response.StatusCommonResponse;
 import com.sparta.eduwithme.domain.room.dto.*;
 import com.sparta.eduwithme.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,16 +21,11 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    /**
-     * [public room 생성 기능]
-     * @param requestDto : roomTitle
-     * @return : message, HttpStatusCode
-     */
+    @Operation(summary = "public 방 생성 기능")
     @PostMapping("/public")
     public ResponseEntity<StatusCommonResponse> createPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                  @RequestBody @Valid CreatePublicRoomRequestDto requestDto)
     {
-        System.out.println("요청이옴");
         roomService.createPublicRoom(requestDto, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(
                 HttpStatus.CREATED.value(),
@@ -37,6 +33,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "private 방 생성 기능")
     @PostMapping("/private")
     public ResponseEntity<StatusCommonResponse> createPrivateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                   @RequestBody @Valid CreatePrivateRoomRequestDto requestDto)
@@ -48,7 +45,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // 방 전체 조회
+    @Operation(summary = "방 전체 조회 기능")
     @GetMapping
     public ResponseEntity<DataCommonResponse<List<RoomWithNickNameDto>>> getRoomListWithPage(
             @RequestParam(value = "page") int page)
@@ -61,7 +58,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 특정 유저가 속한 방 전체 조회
+    @Operation(summary = "특정 유저가 속한 방 전체 조회")
     @GetMapping("/{userId}")
     public ResponseEntity<DataCommonResponse<List<SelectAllUsersRoomResponseDto>>> selectAllUsersRoom(@PathVariable Long userId) {
         List<SelectAllUsersRoomResponseDto> responseDtoList = roomService.selectAllUsersRoom(userId);
@@ -69,6 +66,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "방 제목 수정 기능")
     @PutMapping("/{roomId}")
     public ResponseEntity<StatusCommonResponse> updateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @RequestBody UpdateRequestDto requestDto,
@@ -79,6 +77,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "방 삭제 기능")
     @DeleteMapping("/{roomId}")
     public ResponseEntity<StatusCommonResponse> deleteRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @PathVariable Long roomId)
@@ -90,7 +89,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 방 입장 전 상세 조회(password 가 있는 방 인지 아닌지 체크)
+    @Operation(summary = "방 상세 조회 기능")
     @PostMapping("/{roomId}")
     public ResponseEntity<DataCommonResponse<DetailRoomResponseDto>> selectDetailRoom(@PathVariable Long roomId) {
         DetailRoomResponseDto responseDto = roomService.selectDetailRoom(roomId);
@@ -100,6 +99,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "private 방 입장 기능")
     @PostMapping("/{roomId}/private")
     public ResponseEntity<DataCommonResponse<StudentResponseDto>> entryPrivateRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                    @RequestBody EntryPrivateRoomRequestDto requestDto,
@@ -110,6 +110,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "public 방 입장 기능")
     @PostMapping("/{roomId}/public")
     public ResponseEntity<DataCommonResponse<StudentResponseDto>> entryPublicRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                   @PathVariable Long roomId)
@@ -119,6 +120,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "방 입장 인원 전체 조회 기능")
     @GetMapping("/{roomId}/users")
     public ResponseEntity<DataCommonResponse<List<RoomUserListResponseDto>>> selectRoomUsers(@PathVariable Long roomId) {
         List<RoomUserListResponseDto> responseDtoList = roomService.selectRoomUsers(roomId);
@@ -126,6 +128,7 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "방 단건 조회 기능")
     @GetMapping("/one/{roomId}")
     public ResponseEntity<DataCommonResponse<SelectOneRoomResponseDto>> selectOneRoom(@PathVariable Long roomId) {
         SelectOneRoomResponseDto responseDto = roomService.selectOneRoom(roomId);

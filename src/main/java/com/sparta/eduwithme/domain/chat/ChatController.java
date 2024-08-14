@@ -2,6 +2,7 @@ package com.sparta.eduwithme.domain.chat;
 
 import com.sparta.eduwithme.domain.chat.dto.ChatMessage;
 import com.sparta.eduwithme.domain.chat.dto.ChatMessageResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,6 +21,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    @Operation(summary = "특정 방 채팅 전체 조회")
     @GetMapping("/api/room/{roomId}")
     public List<ChatMessageResponse> getChats(@PathVariable Long roomId) {
         return chatService.getRecentChats(roomId);
