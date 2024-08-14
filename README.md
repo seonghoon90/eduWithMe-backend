@@ -9,7 +9,7 @@
 | 홍준빈 | 신성훈 | 이지우 | 이세원 |
 |:------:|:------:|:------:|:------:|
 | [![홍준빈](https://github.com/Hongjunbin.png)](https://github.com/Hongjunbin) | [![신성훈](https://github.com/seonghoon90.png)](https://github.com/seonghoon90) | [![이지우](https://github.com/wldnfl.png)](https://github.com/wldnfl) | [![이세원](https://github.com/leesw1945.png)](https://github.com/leesw1945) |
-| <span style="font-size: 0.5em;">• 클래스룸 CRUD/페이징 정렬<br>• 실시간 채팅 기능<br>• 프론트 구현<br>• API 연동<br>• 백엔드 배포<br>• 프론트 배포</span> | <span style="font-size: 0.5em;">• 문제게시판 CRUD/페이징 정렬<br>• 댓글 CRUD<br>• 프론트 구현<br>• API 연동<br>• 프론트 배포</span> | <span style="font-size: 0.5em;">• 프로필<br>• 비밀번호 수정<br>• 마이페이지 문제 조회/페이징 정렬<br>• 프론트 구현<br>• API 연동</span> | <span style="font-size: 0.5em;">• 로그인/회원가입<br>• 카카오 로그인<br>• 이메일 인증<br>• 프론트 구현<br>• API 연동<br>• 백엔드 배포</span> |
+| <span style="font-size: 0.5em;">• 클래스룸 CRUD/페이징 정렬<br>• 실시간 채팅 기능<br>• 프론트 구현<br>• API 연동<br>• 백엔드 배포<br>• 프론트 배포</span> | <span style="font-size: 0.5em;">• 문제게시판 CRUD/페이징 정렬<br>• 댓글 CRUD<br>• 프론트 구현<br>• API 연동<br>• 프론트 배포<br>• UT 피드백 수정</span> | <span style="font-size: 0.5em;">• 프로필<br>• 비밀번호 수정<br>• 마이페이지 문제 조회/페이징 정렬<br>• 프론트 구현<br>• API 연동<br>• UT 피드백 수정</span> | <span style="font-size: 0.5em;">• 로그인/회원가입<br>• 카카오 로그인<br>• 이메일 인증<br>• 프론트 구현<br>• API 연동<br>• 백엔드 배포</span> |
 
 
 <br>
