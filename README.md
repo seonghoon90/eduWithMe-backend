@@ -45,7 +45,17 @@
 
 
 # 📝 API 명세서
-
+![image](https://github.com/user-attachments/assets/169bb36d-54e9-4dd9-a6f1-662a52945874)
+![image](https://github.com/user-attachments/assets/77ddb6e3-02e6-45ba-9d42-cc02adbb0e59)
+![image](https://github.com/user-attachments/assets/e3b90a30-27f1-4bc7-96d9-92c9334a7ac2)
+![image](https://github.com/user-attachments/assets/4caffbca-c4b4-4ce3-8381-78dad4ec0b1f)
+![image](https://github.com/user-attachments/assets/595f5c2d-5f4f-482c-be9e-04bd38d413a5)
+![image](https://github.com/user-attachments/assets/ca756138-d150-400a-a3c0-f8b4708c8418)
+![image](https://github.com/user-attachments/assets/b8733884-402e-4202-be18-9772cc4c3a13)
+![image](https://github.com/user-attachments/assets/5eb7de5d-46d5-4383-b728-b5666e3cf1c9)
+![image](https://github.com/user-attachments/assets/050cbe47-f058-4e9a-bdd9-97e59da67caf)
+![image](https://github.com/user-attachments/assets/7a99f9dc-2214-401e-b310-46ccd9abb095)
+![image](https://github.com/user-attachments/assets/5571b183-d7ba-4d3e-8d73-3d3ab0262bd3)
 
 
 <br>
