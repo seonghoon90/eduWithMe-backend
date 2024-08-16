@@ -47,14 +47,15 @@ public class RoomController {
 
     @Operation(summary = "방 전체 조회 기능")
     @GetMapping
-    public ResponseEntity<DataCommonResponse<List<RoomWithNickNameDto>>> getRoomListWithPage(
-            @RequestParam(value = "page") int page)
+    public ResponseEntity<DataCommonResponse<PagedRoomResponse>> getRoomListWithPage(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "12") int size)
     {
-        List<RoomWithNickNameDto> responseDtoList = roomService.getRoomListWithPage(page);
-        DataCommonResponse<List<RoomWithNickNameDto>> response = new DataCommonResponse<>(
-                HttpStatus.OK.value(),
-                "성공적으로 조회가 되었습니다.",
-                responseDtoList);
+        PagedRoomResponse responseDto = roomService.getRoomListWithPage(page, size);
+        DataCommonResponse<PagedRoomResponse> response = new DataCommonResponse<>(
+            HttpStatus.OK.value(),
+            "성공적으로 조회가 되었습니다.",
+            responseDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
