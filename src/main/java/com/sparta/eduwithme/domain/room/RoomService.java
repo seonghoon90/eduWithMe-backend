@@ -10,6 +10,7 @@ import com.sparta.eduwithme.domain.room.repository.StudentRepository;
 import com.sparta.eduwithme.domain.user.entity.User;
 import com.vane.badwordfiltering.BadWordFiltering;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class RoomService {
     private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     private static final int ROOM_CREATE_LIMIT = 2;
-    private static final int pageSize = 50;
+    private static final int pageSize = 12;
 
     // public room
     public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {
@@ -79,9 +80,15 @@ public class RoomService {
         }
     }
 
-    public List<RoomWithNickNameDto> getRoomListWithPage(int page) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
-        return roomRepository.getRoomListWithPage(pageRequest.getOffset(), pageRequest.getPageSize());
+    public PagedRoomResponse getRoomListWithPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<RoomWithNickNameDto> roomPage = roomRepository.getRoomListWithPage(pageRequest);
+
+        return new PagedRoomResponse(
+            roomPage.getContent(),
+            roomPage.getTotalPages(),
+            roomPage.getTotalElements()
+        );
     }
 
     public List<SelectAllUsersRoomResponseDto> selectAllUsersRoom(Long userId) {
