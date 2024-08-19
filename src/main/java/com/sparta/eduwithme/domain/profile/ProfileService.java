@@ -32,7 +32,7 @@ public class ProfileService {
 
     private String uploadDir;
 
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[a-z\\d@$!%*?&]{8,}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[!@#$%^*+=\\-])(?=.*[0-9]).{8,15}$");
 
     public UserProfileDto getUserProfile(Long userId) {
         User user = profileRepository.findById(userId).orElseThrow(() ->
