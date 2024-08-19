@@ -30,6 +30,13 @@
 <br>
 
 
+# 💻 아키텍처
+![image](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
+
+
+<br>
+
+
 # 🖥 와이어프레임
 ![eduWithMeWireFrame](https://github.com/user-attachments/assets/3d84ec7f-11fd-400e-9eea-f25ca0e25c66)
 
