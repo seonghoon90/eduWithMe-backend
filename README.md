@@ -1,11 +1,10 @@
-# ✏ EduWithMe
-- 모든 연령과 배경의 사용자들이 언제 어디서나 접근할 수 있는 개인 맞춤형 학습을 통해 커뮤니티와 함께 성장할 수 있는 교육 플랫폼을 제공합니다. 
-
+## ✏ EduWithMe
+- EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접근할 수 있는 개인 맞춤형 플랫폼으로, 선생님과 학생 간의 상호작용을 강화하고 학습 동기를 높이는 교육 플랫폼입니다.
 
 <br>
 
 
-# 🤝 팀원 / 역할분담
+## 🤝 팀원 / 역할분담
 | 홍준빈 | 신성훈 | 이지우 | 이세원 |
 |:------:|:------:|:------:|:------:|
 | [![홍준빈](https://github.com/Hongjunbin.png)](https://github.com/Hongjunbin) | [![신성훈](https://github.com/seonghoon90.png)](https://github.com/seonghoon90) | [![이지우](https://github.com/wldnfl.png)](https://github.com/wldnfl) | [![이세원](https://github.com/leesw1945.png)](https://github.com/leesw1945) |
@@ -15,7 +14,7 @@
 <br>
 
 
-# 📚 기술 스택
+## 📚 기술 스택
 
 | Type       | Tech                                                                                                              |
 | ---------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -30,28 +29,28 @@
 <br>
 
 
-# 💻 아키텍처
+## 💻 아키텍처
 ![image](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
 
 
 <br>
 
 
-# 🖥 와이어프레임
+## 🖥 와이어프레임
 ![eduWithMeWireFrame](https://github.com/user-attachments/assets/3d84ec7f-11fd-400e-9eea-f25ca0e25c66)
 
 
 <br>
 
 
-# 📊 ERD DIAGRAM
+## 📊 ERD DIAGRAM
 ![image](https://github.com/user-attachments/assets/2aae0197-3ec8-4676-a02d-fcfb8576ad86)
 
 
 <br>
 
 
-# 📝 API 명세서
+## 📝 API 명세서
 ![image](https://github.com/user-attachments/assets/169bb36d-54e9-4dd9-a6f1-662a52945874)
 ![image](https://github.com/user-attachments/assets/77ddb6e3-02e6-45ba-9d42-cc02adbb0e59)
 ![image](https://github.com/user-attachments/assets/e3b90a30-27f1-4bc7-96d9-92c9334a7ac2)
@@ -67,6 +66,6 @@
 <br>
 
 
-# 🗃 노션
+## 🗃 노션
 
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://teamsparta.notion.site/5-0c0d167370ab43f0b76fac34a4c492be)
