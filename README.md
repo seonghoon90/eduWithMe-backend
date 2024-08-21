@@ -59,7 +59,7 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 
 
 ## 📝 API 명세서
-[🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/a0eab32a5094449691923d9d4b135c1a?v=db93bde0de294700baaceb5e89125eb4)
+[🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
 
 <br>
 
