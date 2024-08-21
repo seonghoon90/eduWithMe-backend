@@ -28,7 +28,6 @@ public class RoomService {
     private final BadWordFiltering badWordFiltering = new BadWordFiltering();
 
     private static final int ROOM_CREATE_LIMIT = 2;
-    private static final int pageSize = 12;
 
     // public room
     public void createPublicRoom(CreatePublicRoomRequestDto requestDto, User user) {

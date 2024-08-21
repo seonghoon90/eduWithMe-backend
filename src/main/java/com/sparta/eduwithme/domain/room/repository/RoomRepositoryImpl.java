@@ -34,6 +34,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
             .leftJoin(user).on(room.managerUserId.eq(user.id))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .orderBy(room.createdAt.desc())
             .fetch();
 
         long total = queryFactory
