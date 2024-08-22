@@ -94,13 +94,16 @@ gemini.api.key=${GEMINI_KEY}
 
 </div>
 </details>
+
 <details>
-<summary>💻 아키텍처</summary>
+<summary> 💻 아키텍처</summary>
 <div markdown="1">
-   ![아키텍처](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
+
+## 💻 아키텍처
+ ![아키텍처](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
+
 </div>
 </details>
-
 
 <br>
 
