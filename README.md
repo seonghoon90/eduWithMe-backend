@@ -1,5 +1,8 @@
 ## ✏ EduWithMe
-EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접근할 수 있는 개인 맞춤형 학습을 통해 성장하며, 선생님과 학생 간의 상호작용을 강화하고 학습 동기를 높이는 교육 플랫폼입니다.
+```
+EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접근할 수 있는 개인 맞춤형 학습을 통해 성장하며,
+선생님과 학생 간의 상호작용을 강화하고 학습 동기를 높이는 교육 플랫폼입니다.
+```
 ### [🏫 EduWithMe 사이트 바로가기 📝](https://eduwithme.com)
 
 <br>
@@ -27,23 +30,53 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 
 <br>
 
-# ⚙️ Tech Stack
-
-|     Type     |                                                                                                                                                                                              Tech                                                                                                                                                                                               |                                Version                                 |                                            Comment                                            |
-|:------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
-| IDE / EDITOR |                                                                                                                                  ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)                                                                                                                                  |                                   -                                    |                                               -                                               |
-|  Framework   |                                                                                                                                        ![Spring](https://img.shields.io/badge/springBoot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)                                                                                                                                         |                                 3.3.2                                  |                                               -                                               |
-|   Language   |                                                                                                                                            ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)                                                                                                                                            |                                 JDK 17                                 |                                               -                                               |
-|     IaaS     | ![AWS EC2](https://img.shields.io/badge/AWS_EC2-RDS?style=for-the-badge&logo=amazonec2&logoColor=white&logoSize=amg&labelColor=FF9900&color=FF9900) | EC2 : Amazon Linux 2023 AMI <br> Prometheus: 2.54 <br> Grafana: 11.1.4 |                                   ECS Container Monitoring                                    |
-|   Database   |                                                                ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)                                                                |                             MySQL:                              |                    Store relational data such as User, Space, Channel, etc                    |
-|   Database   |                                                                       ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)                                                                       |                               Redis: 7.1                               |                                    Auth Data Save, Pub/Sub                                    |
-|    Record    |                                                                                                                                          ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)                                                                                                                                           |                                   -                                    |         [Link](https://teamsparta.notion.site/5-0c0d167370ab43f0b76fac34a4c492be)          |
-
-
-[(Back to top)](#table)
+## ⚙️ 기술 스택
+  
+| Type           | Tech                                                                                                                                                                                                                                                                                                                                                                                                                                     | 
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IDE            | ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)                                         
+| Framework      | ![Spring](https://img.shields.io/badge/SpringBoot_3.3.2-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)                                                
+| Language       | ![Java](https://img.shields.io/badge/java_JDK17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)                                                       
+| Database       | ![MySQL](https://img.shields.io/badge/mysql_8.0.28-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)                                                       
+| Cashing        | ![Redis](https://img.shields.io/badge/redis_7.2.5-FF4438?style=for-the-badge&logo=redis&logoColor=white)                                                              
+| Message Broker | ![Kafka](https://img.shields.io/badge/kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white)                                                              
+| Live Chatting  | ![Websocket](https://img.shields.io/badge/websocket-000000?style=for-the-badge&logo=websocket&logoColor=white)  ![Stomp](https://img.shields.io/badge/stomp-000000?style=for-the-badge&logo=stomp&logoColor=white)                                                                                                                                          
+| Tools          | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Docker](https://img.shields.io/badge/docker_6.0.16-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)                        
+| Collaboration  | ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![Slack](https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)                         
+| Code Editor    | ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)                     
+| FrontEnd       | ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![HTML5](https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![css](https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![Javascript](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)        |
+| Infra          | ![EC2](https://img.shields.io/badge/EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white) ![ELB](https://img.shields.io/badge/ELB-8C4FFF?style=for-the-badge&logo=awselasticloadbalancing&logoColor=white) ![Route53](https://img.shields.io/badge/Route53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white) ![Route53](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)  |
 
 <br>
 
+## 🌌 환경변수
+```
+
+```
+## 📚 기술 문서
+<details>
+<summary>🌠 Commit Rule</summary>
+<div markdown="1">
+  
+## 🌠 Commit Rule
+
+| 작업 타입 | 작업내용 |
+| --- | --- |
+| ✨ feature | 새로운 기능을 추가 |
+| 🐛 bugfix | 버그 수정 |
+| ♻️ refactor | 코드 리팩토링 |
+| 🩹 fix | 코드 수정 |
+| 🚚 move | 파일 옮김/정리 |
+| 🔥 del | 기능/파일을 삭제 |
+| 💄 style | css |
+| 🍻 test | 테스트 코드를 작성 |
+| 🎨 readme | readme 수정 |
+| 🙈 gitfix | gitignore 수정 |
+| 🔨script | package.json 변경(npm 설치 등) |
+
+
+</div>
+</details>
 
 ## 💻 아키텍처
 ![image](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
