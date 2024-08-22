@@ -76,7 +76,7 @@ gemini.api.key=${GEMINI_KEY}
 <summary>🌠 Commit Rule</summary>
 <div markdown="1">
   
-## 🌠 Commit Rule
+### 🌠 Commit Rule
 
 | 작업 타입 | 작업내용 |
 | --- | --- |
@@ -97,33 +97,42 @@ gemini.api.key=${GEMINI_KEY}
 </details>
 
 <details>
-<summary> 💻 아키텍처</summary>
+<summary>💻 아키텍처</summary>
 <div markdown="1">
 
-## 💻 아키텍처
+### 💻 아키텍처
  ![아키텍처](https://github.com/user-attachments/assets/db0585d7-d4cd-4c92-bc9e-21a8cfa9dd66)
 
 </div>
 </details>
 
-<br>
+<details>
+<summary>🎨 와이어프레임</summary>
+<div markdown="1">
 
+### 🎨 와이어프레임
+ ![와이어프레임](https://github.com/user-attachments/assets/fb5bba28-5253-4176-8a43-7a8a94c1a787)
 
-## 🖥 와이어프레임
-![eduWithMeWireFrame](https://github.com/user-attachments/assets/3d84ec7f-11fd-400e-9eea-f25ca0e25c66)
+</div>
+</details>
 
+<details>
+<summary>🔨 API 명세서</summary>
+<div markdown="1">
 
-<br>
+[🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
 
+</div>
+</details>
 
-## 📊 ERD DIAGRAM
+<details>
+<summary>📊 ERD DIAGRAM</summary>
+<div markdown="1">
+
+### 📊 ERD DIAGRAM
 ![image](https://github.com/user-attachments/assets/2aae0197-3ec8-4676-a02d-fcfb8576ad86)
 
-
-<br>
-
-
-## 📝 API 명세서
-[🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
+</div>
+</details>
 
 <br>
