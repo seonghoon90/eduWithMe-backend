@@ -51,7 +51,24 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 
 ## 🌌 환경변수
 ```
-
+spring.data.redis.host=${REDIS_HOST}
+spring.datasource.url=${MYSQL_URL}
+spring.datasource.username=${MYSQL_ROOT_USER}
+spring.datasource.password=${MYSQL_ROOT_PASSWORD}
+jwt.secret.key=${JWT_SECRET_KEY}
+email.fromEmail=${FROM_EMAIL}
+email.emailPassword=${EMAIL_PASSWORD}
+client.id=${CLIENT_ID}
+kakao.init=${KAKAO_INIT}
+redirect.uri=${REDIRECT_URI}
+cloud.aws.credentials.accessKey=${ACCESS_KEY}
+cloud.aws.credentials.secretKey=${SECRET_KEY}
+cloud.aws.s3.bucketName=${BUCKET_NAME}
+cloud.aws.region.static=${REGION}
+frontend.domain=${FRONTEND_DOMAIN}
+frontend.kakao.domain=${FRONTEND_KAKAO_DOMAIN}
+gemini.api.url=${GEMINI_URL}
+gemini.api.key=${GEMINI_KEY}
 ```
 ## 📚 기술 문서
 <details>
