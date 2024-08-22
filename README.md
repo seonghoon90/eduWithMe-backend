@@ -3,6 +3,11 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 
 <br>
 
+## 📆 개발 기간
+- 2024.07.17 - 2024.08.20
+
+<br>
+
 ## 📌 주요 기능
 - 방 생성 및 문제 출제
 - 포인트 획득 및 랭킹 시스템
@@ -31,7 +36,7 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 |     IaaS     | ![AWS EC2](https://img.shields.io/badge/AWS_EC2-RDS?style=for-the-badge&logo=amazonec2&logoColor=white&logoSize=amg&labelColor=FF9900&color=FF9900) | EC2 : Amazon Linux 2023 AMI <br> Prometheus: 2.54 <br> Grafana: 11.1.4 |                                   ECS Container Monitoring                                    |
 |   Database   |                                                                ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)                                                                |                             MariaDB: 10.11                             |                    Store relational data such as User, Space, Channel, etc                    |
 |   Database   |                                                                       ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)                                                                       |                               Redis: 7.1                               |                                    Auth Data Save, Pub/Sub                                    |
-|    Record    |                                                                                                                                          ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)                                                                                                                                           |                                   -                                    |         [Link](https://teamsparta.notion.site/Echo-191b7395737d4a608c2e07bd98c42f2a)          |
+|    Record    |                                                                                                                                          ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)                                                                                                                                           |                                   -                                    |         [Link](https://teamsparta.notion.site/5-0c0d167370ab43f0b76fac34a4c492be)          |
 
 
 [(Back to top)](#table)
@@ -64,8 +69,3 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 [🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
 
 <br>
-
-
-## 🗃 노션
-
-[![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://teamsparta.notion.site/5-0c0d167370ab43f0b76fac34a4c492be)
