@@ -119,8 +119,8 @@ gemini.api.key=${GEMINI_KEY}
 <details>
 <summary>🔨 API 명세서</summary>
 <div markdown="1">
-
-[🔗 EduWithMe API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
+  
+## [🔨 API 명세서](https://luxuriant-volcano-e6c.notion.site/f676cf01326644cfba35e2abfce1427e?v=012d2fa6f689494eb20d90d1d0b7aa04)
 
 </div>
 </details>
