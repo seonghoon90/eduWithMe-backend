@@ -21,93 +21,19 @@ EduWithMe는 모든 연령과 배경의 사용자들이 언제 어디서나 접�
 
 <br>
 
+# ⚙️ Tech Stack
 
-## 📚 기술 스택
+|     Type     |                                                                                                                                                                                              Tech                                                                                                                                                                                               |                                Version                                 |                                            Comment                                            |
+|:------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
+| IDE / EDITOR |                                                                                                                                  ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)                                                                                                                                  |                                   -                                    |                                               -                                               |
+|  Framework   |                                                                                                                                        ![Spring](https://img.shields.io/badge/springBoot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)                                                                                                                                         |                                 3.3.2                                  |                                               -                                               |
+|   Language   |                                                                                                                                            ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)                                                                                                                                            |                                 JDK 21                                 |                                               -                                               |
+|     IaaS     | ![AWS EC2](https://img.shields.io/badge/AWS_EC2-RDS?style=for-the-badge&logo=amazonec2&logoColor=white&logoSize=amg&labelColor=FF9900&color=FF9900) <br> ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) <br> ![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white) | EC2 : Amazon Linux 2023 AMI <br> Prometheus: 2.54 <br> Grafana: 11.1.4 |                                   ECS Container Monitoring                                    |
+|   Database   |                                                                ![AWS RDS](https://img.shields.io/badge/AWS_RDS-RDS?style=for-the-badge&logo=amazonrds&logoColor=white&logoSize=amg&labelColor=527FFF&color=527FFF) <br> ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)                                                                |                             MariaDB: 10.11                             |                    Store relational data such as User, Space, Channel, etc                    |
+|   Database   |                                                                                                                                          ![MongoDB](https://img.shields.io/badge/mongodb-47A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)                                                                                                                                           |                         MongoDB Atlas: 7.0.12                          |                  Store unstructured data such as Text, DM, Notification, etc                  |
+|   Database   |                                                                       ![AWS Elasticache](https://img.shields.io/badge/AWS%20elasticache-C925D1?style=for-the-badge&logo=amazonelasticache&logoColor=white) <br> ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)                                                                       |                               Redis: 7.1                               |                                    Auth Data Save, Pub/Sub                                    |
+|    Record    |                                                                                                                                          ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)                                                                                                                                           |                                   -                                    |         [Link](https://teamsparta.notion.site/Echo-191b7395737d4a608c2e07bd98c42f2a)          |
 
-# 🖇️ Team
-<table>
-    <tbody>
-        <tr>
-            <td align="center"> <a href="https://github.com/hyun1202"> <img src="https://avatars.githubusercontent.com/u/60086998?v=4" width="150px;" alt=""/> </a> <br> <b> 정현경 [리더] </b> </td>
-            <td align="center"> <a href="https://github.com/hsd9681"> <img src="https://avatars.githubusercontent.com/u/39897041?v=4" width="150px;" alt=""/> </a> <br> <b> 홍성도 [부리더] </b> </td>
-            <td align="center"> <a href="https://github.com/kiseokkm"> <img src="https://avatars.githubusercontent.com/u/132454778?v=4" width="150px;" alt=""/> </a> <br> <b> 김기석 </b> </td>
-            <td align="center"> <a href="https://github.com/Berithx"> <img src="https://avatars.githubusercontent.com/u/154594004?v=4" width="150px;" alt=""/> </a> <br> <b> 이유환 </b> </td>
-            <td align="center"> <a href="https://github.com/HyeonjinChoi"> <img src="https://avatars.githubusercontent.com/u/63872787?v=4" width="150px;" alt=""/> </a> <br> <b> 최현진 </b> </td>
-        </tr>
-        <tr>
-            <td>
-                <span style="font-size: 12px">ㆍProject Chief</span>
-                <br>
-                <span style="font-size: 12px">ㆍUser Domain</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- basic func</span>
-                <br>
-                <span style="font-size: 12px">ㆍAuth Domain</span>
-                <br>
-                <span style="font-size: 12px">ㆍThread Domain</span>
-                <br>
-                <span style="font-size: 12px">ㆍGlobal Issue</span>
-                <br>
-                <span style="font-size: 12px">ㆍSpring Security</span>
-                <br>
-                <span style="font-size: 12px">ㆍSSE</span>
-                <br>
-            </td>
-            <td>
-                <span style="font-size: 12px">ㆍFront-End Chief</span>
-                <br>
-                <span style="font-size: 12px">ㆍMedia Chat Domain</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- 1:1 Video</span>
-                <br>
-                <span style="font-size: 12px">ㆍOAuth2 (Kakao)</span>
-                <br>
-                <span style="font-size: 12px">ㆍDirect Message</span>
-                <br>
-            </td>
-            <td>
-                <span style="font-size: 12px">ㆍUser Domain</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- additional func</span>
-                <br>
-                <span style="font-size: 12px">ㆍSpace Domain</span>
-                <br>
-                <span style="font-size: 12px">ㆍChannel Domain</span>
-                <br>
-                <span style="font-size: 12px">ㆍFriend Domain</span>
-                <br>
-                <span style="font-size: 12px">ㆍCI/CD, Deployment</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;with AWS and</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;Github Action</span>
-                <br>
-            </td>
-            <td>
-                <span style="font-size: 12px">ㆍText Chat</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- N:M Chat</span>
-                <br>
-                <span style="font-size: 12px">ㆍS3 Service</span>
-                <br>
-                <span style="font-size: 12px">ㆍRedis Pub/Sub</span>
-                <br>
-            </td>
-            <td>
-                <span style="font-size: 12px">ㆍMedia Chat Domain</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- N:M Video</span>
-                <br>
-                <span style="font-size: 12px">&ensp;&ensp;&ensp;- Screen Sharing</span>
-                <br>
-                <span style="font-size: 12px">ㆍTyping Indicator</span>
-                <br>
-                <span style="font-size: 12px">ㆍChat Room User Limit</span>
-                <br>
-            </td>
-        </tr>
-    </tbody>
-</table>
 
 [(Back to top)](#table)
 
