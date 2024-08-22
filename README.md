@@ -101,7 +101,7 @@ gemini.api.key=${GEMINI_KEY}
 <div markdown="1">
 
 ### 💻 아키텍처
- ![image](https://github.com/user-attachments/assets/005aadb0-ed5b-4769-a3e7-71b4eb5c3d82)
+ ![image](https://github.com/user-attachments/assets/27489a2e-989e-4da4-90e6-bc236615da93)
 
 </div>
 </details>
