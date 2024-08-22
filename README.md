@@ -80,7 +80,7 @@ gemini.api.key=${GEMINI_KEY}
 
 | 작업 타입 | 작업내용 |
 | --- | --- |
-| ✨ feature | 새로운 기능을 추가 |
+| ✨ feat | 새로운 기능을 추가 |
 | 🐛 bugfix | 버그 수정 |
 | ♻️ refactor | 코드 리팩토링 |
 | 🩹 fix | 코드 수정 |
